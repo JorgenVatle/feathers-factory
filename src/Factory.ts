@@ -29,7 +29,7 @@ export default class Factory {
      * @param generator
      * @param defaultParams
      */
-    public constructor(service: Service<any>, generator: DataGenerator, defaultParams = {}) {
+    public constructor(service: Service<any>, generator: DataGenerator, defaultParams: Params = {}) {
         this.service = service;
         this.generator = generator;
         this.params = defaultParams;
