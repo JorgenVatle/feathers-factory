@@ -64,6 +64,7 @@ This will create a full-fledged user for your post. This can be super handy when
 ### How does it work?
 Pretty simple - any property, function, method, promise, etc you define in the factory specification is resolved
 whenever you call `FeathersFactory.create()`, keeping your object structure, but using resolved data.
+
 (E.g. `{ foo: () => 'foo') } -> { foo: 'foo' }`)
 
 The resolved data is then passed directly into your 
