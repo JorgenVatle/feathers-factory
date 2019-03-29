@@ -54,7 +54,7 @@ export default class Factory {
             ...await this.resolveData(overrides),
         };
 
-        return await this.service.create(overrides);
+        return await this.service.create(data);
     }
 
 }
