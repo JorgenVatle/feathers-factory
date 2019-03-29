@@ -3,7 +3,7 @@ A dead easy way to mock data for your Feathers services.
 
 ## Installation
 ```bash
-npm install feathers-generator
+npm install feathers-factory
 ```
 
 ## Usage
