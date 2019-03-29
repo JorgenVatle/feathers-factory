@@ -52,10 +52,7 @@ export default class Factory {
      * @param params
      */
     public async create(overrides: { [s: string]: any } = {}, params?: Params) {
-        const data = {
-            ...await this.resolveData(this.generator),
-            ...await this.resolveData(overrides),
-        };
+        const data = await this.resolveData({ ...this.generator, ...overrides, });
 
         return await this.service.create(data, params);
     }
