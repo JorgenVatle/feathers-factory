@@ -33,12 +33,16 @@ export default class Factory {
      *
      * @param data
      */
-    private resolveData(data: DataGenerator) {
-        const resolveData = Object.keys(this.generator).map((key: string) => {
-            return Clues(this.generator, key);
+    private async resolveData(data: DataGenerator) {
+        const output: { [s: string]: any } = {};
+
+        const resolveData = Object.keys(this.generator).map(async (key: string) => {
+            output[key] = await Clues(this.generator, key);
         });
 
-        return Promise.all(resolveData)
+        await Promise.all(resolveData);
+
+        return output;
     }
 
     /**
