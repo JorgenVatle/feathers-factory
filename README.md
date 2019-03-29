@@ -43,7 +43,8 @@ export default async (FeathersApp) => {
 ### Advanced usage
 
 #### Use promises and other factories
-The following will create a full-fledged user for your post. This can be super handy when dealing with a lot of relational data.
+You're not limited to functions and static data! The following will create a full-fledged user for your post.
+This can be super handy when dealing with a lot of relational data.
 ```js
 FeathersFactory.define('post', FeathersApp.service('/posts'), {
     
