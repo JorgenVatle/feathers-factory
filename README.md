@@ -59,6 +59,7 @@ FeathersFactory.define('posts', FeathersApp.service('/posts'), {
     
 });
 ```
+This will create a full-fledged user for your post. This can be super handy when dealing with a lot of relational data.
 
 ## License
 This repository is licensed under the ISC license.
