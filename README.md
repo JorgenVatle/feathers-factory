@@ -1,5 +1,5 @@
 # Feathers Factory
-A dead easy way to mock data for your Feathers services.
+A dead easy way to mock data for your [Feathers](https://feathersjs.com/) services.
 
 ## Installation
 ```bash
