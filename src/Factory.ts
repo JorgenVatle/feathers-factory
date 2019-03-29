@@ -48,7 +48,7 @@ export default class Factory {
      *
      * @param overrides
      */
-    public async create(overrides: { [s: string]: any } ) {
+    public async create(overrides: { [s: string]: any } = {}) {
         const data = {
             ...await this.resolveData(this.generator),
             ...await this.resolveData(overrides),
