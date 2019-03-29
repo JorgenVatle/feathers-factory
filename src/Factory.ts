@@ -18,15 +18,23 @@ export default class Factory {
     private readonly generator: DataGenerator;
 
     /**
+     * Default service create() params.
+     */
+    private readonly params: Params;
+
+    /**
      * Factory constructor.
      *
      * @param service
      * @param generator
+     * @param defaultParams
      */
-    public constructor(service: Service<any>, generator: DataGenerator) {
+    public constructor(service: Service<any>, generator: DataGenerator, defaultParams = {}) {
         this.service = service;
         this.generator = generator;
+        this.params = defaultParams;
     }
+
 
     /**
      * Resolve data from a data generator object.
@@ -54,7 +62,7 @@ export default class Factory {
     public async create(overrides: { [s: string]: any } = {}, params?: Params) {
         const data = await this.resolveData({ ...this.generator, ...overrides, });
 
-        return await this.service.create(data, params);
+        return await this.service.create(data, params || this.params);
     }
 
 }

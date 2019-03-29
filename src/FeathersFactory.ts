@@ -14,9 +14,10 @@ class FeathersFactory {
      * @param factoryName
      * @param service
      * @param generator
+     * @param defaultParams
      */
-    public define(factoryName: string, service: Service<any>, generator: DataGenerator) {
-        this.factories[factoryName] = new Factory(service, generator);
+    public define(factoryName: string, service: Service<any>, generator: DataGenerator, defaultParams?: Params) {
+        this.factories[factoryName] = new Factory(service, generator, defaultParams);
     }
 
     /**
