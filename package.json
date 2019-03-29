@@ -2,7 +2,7 @@
   "name": "feathers-factory",
   "version": "1.0.0",
   "description": "Create data factories for your Feathers services",
-  "main": "dist/index.js",
+  "main": "dist/FeathersFactory.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
