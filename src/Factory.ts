@@ -50,4 +50,18 @@ export default class Factory {
         return Promise.all(resolveData)
     }
 
+    /**
+     * Store generated data to the Feathers service.
+     *
+     * @param overrides
+     */
+    public async create(overrides: { [s: string]: any } ) {
+        const data = {
+            ...await this.resolveData(this.generator),
+            ...await this.resolveData(overrides),
+        };
+
+        return await this.service.create(overrides);
+    }
+
 }
