@@ -30,7 +30,7 @@ FeathersFactory.define('my-factory', FeathersApp.service('service-to-mock-for'),
 });
 ```
 
-Run the factory anywhere:
+Run the factory anywhere you need to mock a database entry with random data:
 ```js
 export default async (FeathersApp) => {
     const user = await FeathersFactory.create('my-factory');
