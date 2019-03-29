@@ -1,7 +1,7 @@
 import { Service } from '@feathersjs/feathers';
 const Clues = require('clues');
 
-type DataGenerator = {
+export type DataGenerator = {
     [s: string]: () => any | Promise<any> | any,
 }
 
