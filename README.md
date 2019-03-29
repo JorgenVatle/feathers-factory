@@ -66,7 +66,9 @@ Pretty simple - any property, function, method, promise, etc you define in the f
 whenever you call `FeathersFactory.create()`, keeping your object structure, but using resolved data.
 (E.g. `{ foo: () => 'foo') } -> { foo: 'foo' }`)
 
-The resolved data is then passed directly into your Feathers service through its `create()` method. (`app.service('/some/service').create()`)
+The resolved data is then passed directly into your 
+[Feathers service](https://crow.docs.feathersjs.com/guides/basics/services.html#service-methods) through its 
+`create()` method.
 
 ## Credit
 Thanks to [clues](https://www.npmjs.com/package/clues) for providing an excellent library for resolving in-object data.
