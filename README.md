@@ -1,5 +1,6 @@
 # Feathers Factory
-A dead easy way to mock data for your [Feathers](https://feathersjs.com/) services.
+A dead easy way to mock data for your [Feathers](https://feathersjs.com/) services. Heavily inspired by 
+[Meteor Factory](https://github.com/versolearning/meteor-factory)
 
 ## Installation
 ```bash
