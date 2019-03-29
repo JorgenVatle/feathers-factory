@@ -27,5 +27,8 @@
   "devDependencies": {
     "@types/feathersjs__feathers": "^3.1.1",
     "typescript": "^3.3.4000"
+  },
+  "dependencies": {
+    "clues": "^4.0.2"
   }
 }
