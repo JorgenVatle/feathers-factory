@@ -40,3 +40,8 @@ export default async (FeathersApp) => {
     await FeathersApp.get(user.id) // -> { id: "507f191e810c19729de860ea", email: "Damaris8@yahoo.com", companyName: "Acme Inc" }
 };
 ```
+
+## License
+This repository is licensed under the ISC license.
+
+Copyright (c) 2019, Jørgen Vatle.
