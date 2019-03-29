@@ -15,6 +15,9 @@
     "type": "git",
     "url": "git+https://github.com/JorgenVatle/feathers-factory.git"
   },
+  "files": [
+    "dist"
+  ],
   "keywords": [
     "factory",
     "feathers",
