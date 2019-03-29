@@ -42,6 +42,8 @@ export default async (FeathersApp) => {
 
 ### Advanced usage
 You're not just limited to functions and static data.
+
+#### Use promises and other factories
 ```js
 FeathersFactory.define('post', FeathersApp.service('/posts'), {
     
@@ -60,6 +62,7 @@ FeathersFactory.define('post', FeathersApp.service('/posts'), {
 ```
 This will create a full-fledged user for your post. This can be super handy when dealing with a lot of relational data.
 
+#### Override properties
 Override factory data that would otherwise need to be generated:
 ```js
 const createPost = async () => {
