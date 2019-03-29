@@ -1,4 +1,4 @@
-import { Service } from '@feathersjs/feathers';
+import { Params, Service } from '@feathersjs/feathers';
 const Clues = require('clues');
 
 export type DataGenerator = {
@@ -47,14 +47,15 @@ export default class Factory {
      * Store generated data to the Feathers service.
      *
      * @param overrides
+     * @param params
      */
-    public async create(overrides: { [s: string]: any } = {}) {
+    public async create(overrides: { [s: string]: any } = {}, params?: Params) {
         const data = {
             ...await this.resolveData(this.generator),
             ...await this.resolveData(overrides),
         };
 
-        return await this.service.create(data);
+        return await this.service.create(data, params);
     }
 
 }

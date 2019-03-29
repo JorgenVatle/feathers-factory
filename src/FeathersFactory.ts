@@ -1,4 +1,4 @@
-import { Service } from '@feathersjs/feathers';
+import { Params, Service } from '@feathersjs/feathers';
 import Factory, { DataGenerator } from './Factory';
 
 class FeathersFactory {
@@ -24,9 +24,10 @@ class FeathersFactory {
      *
      * @param factoryName
      * @param overrides
+     * @param params
      */
-    public create(factoryName: string, overrides?: DataGenerator) {
-        return this.factories[factoryName].create(overrides);
+    public create(factoryName: string, overrides?: DataGenerator, params?: Params) {
+        return this.factories[factoryName].create(overrides, params);
     }
 
 }
