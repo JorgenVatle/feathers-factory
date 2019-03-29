@@ -1,4 +1,5 @@
 import { Service } from '@feathersjs/feathers';
+const Clues = require('clues');
 
 type DataGenerator = {
     [s: string]: () => any | Promise<any> | any,
@@ -28,10 +29,25 @@ export default class Factory {
      * @param service
      * @param generator
      */
-    constructor(factoryName: string, service: Service<any>, generator: DataGenerator) {
+    public constructor(factoryName: string, service: Service<any>, generator: DataGenerator) {
         this.factoryName = factoryName;
         this.service = service;
         this.generator = generator;
+    }
+
+    /**
+     * Resolve data from a data generator object.
+     *
+     * @param data
+     */
+    private resolveData(data: DataGenerator) {
+        const output: { [s: string]: any } = {};
+
+        const resolveData = Object.keys(this.generator).map((key: string) => {
+            return Clues(this.generator, key);
+        });
+
+        return Promise.all(resolveData)
     }
 
 }
