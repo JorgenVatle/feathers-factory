@@ -65,7 +65,7 @@ This will create a full-fledged user for your post. This can be super handy when
 Pretty simple - any property, function, method, promise, etc you define in the factory specification is resolved
 whenever you call `FeathersFactory.create()`, keeping your object structure, but using resolved data.
 
-(E.g. `{ foo: () => 'foo') } -> { foo: 'foo' }`)
+(E.g. `{ foo: () => 'foo') }` -> `{ foo: 'foo' }`)
 
 The resolved data is then passed directly into your 
 [Feathers service](https://crow.docs.feathersjs.com/guides/basics/services.html#service-methods) through its 
