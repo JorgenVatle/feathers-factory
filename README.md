@@ -44,7 +44,7 @@ export default async (FeathersApp) => {
 ### Advanced usage
 You're not just limited to functions and static data.
 ```js
-FeathersFactory.define('posts', FeathersApp.service('/posts'), {
+FeathersFactory.define('post', FeathersApp.service('/posts'), {
     
     // You can use promises
     async content() {
