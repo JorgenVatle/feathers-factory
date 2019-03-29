@@ -61,6 +61,16 @@ FeathersFactory.define('post', FeathersApp.service('/posts'), {
 ```
 This will create a full-fledged user for your post. This can be super handy when dealing with a lot of relational data.
 
+### How does it work?
+Pretty simple - any property, function, method, promise, etc you define in the factory specification is resolved
+whenever you call `FeathersFactory.create()`, keeping your object structure, but using resolved data.
+(E.g. `{ foo: () => 'foo') } -> { foo: 'foo' }`)
+
+The resolved data is then passed directly into your Feathers service through its `create()` method. (`app.service('/some/service').create()`)
+
+## Credit
+Thanks to [clues](https://www.npmjs.com/package/clues) for providing an excellent library for resolving in-object data.
+
 ## License
 This repository is licensed under the ISC license.
 
