@@ -8,11 +8,6 @@ export type DataGenerator = {
 export default class Factory {
 
     /**
-     * Factory name.
-     */
-    private readonly factoryName: string;
-
-    /**
      * Feathers service
      */
     private readonly service: Service<any>;
@@ -25,12 +20,10 @@ export default class Factory {
     /**
      * Factory constructor.
      *
-     * @param factoryName
      * @param service
      * @param generator
      */
-    public constructor(factoryName: string, service: Service<any>, generator: DataGenerator) {
-        this.factoryName = factoryName;
+    public constructor(service: Service<any>, generator: DataGenerator) {
         this.service = service;
         this.generator = generator;
     }
