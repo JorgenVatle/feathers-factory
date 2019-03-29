@@ -72,7 +72,7 @@ The resolved data is then passed directly into your
 `create()` method.
 
 ## Credit
-Thanks to [clues](https://www.npmjs.com/package/clues) for providing an excellent library for resolving in-object data.
+Thanks to [clues.js](https://www.npmjs.com/package/clues) for providing an excellent library for resolving in-object data.
 
 ## License
 This repository is licensed under the ISC license.
