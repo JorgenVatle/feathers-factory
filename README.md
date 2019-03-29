@@ -14,7 +14,6 @@ Define factories for the services you want to mock data for. This works well wit
 ### Basic usage
 Define a factory:
 ```js
-import Faker from 'faker';
 import FeathersFactory from 'feathers-factory';
 
 FeathersFactory.define('my-factory', FeathersApp.service('service-to-mock-for'), {
