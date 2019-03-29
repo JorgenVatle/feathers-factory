@@ -34,8 +34,6 @@ export default class Factory {
      * @param data
      */
     private resolveData(data: DataGenerator) {
-        const output: { [s: string]: any } = {};
-
         const resolveData = Object.keys(this.generator).map((key: string) => {
             return Clues(this.generator, key);
         });
