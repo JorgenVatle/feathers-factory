@@ -6,6 +6,7 @@
   "types": "dist/FeathersFactory.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "prepublish": "npm run build",
     "build": "tsc",
     "dev": "npm run build -- --watch"
   },
