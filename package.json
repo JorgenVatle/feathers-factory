@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/JorgenVatle/feathers-factory#readme",
   "devDependencies": {
+    "@types/feathersjs__feathers": "^3.1.1",
     "typescript": "^3.3.4000"
   }
 }
