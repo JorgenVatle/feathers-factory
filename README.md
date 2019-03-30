@@ -79,6 +79,25 @@ const createPost = async () => {
 }
 ```
 
+#### Overriding service `create()` params
+You can assign default create params, and override them. Handy if your service hooks rely on a `route` object in 
+`params`.
+```js
+const createComment = async () => {
+    
+    const post = await createPost();
+    
+    FeathersFactory.create('comment', {
+        message: Faker.lorem.sentence,
+        async userId() {
+            return (await FeathersFactory.create('user'))._id
+        },
+    }, { route: { postSlug: post.slug } })
+    
+};
+```
+
+
 ### How does it work?
 Pretty simple - any property, function, method, promise, etc you define in the factory specification is resolved
 whenever you call `FeathersFactory.create()`, keeping your object structure, but using resolved data.
