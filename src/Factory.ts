@@ -66,4 +66,13 @@ export default class Factory {
         return await this.service.create(data, parameters);
     }
 
+    /**
+     * Just resolve a predefined DataGenerator object.
+     *
+     * @param overrides
+     */
+    public get(overrides: { [s: string]: any } = {}) {
+        return this.resolveData({ ...this.generator, ...overrides });
+    }
+
 }
