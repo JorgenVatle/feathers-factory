@@ -106,6 +106,12 @@ const createComment = async () => {
 };
 ```
 
+#### Creating multiple entries
+You can create multiple database entries using the `createMany()` method.
+```js
+FeathersFactory.createMany(1337, 'user', { name: 'overridden-name' }, { some: 'params' })
+```
+
 
 ### How does it work?
 Pretty simple - any property, function, method, promise, etc you define in the factory specification is resolved
