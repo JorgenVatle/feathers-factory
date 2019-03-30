@@ -79,20 +79,25 @@ const createPost = async () => {
 }
 ```
 
+#### Setting default service `create()` params
+You can assign default create params. Do note that these are not resolved and cannot be async.
+```js
+FeathersFactory.define('comment', {
+    message: Faker.lorem.sentence,
+    async userId() {
+        return (await FeathersFactory.create('user'))._id
+    },
+}, { route: { postSlug: 'some-static-slug' } });
+```
+
 #### Overriding service `create()` params
-You can assign default create params, and override them. Handy if your service hooks rely on a `route` object in 
-`params`.
+You can override default service `create` params. Handy if your service hook relies on a `route` object. 
 ```js
 const createComment = async () => {
     
     const post = await createPost();
     
-    FeathersFactory.create('comment', {
-        message: Faker.lorem.sentence,
-        async userId() {
-            return (await FeathersFactory.create('user'))._id
-        },
-    }, { route: { postSlug: post.slug } })
+    FeathersFactory.create('comment', {}, { route: { postSlug: post.slug } })
     
 };
 ```
