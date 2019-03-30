@@ -94,11 +94,9 @@ FeathersFactory.define('comment', {
 You can override default service `create` params. Handy if your service hook relies on a `route` object. 
 ```js
 const createComment = async () => {
-    
     const post = await createPost();
     
     FeathersFactory.create('comment', {}, { route: { postSlug: post.slug } })
-    
 };
 ```
 
