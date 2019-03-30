@@ -113,7 +113,7 @@ FeathersFactory.createMany(1337, 'user', { name: 'overridden-name' }, { some: 'p
 ```
 
 #### Only fetch data
-You can resolve the factory data without inserting it into the database using the Factory `get()` method.
+You can resolve the factory data _without_ inserting it into the database using the Factory `get()` method.
 ```js
 const randomUserData = async () => {
     const user = await FeathersFactory.get('user', { name: 'overridden-name' });
