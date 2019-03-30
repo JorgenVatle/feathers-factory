@@ -31,6 +31,24 @@ class FeathersFactory {
         return this.factories[factoryName].create(overrides, params);
     }
 
+    /**
+     * Run a number of factories, creating entries in Feathers service.
+     *
+     * @param quantity
+     * @param factoryName
+     * @param overrides
+     * @param params
+     */
+    public createMany(quantity: number, factoryName: string, overrides?: DataGenerator, params?: Params) {
+        const created = [];
+
+        for (let i = 0; i < quantity; i++) {
+            created.push(this.create(factoryName, overrides, params));
+        }
+
+        return Promise.all(created);
+    }
+
 }
 
 export default new FeathersFactory();
