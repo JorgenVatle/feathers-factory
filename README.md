@@ -112,6 +112,15 @@ You can create multiple database entries using the `createMany()` method.
 FeathersFactory.createMany(1337, 'user', { name: 'overridden-name' }, { some: 'params' })
 ```
 
+#### Only fetch data
+You can resolve the factory data without inserting it into the database using the Factory `get()` method.
+```js
+const randomUserData = async () => {
+    const user = await FeathersFactory.get('user', { name: 'overridden-name' });
+    console.log(user) // -> { _id: "507f191e810c19729de860ea", email: "steve@example.com", name: "overridden-name" }
+}
+```
+
 
 ### How does it work?
 Pretty simple - any property, function, method, promise, etc you define in the factory specification is resolved
