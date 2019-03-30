@@ -49,6 +49,17 @@ class FeathersFactory {
         return Promise.all(created);
     }
 
+    /**
+     * Run factory without creating entry in Feathers service.
+     * Returns resolved data object.
+     *
+     * @param factoryName
+     * @param overrides
+     */
+    public get(factoryName: string, overrides?: DataGenerator) {
+        return this.factories[factoryName].get(overrides);
+    }
+
 }
 
 export default new FeathersFactory();
