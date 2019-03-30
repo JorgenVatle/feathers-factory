@@ -44,11 +44,11 @@ export default class Factory {
     private async resolveData(data: DataGenerator) {
         const output: { [s: string]: any } = {};
 
-        const resolveData = Object.keys(data).map(async (key: string) => {
+        const dataResolvers = Object.keys(data).map(async (key: string) => {
             output[key] = await Clues(data, key);
         });
 
-        await Promise.all(resolveData);
+        await Promise.all(dataResolvers);
 
         return output;
     }
