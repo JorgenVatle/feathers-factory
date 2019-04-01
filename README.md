@@ -121,6 +121,21 @@ const randomUserData = async () => {
 }
 ```
 
+#### Fetch data from factory
+You can even use `this` to fetch the _result_ of your factory methods. Notice `merchantId` is accessed as if it was a 
+property.
+```js
+FeathersFactory.create('order', {
+    email: Faker.internet.email,
+    async merchantId() {
+        return (await FeathersFactory.create('merchant')).id;
+    },
+    async productId() {
+        return (await FeathersFactory.create('product', { merchantId: await this.merchantId }))
+    } 
+})
+``` 
+
 
 ### How does it work?
 Pretty simple - any property, function, method, promise, etc you define in the factory specification is resolved
