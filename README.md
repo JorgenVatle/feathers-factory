@@ -123,7 +123,7 @@ const randomUserData = async () => {
 
 #### Fetch data from factory
 You can even use `this` to fetch the _result_ of your factory methods. Notice `merchantId` is accessed as if it was a 
-property.
+property. See [clues.js](https://www.npmjs.com/package/clues) for more info on how this works.
 ```js
 FeathersFactory.create('order', {
     email: Faker.internet.email,
