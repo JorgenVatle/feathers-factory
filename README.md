@@ -36,7 +36,7 @@ export default async (FeathersApp) => {
     
     console.log(user); // -> { id: "507f191e810c19729de860ea", email: "Damaris8@yahoo.com", servicePlan: "free" }
     
-    await FeathersApp.get(user.id) // -> { id: "507f191e810c19729de860ea", email: "Damaris8@yahoo.com", servicePlan: "free" }
+    await FeathersApp.get(user._id) // -> { id: "507f191e810c19729de860ea", email: "Damaris8@yahoo.com", servicePlan: "free" }
 };
 ```
 
@@ -56,7 +56,7 @@ Factory.define('post', FeathersApp.service('/posts'), {
     
     // Depend on a relationship? No problem! Define a `user` factory and:
     async userId() {
-        return (await Factory.create('user')).id;
+        return (await Factory.create('user'))._id;
     }
     
 });
@@ -71,7 +71,7 @@ const createPost = async () => {
     
     Factory.create('post', {
         // Override the userId that would normally create a user per the example above.
-        userId: myUser.id,
+        userId: myUser._id,
         
         // You can also add extra data:
         slug: Faker.lorem.slug,
@@ -128,7 +128,7 @@ property. See [clues.js](https://www.npmjs.com/package/clues) for more info on h
 Factory.create('order', {
     email: Faker.internet.email,
     async merchantId() {
-        return (await Factory.create('merchant')).id;
+        return (await Factory.create('merchant'))._id;
     },
     async productId() {
         return (await Factory.create('product', { merchantId: await this.merchantId }))
