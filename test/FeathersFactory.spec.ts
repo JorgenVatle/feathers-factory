@@ -40,11 +40,18 @@ describe('Feathers Factory', () => {
     });
 
     it('can createMany()', async () => {
-        const entries = await FeathersFactory.createMany(5, 'test');
+        let count = 0;
+        let quantity = 5;
+
+        const entries = await FeathersFactory.createMany(quantity, 'test');
+
         await Promise.all(entries.map(async (entry) => {
             const dbEntry = await service.get(entry.id);
             Expect(dbEntry.selfReference).toBe('ok');
+            count++;
         }));
+
+        Expect(count).toBe(quantity);
     });
 
     it('can override data within predefined factories', async () => {
