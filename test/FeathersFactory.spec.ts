@@ -14,7 +14,7 @@ describe('Feathers Factory', () => {
 
     it('can define() factories', () => {
         FeathersFactory.define('test', service, {
-            _id: () => process.hrtime().join('-'),
+            id: () => process.hrtime().join('-'),
             property: 'ok',
             function: () => 'ok',
             method() { return 'ok' },
@@ -30,14 +30,14 @@ describe('Feathers Factory', () => {
 
     it('can create() defined factories', async () => {
         const entry = await FeathersFactory.create('test');
-        await Expect(service.get(entry._id)).resolves.toBeTruthy();
+        await Expect(service.get(entry.id)).resolves.toBeTruthy();
     });
 
     it('can override data within predefined factories', async () => {
         const entry = await FeathersFactory.create('test', {
             method: 'overridden',
         });
-        const dbEntry = await service.get(entry._id);
+        const dbEntry = await service.get(entry.id);
 
         Expect(entry.method).toBe('overridden');
         Expect(dbEntry.method).toBe('overridden');
