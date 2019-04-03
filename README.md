@@ -3,6 +3,8 @@ A dead easy way to mock data for testing your [Feathers](https://feathersjs.com/
 [Meteor Factory](https://github.com/versolearning/meteor-factory)
 
 [![CircleCI](https://circleci.com/gh/JorgenVatle/feathers-factory.svg?style=svg)](https://circleci.com/gh/JorgenVatle/feathers-factory)
+[![Downloads](https://img.shields.io/npm/dt/feathers-factory.svg)](https://www.npmjs.com/package/feathers-factory)
+[![Version](https://img.shields.io/npm/v/feathers-factory.svg)](https://www.npmjs.com/package/feathers-factory)
 
 ## Installation
 ```bash
