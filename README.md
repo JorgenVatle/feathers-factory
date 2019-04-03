@@ -2,6 +2,8 @@
 A dead easy way to mock data for testing your [Feathers](https://feathersjs.com/) services. Heavily inspired by 
 [Meteor Factory](https://github.com/versolearning/meteor-factory)
 
+[![CircleCI](https://circleci.com/gh/JorgenVatle/feathers-factory.svg?style=svg)](https://circleci.com/gh/JorgenVatle/feathers-factory)
+
 ## Installation
 ```bash
 npm install feathers-factory
