@@ -42,6 +42,19 @@ describe('Feathers Factory', () => {
 
         Expect(entry.method).toBe('overridden');
         Expect(dbEntry.method).toBe('overridden');
-    })
+    });
 
+    it('resolves data as expected', async () => {
+        const entry = await FeathersFactory.create('test');
+        const dbEntry = await service.get(entry.id);
+
+        const validateContent = (key: string) => {
+            if (key === 'id') return;
+            Expect(entry[key]).toBe('ok');
+            Expect(dbEntry[key]).toBe('ok');
+        };
+
+        Object.keys(entry).map(validateContent);
+        Object.keys(dbEntry).map(validateContent);
+    });
 });
