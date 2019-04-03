@@ -1,6 +1,6 @@
 {
   "name": "feathers-factory",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "description": "Create data factories for your Feathers services",
   "main": "dist/FeathersFactory.js",
   "types": "dist/FeathersFactory.d.ts",
