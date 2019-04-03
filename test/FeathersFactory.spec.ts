@@ -37,6 +37,7 @@ describe('Feathers Factory', () => {
     it('can get() a factory\'s data.', async () => {
         const entry = await FeathersFactory.get('test');
         Expect(entry.selfReference).toBe('ok');
+        await Expect(service.get(entry.id)).rejects.toBeTruthy();
     });
 
     it('can createMany()', async () => {
