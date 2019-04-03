@@ -1,10 +1,7 @@
 import Feathers from '@feathersjs/feathers';
 
-const FeathersMemory = require('feathers-memory');
-
 const App = Feathers();
 
-App.use('/users', FeathersMemory());
-App.use('/posts', FeathersMemory());
+App.use('/', require('feathers-memory'));
 
 export default App;
