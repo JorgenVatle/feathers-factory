@@ -39,6 +39,14 @@ describe('Feathers Factory', () => {
         Expect(entry.selfReference).toBe('ok');
     });
 
+    it('can createMany()', async () => {
+        const entries = await FeathersFactory.createMany(5, 'test');
+        await Promise.all(entries.map(async (entry) => {
+            const dbEntry = await service.get(entry.id);
+            Expect(dbEntry.selfReference).toBe('ok');
+        }));
+    });
+
     it('can override data within predefined factories', async () => {
         const entry = await FeathersFactory.create('test', {
             method: 'overridden',
