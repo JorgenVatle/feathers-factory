@@ -8,6 +8,7 @@
     "dev": "npm run build -- --watch",
     "watch:test": "npm run mocha -- --watch-extensions spec.ts --watch",
     "mocha": "cross-env NODE_ENV=test mocha",
+    "test": "npm run mocha",
     "build": "tsc",
     "prepublish": "npm test && npm run build",
     "postpublish": "git push && git push --tags"
