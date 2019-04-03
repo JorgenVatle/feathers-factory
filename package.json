@@ -6,7 +6,8 @@
   "types": "dist/FeathersFactory.d.ts",
   "scripts": {
     "dev": "npm run build -- --watch",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch:test": "npm run mocha -- --watch-extensions spec.ts --watch",
+    "mocha": "cross-env NODE_ENV=test mocha",
     "build": "tsc",
     "prepublish": "npm run build",
     "postpublish": "git push && git push --tags"
