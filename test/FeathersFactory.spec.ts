@@ -7,7 +7,7 @@ import Feathers from './feathers';
 let service: Service<any>;
 
 before(() => {
-    service = Feathers.service('/')
+    service = Feathers.service('/tests')
 });
 
 describe('Feathers Factory', () => {
