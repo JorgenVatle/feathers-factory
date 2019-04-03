@@ -29,7 +29,7 @@ describe('Feathers Factory', () => {
     });
 
     it('can create() defined factories', async () => {
-        const entry = await FeathersFactory.create('can-define-factory');
+        const entry = await FeathersFactory.create('test');
         await Expect(service.get(entry._id)).resolves.toBeTruthy();
     });
 
