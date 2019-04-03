@@ -14,6 +14,7 @@ describe('Feathers Factory', () => {
 
     it('can define() factories', () => {
         FeathersFactory.define('test', service, {
+            _id: () => process.hrtime().join('-'),
             property: 'ok',
             function: () => 'ok',
             method() { return 'ok' },
