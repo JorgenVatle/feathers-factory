@@ -38,9 +38,11 @@ Run the factory anywhere you need to mock a database entry with random data:
 export default async (FeathersApp) => {
     const user = await Factory.create('my-factory');
     
-    console.log(user); // -> { id: "507f191e810c19729de860ea", email: "Damaris8@yahoo.com", servicePlan: "free" }
+    console.log(user); 
+    // -> { _id: "507f191e810c19729de860ea", email: "Damaris8@yahoo.com", servicePlan: "free" }
     
-    await FeathersApp.get(user._id) // -> { id: "507f191e810c19729de860ea", email: "Damaris8@yahoo.com", servicePlan: "free" }
+    await FeathersApp.get(user._id)
+    // -> { _id: "507f191e810c19729de860ea", email: "Damaris8@yahoo.com", servicePlan: "free" }
 };
 ```
 
