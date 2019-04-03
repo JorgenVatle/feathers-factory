@@ -9,7 +9,7 @@
     "watch:test": "npm run mocha -- --watch-extensions spec.ts --watch",
     "mocha": "cross-env NODE_ENV=test mocha",
     "build": "tsc",
-    "prepublish": "npm run build",
+    "prepublish": "npm test && npm run build",
     "postpublish": "git push && git push --tags"
   },
   "repository": {
