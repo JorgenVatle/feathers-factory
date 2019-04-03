@@ -34,6 +34,11 @@ describe('Feathers Factory', () => {
         await Expect(service.get(entry.id)).resolves.toBeTruthy();
     });
 
+    it('can get() a factory\'s data.', async () => {
+        const entry = await FeathersFactory.get('test');
+        Expect(entry.selfReference).toBe('ok');
+    });
+
     it('can override data within predefined factories', async () => {
         const entry = await FeathersFactory.create('test', {
             method: 'overridden',
