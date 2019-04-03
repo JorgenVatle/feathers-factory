@@ -28,7 +28,13 @@ class FeathersFactory {
      * @param params
      */
     public create(factoryName: string, overrides?: DataGenerator, params?: Params) {
-        return this.factories[factoryName].create(overrides, params);
+        const factory = this.factories[factoryName];
+
+        if (!factory) {
+            throw Error(`Could not locate factory '${factoryName}'. Did you define it?`);
+        }
+
+        return factory.create(overrides, params);
     }
 
     /**
