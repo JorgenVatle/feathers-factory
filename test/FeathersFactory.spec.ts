@@ -1,4 +1,5 @@
 import { Service } from '@feathersjs/feathers';
+import Expect from 'expect';
 
 import FeathersFactory from '../src/FeathersFactory';
 import Feathers from './feathers';
@@ -24,6 +25,11 @@ describe('Feathers Factory', () => {
                 return properties.length === properties.filter((value) => value === 'ok').length;
             }
         });
+    });
+
+    it('can create() defined factories', async () => {
+        const entry = await FeathersFactory.create('can-define-factory');
+        await Expect(service.find(entry)).resolves.toBeTruthy();
     });
 
 });
