@@ -30,7 +30,7 @@ describe('Feathers Factory', () => {
 
     it('can create() defined factories', async () => {
         const entry = await FeathersFactory.create('can-define-factory');
-        await Expect(service.find(entry)).resolves.toBeTruthy();
+        await Expect(service.get(entry._id)).resolves.toBeTruthy();
     });
 
 });
