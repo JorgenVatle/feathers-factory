@@ -22,8 +22,9 @@ describe('Feathers Factory', () => {
             async: async () => 'ok',
             selfReference() {
                 const properties = [this.property, this.function, this.method, this.getter, this.async];
+                const okProperties = properties.filter((value) => value === 'ok');
 
-                return properties.length === properties.filter((value) => value === 'ok').length;
+                return properties.length === okProperties.length ? 'ok' : 'error';
             }
         });
     });
