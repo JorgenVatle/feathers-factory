@@ -20,8 +20,8 @@ describe('Feathers Factory', () => {
             method() { return 'ok' },
             get getter() { return 'ok' },
             async: async () => 'ok',
-            selfReference() {
-                const properties = [this.property, this.function, this.method, this.getter, this.async];
+            async selfReference() {
+                const properties = [this.property, this.function, this.method, this.getter, await this.async];
                 const okProperties = properties.filter((value) => value === 'ok');
 
                 return properties.length === okProperties.length ? 'ok' : 'error';
