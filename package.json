@@ -37,6 +37,7 @@
     "@types/expect": "^1.20.4",
     "@types/feathersjs__feathers": "^3.1.1",
     "@types/mocha": "^5.2.6",
+    "cross-env": "^5.2.0",
     "expect": "^24.7.0",
     "feathers-memory": "^3.0.2",
     "mocha": "^6.0.2",
