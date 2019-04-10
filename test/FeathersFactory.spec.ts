@@ -78,4 +78,14 @@ describe('Feathers Factory', () => {
         Object.keys(entry).map(validateContent);
         Object.keys(dbEntry).map(validateContent);
     });
+
+    it('doesn\'t update multiple entries with $limit param', async () => {
+        await FeathersFactory.createMany(10, 'test', { toBeUpdated: true });
+
+        const $limit = 1;
+        await service.patch(null, { wasUpdated: true }, { query: { toBeUpdated: true, $limit } }); // Note the limit here.
+
+        const matched = await service.find({ query: { wasUpdated: true } });
+        Expect(matched.length).toBe($limit);
+    });
 });
