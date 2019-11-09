@@ -8,7 +8,7 @@ A dead easy way to mock data for testing your [Feathers](https://feathersjs.com/
 
 ## Installation
 ```bash
-npm install feathers-factory
+npm install --save-dev feathers-factory
 ```
 
 ## Usage
