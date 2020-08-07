@@ -33,9 +33,8 @@
   },
   "homepage": "https://github.com/JorgenVatle/feathers-factory#readme",
   "devDependencies": {
-    "@feathersjs/feathers": "^3.3.1",
+    "@feathersjs/feathers": "^4.5.7",
     "@types/expect": "^1.20.4",
-    "@types/feathersjs__feathers": "^3.1.1",
     "@types/mocha": "^5.2.6",
     "cross-env": "^5.2.0",
     "expect": "^24.7.0",
