@@ -1,4 +1,4 @@
-import { Params, Service } from '@feathersjs/feathers';
+import { Params, ServiceMethods } from '@feathersjs/feathers';
 const Clues = require('clues');
 
 export type DataGenerator = {
@@ -10,7 +10,7 @@ export default class Factory {
     /**
      * Feathers service
      */
-    private readonly service: Service<any>;
+    private readonly service: ServiceMethods<any>;
 
     /**
      * Factory data generator.
@@ -29,7 +29,7 @@ export default class Factory {
      * @param generator
      * @param defaultParams
      */
-    public constructor(service: Service<any>, generator: DataGenerator, defaultParams: Params = {}) {
+    public constructor(service: ServiceMethods<any>, generator: DataGenerator, defaultParams: Params = {}) {
         this.service = service;
         this.generator = generator;
         this.params = defaultParams;
