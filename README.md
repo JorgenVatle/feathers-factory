@@ -8,7 +8,7 @@ A dead easy way to mock data for testing your [Feathers](https://feathersjs.com/
 
 ## Installation
 ```bash
-npm install feathers-factory
+npm install --save-dev feathers-factory
 ```
 
 ## Usage
@@ -86,7 +86,7 @@ const createPost = async () => {
 ```
 
 #### Setting default service `create()` params
-You can assign default create params. Handy if your service hook relies on a `route` object.
+You can assign default [`create()` params](https://docs.feathersjs.com/api/services#createdata-params). Handy if your Feathers service hooks rely on a [`route`](https://docs.feathersjs.com/api/hooks.html#contextparams) object for handling the `create()` requests fired by Feathers-Factory.
 ```js
 Factory.define('comment', {
     message: Faker.lorem.sentence,
