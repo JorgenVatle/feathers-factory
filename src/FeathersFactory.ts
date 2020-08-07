@@ -1,4 +1,4 @@
-import { Params, Service } from '@feathersjs/feathers';
+import { Params, ServiceMethods } from '@feathersjs/feathers';
 import Factory, { DataGenerator } from './Factory';
 
 class FeathersFactory {
@@ -16,7 +16,7 @@ class FeathersFactory {
      * @param generator
      * @param defaultParams
      */
-    public define(factoryName: string, service: Service<any>, generator: DataGenerator, defaultParams?: Params) {
+    public define(factoryName: string, service: ServiceMethods<any>, generator: DataGenerator, defaultParams?: Params) {
         this.factories[factoryName] = new Factory(service, generator, defaultParams);
     }
 
