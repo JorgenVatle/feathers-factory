@@ -63,7 +63,13 @@ class FeathersFactory {
      * @param overrides
      */
     public get(factoryName: string, overrides?: DataGenerator) {
-        return this.factories[factoryName].get(overrides);
+        const factory = this.factories[factoryName];
+
+        if (!factory) {
+            throw Error(`Could not locate factory '${factoryName}'. Did you define it?`);
+        }
+
+        return factory.get(overrides);
     }
 
 }
