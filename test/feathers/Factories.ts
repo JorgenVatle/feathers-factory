@@ -1,4 +1,4 @@
-import Faker from '@faker-js/faker/dist/types';
+import Faker from '@faker-js/faker';
 import Factory from '../../src/Factory';
 import App from './App';
 
@@ -10,10 +10,10 @@ export const UserFactory = new Factory(UsersService, {
     username: Faker.internet.userName,
 })
 
-export const ArticleFactory = new Factory(ArticlesService, async () => {
-    const author = await UserFactory.create();
-    return {
-        _id: () => process.hrtime().join('-'),
-        userId: () => author._id,
+export const ArticleFactory = new Factory(ArticlesService, {
+    _id: () => process.hrtime().join('-'),
+    userId: async () => {
+        const user = await UserFactory.create();
+        return user._id;
     }
 });
