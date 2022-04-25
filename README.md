@@ -15,7 +15,7 @@ npm install --save-dev feathers-factory
 Define factories for the services you want to mock data for. This works well with 
 [faker](https://www.npmjs.com/package/faker), allowing you to generate random data for every factory run.
 
-### Basic usage
+### Define a global factory
 Define a factory:
 ```js
 import Factory from 'feathers-factory';
@@ -45,6 +45,30 @@ export default async (FeathersApp) => {
     // -> { _id: "507f191e810c19729de860ea", email: "Damaris8@yahoo.com", servicePlan: "free" }
 };
 ```
+
+### Or, define factories as modules
+Defining your factory as a module provides better type-inference for your factory results. Just import the factories,
+and use like you normally would with global factories;
+
+##### Define and export a factory
+```ts
+import Factory from 'feathers-factory/Factory';
+
+export const UserFactory = new Factory(FeathersApp.service('users'), {
+    username: () => Faker.internet.userName(),
+});
+```
+
+##### Import and use your factory
+```ts
+import { UserFactory } from './Factories';
+
+const user = await UserFactory.create();
+
+console.log(user);
+// { _id: "507f191e810c19729de860ea", username: "Damaris8" }
+```
+
 
 ### Advanced usage
 

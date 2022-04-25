@@ -1,11 +1,8 @@
 import { Params, ServiceMethods } from '@feathersjs/feathers';
+import { FeathersServiceNotDefined } from './Errors/FeathersFactoryError';
 const Clues = require('clues');
 
-export type DataGenerator = {
-    [s: string]: any,
-}
-
-export default class Factory {
+export default class Factory<Generator extends DataGenerator> {
 
     /**
      * Feathers service
@@ -15,7 +12,7 @@ export default class Factory {
     /**
      * Factory data generator.
      */
-    private readonly generator: DataGenerator;
+    private readonly generator: Generator;
 
     /**
      * Default service create() params.
@@ -29,7 +26,10 @@ export default class Factory {
      * @param generator
      * @param defaultParams
      */
-    public constructor(service: ServiceMethods<any>, generator: DataGenerator, defaultParams: Params = {}) {
+    public constructor(service: ServiceMethods<any>, generator: Generator, defaultParams: Params = {}) {
+        if (!service) {
+            throw new FeathersServiceNotDefined('The provided service doesn\'t appear to exist!');
+        }
         this.service = service;
         this.generator = generator;
         this.params = defaultParams;
@@ -59,11 +59,11 @@ export default class Factory {
      * @param overrides
      * @param params
      */
-    public async create(overrides: { [s: string]: any } = {}, params?: Params) {
+    public async create<Overrides extends Generator>(overrides: Partial<Overrides> = {}, params?: Params) {
         const data = await this.resolveData({ ...this.generator, ...overrides, });
         const parameters = await this.resolveData({ ...this.params, ...params });
 
-        return await this.service.create(data, parameters);
+        return await this.service.create(data, parameters) as Promise<GeneratorResult<Generator & Overrides>>;
     }
 
     /**
@@ -71,8 +71,14 @@ export default class Factory {
      *
      * @param overrides
      */
-    public get(overrides: { [s: string]: any } = {}) {
-        return this.resolveData({ ...this.generator, ...overrides });
+    public get<Overrides extends Generator>(overrides: Partial<Overrides> = {}) {
+        return this.resolveData({ ...this.generator, ...overrides }) as Promise<GeneratorResult<Generator & Overrides>>;
     }
 
 }
+
+type GeneratorResult<T extends GeneratorObject> = {
+    [key in keyof T]: T[key] extends () => any ? Awaited<ReturnType<T[key]>> : T[key];
+};
+type GeneratorObject = { [s: string]: any }
+export type DataGenerator = GeneratorObject;

@@ -1,6 +1,6 @@
 {
   "name": "feathers-factory",
-  "version": "2.0.3",
+  "version": "3.0.0",
   "description": "Create data factories for your Feathers services",
   "main": "dist/FeathersFactory.js",
   "types": "dist/FeathersFactory.d.ts",
@@ -33,6 +33,7 @@
   },
   "homepage": "https://github.com/JorgenVatle/feathers-factory#readme",
   "devDependencies": {
+    "@faker-js/faker": "^6.2.0",
     "@feathersjs/feathers": "^4.5.7",
     "@types/expect": "^1.20.4",
     "@types/mocha": "^5.2.6",
@@ -42,7 +43,7 @@
     "feathers-memory": "^3.0.2",
     "mocha": "^6.0.2",
     "ts-node": "^8.0.3",
-    "typescript": "^3.3.4000"
+    "typescript": "^4.6.3"
   },
   "dependencies": {
     "clues": "^4.0.2"

@@ -6,7 +6,7 @@ class FeathersFactory {
     /**
      * Defined factories.
      */
-    private factories: { [s: string]: Factory } = {};
+    private factories: { [s: string]: Factory<any> } = {};
 
     /**
      * Define a new factory.
