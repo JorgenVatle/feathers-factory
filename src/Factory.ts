@@ -1,4 +1,5 @@
 import { Params, ServiceMethods } from '@feathersjs/feathers';
+import { FeathersServiceNotDefined } from './Errors/FeathersFactoryError';
 const Clues = require('clues');
 
 export default class Factory<Generator extends DataGenerator> {
@@ -26,6 +27,9 @@ export default class Factory<Generator extends DataGenerator> {
      * @param defaultParams
      */
     public constructor(service: ServiceMethods<any>, generator: Generator, defaultParams: Params = {}) {
+        if (!service) {
+            throw new FeathersServiceNotDefined('The provided service doesn\'t appear to exist!');
+        }
         this.service = service;
         this.generator = generator;
         this.params = defaultParams;
