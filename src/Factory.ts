@@ -85,5 +85,5 @@ type GeneratorResult<T extends DataGenerator<any>> = {
 };
 type GeneratorSchema = { [s: string]: any }
 export type DataGenerator<T extends GeneratorSchema = GeneratorSchema> = {
-    [key in keyof T]: T[key] | (() => Promise<T[key]>) | (() => T[key])
+    [key in keyof T]: T[key] | ((this: T) => Promise<T[key]>) | ((this: T) => T[key])
 }
