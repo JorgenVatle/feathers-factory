@@ -19,7 +19,7 @@ class FeathersFactory {
     public define(
         factoryName: string,
         service: ServiceMethods<any>,
-        generator: DataGenerator<any>,
+        generator: DataGenerator<any, any>,
         defaultParams?: Params,
     ) {
         this.factories[factoryName] = new Factory(service, generator, defaultParams);
@@ -32,7 +32,7 @@ class FeathersFactory {
      * @param overrides
      * @param params
      */
-    public create(factoryName: string, overrides?: DataGenerator<any>, params?: Params) {
+    public create(factoryName: string, overrides?: DataGenerator<any, any>, params?: Params) {
         const factory = this.factories[factoryName];
 
         if (!factory) {
@@ -50,7 +50,7 @@ class FeathersFactory {
      * @param overrides
      * @param params
      */
-    public createMany(quantity: number, factoryName: string, overrides?: DataGenerator<any>, params?: Params) {
+    public createMany(quantity: number, factoryName: string, overrides?: DataGenerator<any, any>, params?: Params) {
         const created = [];
 
         for (let i = 0; i < quantity; i++) {
@@ -67,7 +67,7 @@ class FeathersFactory {
      * @param factoryName
      * @param overrides
      */
-    public get(factoryName: string, overrides?: DataGenerator<any>) {
+    public get(factoryName: string, overrides?: DataGenerator<any, any>) {
         const factory = this.factories[factoryName];
 
         if (!factory) {
