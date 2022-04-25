@@ -83,10 +83,10 @@ type GeneratorResult<T extends DataGenerator<any>> = {
     [key in keyof T]: T[key] extends () => any ? Awaited<ReturnType<T[key]>> : T[key];
 };
 type GeneratorSchema = { [s: string]: any }
-export type DataGenerator<T extends GeneratorSchema = GeneratorSchema> = {
-    [key in keyof T]: T[key]
-                      | ((this: GeneratorFunctionThisType<T>) => Promise<T[key]>)
-                      | ((this: GeneratorFunctionThisType<T>) => T[key])
+export type DataGenerator<Schema extends GeneratorSchema = GeneratorSchema> = {
+    [key in keyof Schema]: Schema[key]
+                           | ((this: GeneratorFunctionThisType<Schema>) => Promise<Schema[key]>)
+                           | ((this: GeneratorFunctionThisType<Schema>) => Schema[key])
 }
 
 type GeneratorFunctionThisType<Schema extends GeneratorSchema> = {
