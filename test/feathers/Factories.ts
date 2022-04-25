@@ -17,3 +17,8 @@ export const ArticleFactory = new Factory(ArticlesService, {
         return user.id;
     }
 });
+
+export const StrictArticleFactory = new Factory<{ userId: string, content: string }>(ArticlesService, {
+    userId: () => 'some-string',
+    content: () => 'foobar',
+})
