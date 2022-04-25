@@ -5,5 +5,6 @@ const App = Feathers();
 App.use('/tests', require('feathers-memory')({ multi: true }));
 App.use('/users', require('feathers-memory')({ multi: true }));
 App.use('/articles', require('feathers-memory')({ multi: true }));
+App.use('/comments', require('feathers-memory')({ multi: true }));
 
 export default App;
