@@ -1,10 +1,16 @@
-import Feathers from '@feathersjs/feathers';
+import Feathers, { Service } from '@feathersjs/feathers';
 
-const App = Feathers();
+const services = {
+    'tests': require('feathers-memory')({ multi: true }) as Service<{}>,
+    'users': require('feathers-memory')({ multi: true }) as Service<{}>,
+    'articles': require('feathers-memory')({ multi: true }) as Service<{}>,
+    'comments': require('feathers-memory')({ multi: true }) as Service<{}>,
+};
 
-App.use('/tests', require('feathers-memory')({ multi: true }));
-App.use('/users', require('feathers-memory')({ multi: true }));
-App.use('/articles', require('feathers-memory')({ multi: true }));
-App.use('/comments', require('feathers-memory')({ multi: true }));
+const App = Feathers<typeof services>();
+
+for (const [name, service] of Object.entries(services)) {
+    App.use(name, service);
+}
 
 export default App;
