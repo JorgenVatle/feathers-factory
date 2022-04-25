@@ -16,7 +16,7 @@ describe('relational/cross-dependent factories', () => {
     it('can create articles with comments from the author', async () => {
         const comment = await CommentOnOwnArticleFactory.create();
         const user = await App.service('users').get(comment.userId);
-        const article = await App.service('comments').get(comment.articleId);
+        const article = await App.service('articles').get(comment.articleId);
 
         Expect(comment).toBeTruthy();
         Expect(user).toHaveProperty('id', comment.userId);
