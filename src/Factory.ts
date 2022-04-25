@@ -75,7 +75,7 @@ export default class Factory<Generator extends DataGenerator> {
 }
 
 type GeneratorResult<T extends GeneratorObject> = {
-    [key in keyof T]: Awaited<ReturnType<T[key]>>
+    [key in keyof T]: T[key] extends () => any ? Awaited<ReturnType<T[key]>> : T[key];
 };
-type GeneratorObject = { [s: string]: () => any }
+type GeneratorObject = { [s: string]: any }
 export type DataGenerator = GeneratorObject;
