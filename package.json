@@ -5,12 +5,9 @@
   "main": "dist/FeathersFactory.js",
   "types": "dist/FeathersFactory.d.ts",
   "scripts": {
-    "dev": "npm run build -- --watch",
-    "watch:test": "npm run mocha -- --watch-extensions spec.ts --watch",
-    "mocha": "cross-env NODE_ENV=test mocha",
-    "test": "npm run mocha",
-    "build": "tsc",
-    "prepublish": "npm test && npm run build",
+    "test": "cross-env NODE_ENV=test mocha",
+    "prepack": "tsc",
+    "prepublishOnly": "tsc && npm test",
     "postpublish": "git push && git push --tags"
   },
   "repository": {
