@@ -6,14 +6,14 @@ const UsersService = App.service('users');
 const ArticlesService = App.service('articles');
 
 export const UserFactory = new Factory(UsersService, {
-    _id: () => process.hrtime().join('-'),
+    id: () => process.hrtime().join('-'),
     username: Faker.internet.userName,
 })
 
 export const ArticleFactory = new Factory(ArticlesService, {
-    _id: () => process.hrtime().join('-'),
+    id: () => process.hrtime().join('-'),
     userId: async () => {
         const user = await UserFactory.create();
-        return user._id;
+        return user.id;
     }
 });

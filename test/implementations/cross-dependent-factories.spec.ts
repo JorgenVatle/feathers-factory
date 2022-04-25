@@ -10,6 +10,6 @@ describe('relational/cross-dependent factories', () => {
 
         const user = await App.service('users').get(article.userId);
 
-        Expect(user).toHaveProperty('_id', article.userId);
+        Expect(user).toHaveProperty('id', article.userId);
     })
 })
