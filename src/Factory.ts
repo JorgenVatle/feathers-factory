@@ -4,7 +4,7 @@ import { FeathersServiceNotDefined } from './Errors/FeathersFactoryError';
 const Clues = require('clues');
 
 export default class Factory<FeathersService extends FactoryCompatibleService<any>,
-    Generator extends DataGenerator<FeathersResult<FeathersService>, Generator>> {
+    Generator extends DataGenerator<Partial<FeathersResult<FeathersService>>>> {
 
     /**
      * Feathers service
@@ -79,13 +79,13 @@ export default class Factory<FeathersService extends FactoryCompatibleService<an
 
 }
 
-type GeneratorResult<T extends DataGenerator<any, any>> = {
+type GeneratorResult<T extends DataGenerator<any>> = {
     [key in keyof T]: Awaited<ReturnType<T[key]>>;
 };
-export type DataGenerator<Schema extends FeathersResult<any>, Generator extends DataGenerator<any, any>> = {
+export type DataGenerator<Schema extends FeathersResult<any>> = {
     [key in keyof Schema]: Schema[key]
-                           | ((this: GeneratorResult<Generator>) => Promise<Schema[key]>)
-                           | ((this: GeneratorResult<Generator>) => Schema[key])
+                           | ((this: Schema) => Promise<Schema[key]>)
+                           | ((this: Schema) => Schema[key])
 }
 
 type FactoryCompatibleService<T> = {
