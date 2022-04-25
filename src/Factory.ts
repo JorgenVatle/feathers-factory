@@ -80,7 +80,7 @@ export default class Factory<Schema extends GeneratorSchema = GeneratorSchema,
 }
 
 type GeneratorResult<T extends DataGenerator<any>> = {
-    [key in keyof T]: T[key] extends () => any ? Awaited<ReturnType<T[key]>> : T[key];
+    [key in keyof T]: Awaited<ReturnType<T[key]>>;
 };
 type GeneratorSchema = { [s: string]: any }
 export type DataGenerator<Schema extends GeneratorSchema = GeneratorSchema> = {
