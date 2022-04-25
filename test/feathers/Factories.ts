@@ -34,7 +34,7 @@ export const CommentOnOwnArticleFactory = new Factory<{
         return article.id;
     },
     userId: async function() {
-        const article = ArticlesService.get(await this.articleId);
+        const article = await ArticlesService.get(await this.articleId);
         return article.userId;
     },
     content: Faker.lorem.paragraph,
