@@ -5,7 +5,7 @@ export type DataGenerator = {
     [s: string]: any,
 }
 
-export default class Factory {
+export default class Factory<Generator extends DataGenerator> {
 
     /**
      * Feathers service
@@ -15,7 +15,7 @@ export default class Factory {
     /**
      * Factory data generator.
      */
-    private readonly generator: DataGenerator;
+    private readonly generator: Generator;
 
     /**
      * Default service create() params.
@@ -29,7 +29,7 @@ export default class Factory {
      * @param generator
      * @param defaultParams
      */
-    public constructor(service: ServiceMethods<any>, generator: DataGenerator, defaultParams: Params = {}) {
+    public constructor(service: ServiceMethods<any>, generator: Generator, defaultParams: Params = {}) {
         this.service = service;
         this.generator = generator;
         this.params = defaultParams;
