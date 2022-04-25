@@ -2,7 +2,10 @@ import { Params, ServiceMethods } from '@feathersjs/feathers';
 import { FeathersServiceNotDefined } from './Errors/FeathersFactoryError';
 const Clues = require('clues');
 
-export default class Factory<Generator extends DataGenerator> {
+export default class Factory<
+    Schema extends GeneratorSchema = GeneratorSchema,
+    Generator extends DataGenerator<Schema> = DataGenerator<Schema>
+    > {
 
     /**
      * Feathers service
@@ -41,7 +44,7 @@ export default class Factory<Generator extends DataGenerator> {
      *
      * @param data
      */
-    private async resolveData(data: DataGenerator) {
+    private async resolveData(data: any) {
         const output: { [s: string]: any } = {};
 
         const dataResolvers = Object.keys(data).map(async (key: string) => {
@@ -77,8 +80,10 @@ export default class Factory<Generator extends DataGenerator> {
 
 }
 
-type GeneratorResult<T extends GeneratorObject> = {
+type GeneratorResult<T extends DataGenerator<any>> = {
     [key in keyof T]: T[key] extends () => any ? Awaited<ReturnType<T[key]>> : T[key];
 };
-type GeneratorObject = { [s: string]: any }
-export type DataGenerator = GeneratorObject;
+type GeneratorSchema = { [s: string]: any }
+export type DataGenerator<T extends GeneratorSchema = GeneratorSchema> = {
+    [key in keyof T]: T[key] | (() => Promise<T[key]>) | (() => T[key])
+}
