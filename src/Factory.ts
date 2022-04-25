@@ -61,7 +61,6 @@ export default class Factory<Generator extends DataGenerator> {
      */
     public async create<Overrides extends Generator>(overrides: Partial<Overrides> = {}, params?: Params) {
         const data = await this.resolveData({ ...this.generator, ...overrides, });
-        // @ts-ignore
         const parameters = await this.resolveData({ ...this.params, ...params });
 
         return await this.service.create(data, parameters) as Promise<GeneratorResult<Generator & Overrides>>;
