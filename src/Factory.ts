@@ -1,15 +1,15 @@
-import { Params, ServiceMethods, Service } from '@feathersjs/feathers';
+import { Params, Service } from '@feathersjs/feathers';
 import { FeathersServiceNotDefined } from './Errors/FeathersFactoryError';
 
 const Clues = require('clues');
 
-export default class Factory<FeathersService extends Service<any>,
-    Generator extends DataGenerator<FeathersSchema<FeathersService>>> {
+export default class Factory<FeathersService extends FactoryCompatibleService<any>,
+    Generator extends DataGenerator<Partial<FeathersResult<FeathersService>>>> {
 
     /**
      * Feathers service
      */
-    private readonly service: ServiceMethods<any>;
+    private readonly service: Service<any>;
 
     /**
      * Factory data generator.
@@ -28,7 +28,7 @@ export default class Factory<FeathersService extends Service<any>,
      * @param generator
      * @param defaultParams
      */
-    public constructor(service: FeathersService, generator: Generator, defaultParams: Params = {}) {
+    public constructor(service: FeathersService & Service<any>, generator: Generator, defaultParams: Params = {}) {
         if (!service) {
             throw new FeathersServiceNotDefined('The provided service doesn\'t appear to exist!');
         }
@@ -65,7 +65,7 @@ export default class Factory<FeathersService extends Service<any>,
         const data = await this.resolveData({ ...this.generator, ...overrides });
         const parameters = await this.resolveData({ ...this.params, ...params });
 
-        return await this.service.create(data, parameters) as FeathersSchema<FeathersService>;
+        return await this.service.create(data, parameters) as FeathersResult<FeathersService>;
     }
 
     /**
@@ -82,9 +82,14 @@ export default class Factory<FeathersService extends Service<any>,
 type GeneratorResult<T extends DataGenerator<any>> = {
     [key in keyof T]: Awaited<ReturnType<T[key]>>;
 };
-export type DataGenerator<Schema extends FeathersSchema<any>> = {
+export type DataGenerator<Schema extends FeathersResult<any>> = {
     [key in keyof Schema]: Schema[key]
                            | ((this: Schema) => Promise<Schema[key]>)
                            | ((this: Schema) => Schema[key])
 }
-type FeathersSchema<T extends Service<any>> = Awaited<ReturnType<T['create']>>
+
+type FactoryCompatibleService<T> = {
+    create(data: T, params?: Params): Promise<T>;
+}
+
+type FeathersResult<T extends FactoryCompatibleService<any>> = Awaited<ReturnType<T['create']>>
