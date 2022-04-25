@@ -2,7 +2,7 @@ import { Params, ServiceMethods } from '@feathersjs/feathers';
 const Clues = require('clues');
 
 export type DataGenerator = {
-    [s: string]: any,
+    [s: string]: () => any,
 }
 
 export default class Factory<Generator extends DataGenerator> {
