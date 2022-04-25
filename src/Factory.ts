@@ -1,11 +1,10 @@
 import { Params, ServiceMethods } from '@feathersjs/feathers';
 import { FeathersServiceNotDefined } from './Errors/FeathersFactoryError';
+
 const Clues = require('clues');
 
-export default class Factory<
-    Schema extends GeneratorSchema = GeneratorSchema,
-    Generator extends DataGenerator<Schema> = DataGenerator<Schema>
-    > {
+export default class Factory<Schema extends GeneratorSchema = GeneratorSchema,
+    Generator extends DataGenerator<Schema> = DataGenerator<Schema>> {
 
     /**
      * Feathers service
@@ -63,7 +62,7 @@ export default class Factory<
      * @param params
      */
     public async create<Overrides extends Generator>(overrides: Partial<Overrides> = {}, params?: Params) {
-        const data = await this.resolveData({ ...this.generator, ...overrides, });
+        const data = await this.resolveData({ ...this.generator, ...overrides });
         const parameters = await this.resolveData({ ...this.params, ...params });
 
         return await this.service.create(data, parameters) as Promise<GeneratorResult<Generator & Overrides>>;
@@ -85,7 +84,9 @@ type GeneratorResult<T extends DataGenerator<any>> = {
 };
 type GeneratorSchema = { [s: string]: any }
 export type DataGenerator<T extends GeneratorSchema = GeneratorSchema> = {
-    [key in keyof T]: T[key] | ((this: GeneratorFunctionThisType<T>) => Promise<T[key]>) | ((this: GeneratorFunctionThisType<T>) => T[key])
+    [key in keyof T]: T[key]
+                      | ((this: GeneratorFunctionThisType<T>) => Promise<T[key]>)
+                      | ((this: GeneratorFunctionThisType<T>) => T[key])
 }
 
 type GeneratorFunctionThisType<Schema extends GeneratorSchema> = {
