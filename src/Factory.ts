@@ -1,10 +1,10 @@
-import { Params, ServiceMethods } from '@feathersjs/feathers';
+import { Params, ServiceMethods, Service } from '@feathersjs/feathers';
 import { FeathersServiceNotDefined } from './Errors/FeathersFactoryError';
 
 const Clues = require('clues');
 
-export default class Factory<Schema extends GeneratorSchema = GeneratorSchema,
-    Generator extends DataGenerator<Schema> = DataGenerator<Schema>> {
+export default class Factory<FeathersService extends Service<any>,
+    Generator extends DataGenerator<FeathersSchema<FeathersService>>> {
 
     /**
      * Feathers service
@@ -28,7 +28,7 @@ export default class Factory<Schema extends GeneratorSchema = GeneratorSchema,
      * @param generator
      * @param defaultParams
      */
-    public constructor(service: ServiceMethods<any>, generator: Generator, defaultParams: Params = {}) {
+    public constructor(service: FeathersService, generator: Generator, defaultParams: Params = {}) {
         if (!service) {
             throw new FeathersServiceNotDefined('The provided service doesn\'t appear to exist!');
         }
@@ -65,7 +65,7 @@ export default class Factory<Schema extends GeneratorSchema = GeneratorSchema,
         const data = await this.resolveData({ ...this.generator, ...overrides });
         const parameters = await this.resolveData({ ...this.params, ...params });
 
-        return await this.service.create(data, parameters) as Promise<GeneratorResult<Generator & Overrides>>;
+        return await this.service.create(data, parameters) as FeathersSchema<FeathersService>;
     }
 
     /**
@@ -82,13 +82,9 @@ export default class Factory<Schema extends GeneratorSchema = GeneratorSchema,
 type GeneratorResult<T extends DataGenerator<any>> = {
     [key in keyof T]: Awaited<ReturnType<T[key]>>;
 };
-type GeneratorSchema = { [s: string]: any }
-export type DataGenerator<Schema extends GeneratorSchema = GeneratorSchema> = {
+export type DataGenerator<Schema extends FeathersSchema<any>> = {
     [key in keyof Schema]: Schema[key]
-                           | ((this: GeneratorFunctionThisType<Schema>) => Promise<Schema[key]>)
-                           | ((this: GeneratorFunctionThisType<Schema>) => Schema[key])
+                           | ((this: Schema) => Promise<Schema[key]>)
+                           | ((this: Schema) => Schema[key])
 }
-
-type GeneratorFunctionThisType<Schema extends GeneratorSchema> = {
-    [key in keyof Schema]: Promise<Schema[key]>;
-}
+type FeathersSchema<T extends Service<any>> = Awaited<ReturnType<T['create']>>

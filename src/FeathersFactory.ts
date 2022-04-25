@@ -1,4 +1,4 @@
-import { Params, ServiceMethods } from '@feathersjs/feathers';
+import { Params, Service } from '@feathersjs/feathers';
 import Factory, { DataGenerator } from './Factory';
 
 class FeathersFactory {
@@ -6,7 +6,7 @@ class FeathersFactory {
     /**
      * Defined factories.
      */
-    private factories: { [s: string]: Factory<any> } = {};
+    private factories: { [s: string]: Factory<any, any> } = {};
 
     /**
      * Define a new factory.
@@ -16,7 +16,7 @@ class FeathersFactory {
      * @param generator
      * @param defaultParams
      */
-    public define(factoryName: string, service: ServiceMethods<any>, generator: DataGenerator, defaultParams?: Params) {
+    public define(factoryName: string, service: Service<any>, generator: DataGenerator<any>, defaultParams?: Params) {
         this.factories[factoryName] = new Factory(service, generator, defaultParams);
     }
 
@@ -27,7 +27,7 @@ class FeathersFactory {
      * @param overrides
      * @param params
      */
-    public create(factoryName: string, overrides?: DataGenerator, params?: Params) {
+    public create(factoryName: string, overrides?: DataGenerator<any>, params?: Params) {
         const factory = this.factories[factoryName];
 
         if (!factory) {
@@ -45,7 +45,7 @@ class FeathersFactory {
      * @param overrides
      * @param params
      */
-    public createMany(quantity: number, factoryName: string, overrides?: DataGenerator, params?: Params) {
+    public createMany(quantity: number, factoryName: string, overrides?: DataGenerator<any>, params?: Params) {
         const created = [];
 
         for (let i = 0; i < quantity; i++) {
@@ -62,7 +62,7 @@ class FeathersFactory {
      * @param factoryName
      * @param overrides
      */
-    public get(factoryName: string, overrides?: DataGenerator) {
+    public get(factoryName: string, overrides?: DataGenerator<any>) {
         const factory = this.factories[factoryName];
 
         if (!factory) {

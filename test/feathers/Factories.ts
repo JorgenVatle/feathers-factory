@@ -19,16 +19,8 @@ export const ArticleFactory = new Factory(ArticlesService, {
     },
 });
 
-export const StrictArticleFactory = new Factory<{ userId: string, content: string }>(ArticlesService, {
-    userId: () => 'some-string',
-    content: () => 'foobar',
-});
-
-export const CommentOnOwnArticleFactory = new Factory<{
-    userId: string;
-    articleId: string;
-    content: string;
-}>(CommentService, {
+export const CommentOnOwnArticleFactory = new Factory(CommentService, {
+    id: () => process.hrtime().join('-'),
     articleId: async () => {
         const article = await ArticleFactory.create();
         return article.id;
