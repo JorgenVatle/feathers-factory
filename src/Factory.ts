@@ -1,10 +1,6 @@
 import { Params, ServiceMethods } from '@feathersjs/feathers';
 const Clues = require('clues');
 
-export type DataGenerator = {
-    [s: string]: () => any,
-}
-
 export default class Factory<Generator extends DataGenerator> {
 
     /**
@@ -59,11 +55,12 @@ export default class Factory<Generator extends DataGenerator> {
      * @param overrides
      * @param params
      */
-    public async create(overrides: { [s: string]: any } = {}, params?: Params) {
+    public async create<Overrides extends Generator>(overrides: Partial<Overrides> = {}, params?: Params) {
         const data = await this.resolveData({ ...this.generator, ...overrides, });
+        // @ts-ignore
         const parameters = await this.resolveData({ ...this.params, ...params });
 
-        return await this.service.create(data, parameters);
+        return await this.service.create(data, parameters) as Promise<GeneratorResult<Generator & Overrides>>;
     }
 
     /**
@@ -71,8 +68,14 @@ export default class Factory<Generator extends DataGenerator> {
      *
      * @param overrides
      */
-    public get(overrides: { [s: string]: any } = {}) {
-        return this.resolveData({ ...this.generator, ...overrides });
+    public get<Overrides extends Generator>(overrides: Partial<Overrides> = {}) {
+        return this.resolveData({ ...this.generator, ...overrides }) as Promise<GeneratorResult<Generator & Overrides>>;
     }
 
 }
+
+type GeneratorResult<T extends GeneratorObject> = {
+    [key in keyof T]: Awaited<ReturnType<T[key]>>
+};
+type GeneratorObject = { [s: string]: () => any }
+export type DataGenerator = GeneratorObject;
