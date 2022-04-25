@@ -56,7 +56,7 @@ and use like you normally would with global factories;
 ```ts
 import Factory from 'feathers-factory/Factory';
 
-export const UserFactory = new Factory(App.service('users'), {
+export const UserFactory = new Factory(FeathersApp.service('users'), {
     username: () => Faker.internet.userName(),
 });
 ```
@@ -65,7 +65,7 @@ export const UserFactory = new Factory(App.service('users'), {
 ```ts
 import { UserFactory } from './Factories';
 
-const user = UserFactory.create();
+const user = await UserFactory.create();
 console.log('Created user with username: ', user.username);
 ```
 
