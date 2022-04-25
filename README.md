@@ -48,6 +48,28 @@ export default async (FeathersApp) => {
 
 ### Advanced usage
 
+#### Define factories as modules
+Defining your factory as a module provides better type-inference for your factory results. Just import the factories,
+and use like you normally would with global factories;
+
+##### Define and export a factory
+```ts
+import Factory from 'feathers-factory/Factory';
+
+export const UserFactory = new Factory(App.service('users'), {
+    username: () => Faker.internet.userName(),
+});
+```
+
+##### Import and use your factory
+```ts
+import { UserFactory } from './Factories';
+
+const user = UserFactory.create();
+console.log('Created user with username: ', user.username);
+```
+
+
 #### Use promises and other factories
 You're not limited to functions and static data! The following will create a full-fledged user for your post.
 This can be super handy when dealing with a lot of relational data.
