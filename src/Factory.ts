@@ -84,8 +84,8 @@ type GeneratorResult<T extends DataGenerator<any>> = {
 };
 export type DataGenerator<Schema extends FeathersResult<any>> = {
     [key in keyof Schema]: Schema[key]
-                           | ((this: Schema) => Promise<Schema[key]>)
-                           | ((this: Schema) => Schema[key])
+                           | ((this: Required<Schema>) => Promise<Schema[key]>)
+                           | ((this: Required<Schema>) => Schema[key])
 }
 
 type FactoryCompatibleService<T> = {
