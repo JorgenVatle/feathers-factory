@@ -86,9 +86,12 @@ type GeneratorResult<T extends DataGenerator<any>> = {
     [key in keyof T]: Awaited<ReturnType<T[key]>>;
 };
 export type DataGenerator<Schema> = {
-    [key in keyof Schema]: Schema[key] | ((this: Schema extends Array<any>
-                                                 ? Required<Schema[number]>
-                                                 : Required<Schema>) => Promise<Schema[key]> | Schema[key])
+    [key in keyof Schema]: Schema[key] | ((this: SchemaThisType<Schema extends Array<any>
+                                                                ? Required<Schema[number]>
+                                                                : Required<Schema>>) => Promise<Schema[key]> | Schema[key])
+}
+type SchemaThisType<Schema> = {
+    [key in keyof Schema]: Promise<Schema[key]>;
 }
 
 type FactoryCompatibleService = {
