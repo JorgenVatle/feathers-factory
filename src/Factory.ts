@@ -1,15 +1,15 @@
-import { Params, Service } from '@feathersjs/feathers';
+import { Params } from '@feathersjs/feathers';
 import { FeathersServiceNotDefined } from './Errors/FeathersFactoryError';
 
 const Clues = require('clues');
 
-export default class Factory<FeathersService extends FactoryCompatibleService<any>,
-    Generator extends DataGenerator<Partial<FeathersResult<FeathersService>>>> {
+export default class Factory<FeathersService extends FactoryCompatibleService,
+    Generator extends DataGenerator<Partial<Awaited<ResultType>>>, ResultType = FeathersResult<FeathersService>> {
 
     /**
      * Feathers service
      */
-    private readonly service: Service<any>;
+    private readonly service: FeathersService;
 
     /**
      * Factory data generator.
@@ -28,7 +28,7 @@ export default class Factory<FeathersService extends FactoryCompatibleService<an
      * @param generator
      * @param defaultParams
      */
-    public constructor(service: FeathersService & Service<any>, generator: Generator, defaultParams: Params = {}) {
+    public constructor(service: FeathersService, generator: Generator, defaultParams: Params = {}) {
         if (!service) {
             throw new FeathersServiceNotDefined('The provided service doesn\'t appear to exist!');
         }
@@ -61,11 +61,11 @@ export default class Factory<FeathersService extends FactoryCompatibleService<an
      * @param overrides
      * @param params
      */
-    public async create<Overrides extends Generator>(overrides: Partial<Overrides> = {}, params?: Params) {
+    public async create<Overrides extends Generator>(overrides: Partial<Overrides> = {}, params?: Params): ResultType {
         const data = await this.resolveData({ ...this.generator, ...overrides });
         const parameters = await this.resolveData({ ...this.params, ...params });
 
-        return await this.service.create(data, parameters) as FeathersResult<FeathersService>;
+        return this.service.create(data, parameters);
     }
 
     /**
@@ -88,8 +88,8 @@ export type DataGenerator<Schema> = {
                                                  : Required<Schema>) => Promise<Schema[key]> | Schema[key])
 }
 
-type FactoryCompatibleService<T> = {
-    create(data: T, params?: Params): Promise<T>;
+type FactoryCompatibleService = {
+    create(data: any, params?: Params): Promise<any>;
 }
 
-type FeathersResult<T extends FactoryCompatibleService<any>> = Awaited<ReturnType<T['create']>>
+type FeathersResult<T extends FactoryCompatibleService> = ReturnType<T['create']>
