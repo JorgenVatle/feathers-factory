@@ -1,3 +1,4 @@
+import { AdapterService } from '@feathersjs/adapter-commons';
 import Feathers, { Service } from '@feathersjs/feathers';
 
 const services = {
@@ -15,6 +16,9 @@ const services = {
         userId: string;
         articleId: string;
         content: string;
+    }>,
+    'adapter-service': require('feathers-memory')({ multi: true }) as AdapterService<{
+        id: string;
     }>,
 };
 
