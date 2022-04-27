@@ -10,6 +10,14 @@ describe('Feathers Test Factories', () => {
 
             Expect(article).toHaveProperty('id', 'test');
         });
+
+        it('properly applies overrides defined as async functions', async () => {
+            const article = await ArticleFactory.create({
+                id: async () => 'async test',
+            });
+
+            Expect(article).toHaveProperty('id', 'async test');
+        });
     });
 
 });
