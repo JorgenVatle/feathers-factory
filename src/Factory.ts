@@ -82,10 +82,10 @@ export default class Factory<FeathersService extends FactoryCompatibleService<an
 type GeneratorResult<T extends DataGenerator<any>> = {
     [key in keyof T]: Awaited<ReturnType<T[key]>>;
 };
-export type DataGenerator<Schema extends FeathersResult<any>> = {
-    [key in keyof Schema]: Schema[key]
-                           | ((this: Required<Schema>) => Promise<Schema[key]>)
-                           | ((this: Required<Schema>) => Schema[key])
+export type DataGenerator<Schema> = {
+    [key in keyof Schema]: Schema[key] | ((this: Schema extends Array<any>
+                                                 ? Required<Schema[number]>
+                                                 : Required<Schema>) => Promise<Schema[key]> | Schema[key])
 }
 
 type FactoryCompatibleService<T> = {
