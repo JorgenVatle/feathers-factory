@@ -61,8 +61,8 @@ export default class Factory<FeathersService extends FactoryCompatibleService,
      * @param overrides
      * @param params
      */
-    public async create<Overrides extends Generator>(
-        overrides: Partial<Overrides> = {},
+    public async create<Overrides extends DataGenerator<ResultType>>(
+        overrides: Partial<Overrides>,
         params?: Params,
     ): Promise<ResultType extends Array<any> ? ResultType[number] : ResultType> {
         const data = await this.resolveData({ ...this.generator, ...overrides });
@@ -76,7 +76,7 @@ export default class Factory<FeathersService extends FactoryCompatibleService,
      *
      * @param overrides
      */
-    public get<Overrides extends Generator>(overrides: Partial<Overrides> = {}) {
+    public get<Overrides extends DataGenerator<ResultType>>(overrides: Partial<Overrides> = {}) {
         return this.resolveData({ ...this.generator, ...overrides }) as Promise<GeneratorResult<Generator & Overrides>>;
     }
 
