@@ -1,4 +1,5 @@
 import Faker from '@faker-js/faker';
+import { AdapterService } from '@feathersjs/adapter-commons';
 import Factory from '../../src/Factory';
 import App from './App';
 
@@ -30,4 +31,8 @@ export const CommentOnOwnArticleFactory = new Factory(CommentService, {
         return article.userId;
     },
     content: Faker.lorem.paragraph,
+});
+
+export const AdapterFactory = new Factory(AdapterService, {
+    id: () => process.hrtime().join('-'),
 });
