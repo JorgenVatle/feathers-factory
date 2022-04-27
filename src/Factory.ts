@@ -4,7 +4,7 @@ import { FeathersServiceNotDefined } from './Errors/FeathersFactoryError';
 const Clues = require('clues');
 
 export default class Factory<FeathersService extends FactoryCompatibleService,
-    Generator extends DataGenerator<Partial<Awaited<ResultType>>>, ResultType = FeathersResult<FeathersService>> {
+    Generator extends DataGenerator<Partial<ResultType>>, ResultType = FeathersResult<FeathersService>> {
 
     /**
      * Feathers service
@@ -61,7 +61,10 @@ export default class Factory<FeathersService extends FactoryCompatibleService,
      * @param overrides
      * @param params
      */
-    public async create<Overrides extends Generator>(overrides: Partial<Overrides> = {}, params?: Params): ResultType {
+    public async create<Overrides extends Generator>(
+        overrides: Partial<Overrides> = {},
+        params?: Params,
+    ): Promise<ResultType extends Array<any> ? ResultType[number] : ResultType> {
         const data = await this.resolveData({ ...this.generator, ...overrides });
         const parameters = await this.resolveData({ ...this.params, ...params });
 
@@ -92,4 +95,4 @@ type FactoryCompatibleService = {
     create(data: any, params?: Params): Promise<any>;
 }
 
-type FeathersResult<T extends FactoryCompatibleService> = ReturnType<T['create']>
+type FeathersResult<T extends FactoryCompatibleService> = Awaited<ReturnType<T['create']>>
