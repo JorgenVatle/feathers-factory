@@ -1,11 +1,11 @@
 import Faker from '@faker-js/faker';
-import { AdapterService } from '@feathersjs/adapter-commons';
 import Factory from '../../src/Factory';
 import App from './App';
 
 const UsersService = App.service('users');
 const ArticlesService = App.service('articles');
 const CommentService = App.service('comments');
+const AdapterService = App.service('adapter-service');
 
 export const UserFactory = new Factory(UsersService, {
     id: () => process.hrtime().join('-'),
