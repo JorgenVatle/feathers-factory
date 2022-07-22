@@ -19,7 +19,7 @@ export default class Factory<FeathersService extends FactoryCompatibleService,
     /**
      * Default service create() params.
      */
-    private readonly params: Params;
+    private readonly params: DataGenerator<Params>;
 
     /**
      * Factory constructor.
@@ -28,7 +28,7 @@ export default class Factory<FeathersService extends FactoryCompatibleService,
      * @param generator
      * @param defaultParams
      */
-    public constructor(service: FeathersService, generator: Generator, defaultParams: Params = {}) {
+    public constructor(service: FeathersService, generator: Generator, defaultParams: DataGenerator<Params> = {}) {
         if (!service) {
             throw new FeathersServiceNotDefined('The provided service doesn\'t appear to exist!');
         }
