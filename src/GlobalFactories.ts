@@ -24,6 +24,22 @@ export default new class GlobalFactories {
     ) {
         this.factories[factoryName] = new Factory(service, generator, defaultParams);
     }
+    
+    /**
+     * Retrieve a factory name as defined in the define() method.
+     *
+     * @param name
+     */
+    public getFactory(name: string) {
+        const factory = this.factories[name];
+    
+        if (!factory) {
+            throw Error(`Could not locate factory '${name}'. Did you define it?`);
+        }
+        
+        return factory;
+    }
+    
 
     /**
      * Run factory, creating entry in Feathers service.
@@ -33,11 +49,7 @@ export default new class GlobalFactories {
      * @param params
      */
     public create(factoryName: string, overrides?: DataGenerator<any>, params?: Params) {
-        const factory = this.factories[factoryName];
-
-        if (!factory) {
-            throw Error(`Could not locate factory '${factoryName}'. Did you define it?`);
-        }
+        const factory = this.getFactory(factoryName);
 
         return factory.create(overrides, params);
     }
@@ -51,13 +63,8 @@ export default new class GlobalFactories {
      * @param params
      */
     public createMany(quantity: number, factoryName: string, overrides?: DataGenerator<any>, params?: Params) {
-        const created = [];
-
-        for (let i = 0; i < quantity; i++) {
-            created.push(this.create(factoryName, overrides, params));
-        }
-
-        return Promise.all(created);
+        const factory = this.getFactory(factoryName);
+        return factory.createMany(quantity, overrides, params);
     }
 
     /**
