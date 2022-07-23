@@ -27,12 +27,13 @@ import { Factory } from 'feathers-factory';
 
 export const UserFactory = new Factory(FeathersApp.service('users'), {
     username: () => Faker.internet.userName(),
+    membership: 'bronze'
 });
 ```
 
 Types for the factory are inferred from the Feathers service you provide. 
-It's fairly strict by design, so it may give you some issues depending on how your service is defined. See [Overriding 
-inferred types](#overriding-service-types) for more info on work around this.
+It's fairly strict by design, so it may give you some issues depending on how your service is defined. See [Global 
+Factories](#define-a-global-factory) for more info on how to work around this.
 
 ##### Import and use your factory
 ```ts
@@ -44,7 +45,8 @@ describe('Users', () => {
     const service = FeathersApp.service('users');
     
     it('can be removed', async () => {
-        const user = await UserFactory.create(); // { _id: "507f191e810c19729de860ea", username: "Damaris8" }
+        const user = await UserFactory.create(); 
+        // { _id: "507f191e810c19729de860ea", username: "Damaris8", membership: "bronze" }
     
         await expect(service.get(user._id)).resolves.toHaveProperty('_id', user._id);
         
@@ -59,82 +61,103 @@ describe('Users', () => {
 ### Advanced usage
 
 #### Use promises and other factories
-You're not limited to functions and static data! The following will create a full-fledged user for your post.
-This can be super handy when dealing with a lot of relational data.
+You're not limited to functions and static data! Your factories can call on other factories to ensure there any 
+relational data is also created for your service.
 ```js
-Factory.define('post', FeathersApp.service('/posts'), {
-    
+
+export const CommentFactory = new Factory(FeathersApp.service('/posts/comments'), {
     // You can use promises
     async content() {
-        const response = await Axios.get('https://jsonplaceholder.typicode.com/posts');
+        const response = await Axios.get('https://jsonplaceholder.typicode.com/posts/1/comments');
         return response[0].body;
     },
-    
-    // Depend on a relationship? No problem! Define a `user` factory and:
+
+    // Service depends on a relationship? No problem! Define a `user` factory and call it:
     async userId() {
         return (await Factory.create('user'))._id;
     }
-    
-});
+})  
 ```
 
 #### Override properties
-Override factory data that would otherwise need to be generated. The content object will still be generated as we're
-not specifying a substitute in the below overrides.
+You don't need to create a whole new factory if you just need to override one bit of data for a test.
+For example, if you want to test against comments left by a user with "Gold" membership for example.
 ```js
-const createPost = async () => {
-    const myUser = await FeathersApp.service('/users').get('507f191e810c19729de860ea');
-    
-    Factory.create('post', {
-        // Override the userId that would normally create a user per the example above.
-        userId: myUser._id,
-        
-        // You can also add extra data:
-        slug: Faker.lorem.slug,
-    })
-}
+const goldUser = await UserFactory.create({ membership: 'gold' });
+// { _id: "00000020f51bb4362eee2a4d", username: "Eliseo2", membership: "gold" }
+
+const commentByGoldUser = await CommentFactory.create({
+    userId: goldUser._id,
+})
+// { _id: "507f191e810c19729de860ea", "userId": "00000020f51bb4362eee2a4d", content: "lorem ipsum..." }
 ```
 
+#### Use a property from the current factory
+Using `this`, you can reference properties from the factory _result_. All properties are promises, so you may 
+need to `await` the property if you're going to modify it.
+
+This can be particularly if your service depends on relational data belonging to the same entity.
+```ts
+export const OrderFactory = new Factory(FeathersApp.service('/merchant/orders'), {
+    customerEmail: () => Faker.internet.email(),
+    async merchantId() {
+        const merchant = await MerchantFactory.create();
+        return merchant._id;
+    },
+    async productId() {
+        const merchantId = await this.merchantId;
+        const product = await ProductFactory.create();
+        return product._id;
+    }
+})
+```
+See [clues.js](https://www.npmjs.com/package/clues) for more details on how this works.
+
 #### Setting default service `create()` params
-You can assign default [`create()` params](https://docs.feathersjs.com/api/services#createdata-params). Handy if your Feathers service hooks rely on a [`route`](https://docs.feathersjs.com/api/hooks.html#contextparams) object for handling the `create()` requests fired by Feathers-Factory.
+You can assign default [`create()` params](https://docs.feathersjs.com/api/services#createdata-params). Handy if your
+Feathers service hooks rely on some Hook [`context`](https://docs.feathersjs.com/api/hooks.html#contextparams) 
+params for handling the `create()` requests fired by Feathers-Factory.
 ```js
-Factory.define('comment', {
+export const CommentFacoryWithSlugs = new Factory(FeathersApp.service('/posts/comments'), {
     message: Faker.lorem.sentence,
     async userId() {
-        return (await Factory.create('user'))._id
+        return (await UserFactory.create())._id
     },
 }, {
-    async route() {
+    async query() {
         return {
-            postSlug: (await Factory.create('post')).slug
+            postSlug: (await PostFactory.create()).slug
         }
+    }
+})
+```
+
+#### Overriding params for a one-off `create()` call
+You can override default service `create` params. It's worth noting that merging with defaults only goes one level deep.
+```js
+const SpecialComment = await CommentFactoryWithSlugs.create({}, {
+    query: {
+        postSlug: 'foo-bar'
     }
 });
 ```
 
-#### Overriding service `create()` params
-You can override default service `create` params. It's worth noting that merging with defaults only goes one level deep.
-```js
-const createComment = async () => {
-    const post = await createPost();
-    
-    Factory.create('comment', {}, { route: { postSlug: post.slug } })
-};
-```
-
 #### Creating multiple entries
-You can create multiple database entries using the `createMany()` method.
+You can create multiple database entries using the `createMany()` method. Handy if you need to generate a lot of 
+data for a particular service.
 ```js
-Factory.createMany(1337, 'user', { name: 'overridden-name' }, { some: 'params' })
+await CommentFactoryWithSlugs.createMany(1337, {}, {
+    query: {
+        postSlug: 'foo-bar'
+    }
+});
 ```
 
 #### Only fetch data
 You can resolve the factory data _without_ inserting it into the database using the Factory `get()` method.
 ```js
-const randomUserData = async () => {
-    const user = await Factory.get('user', { name: 'overridden-name' });
-    console.log(user) // -> { _id: "507f191e810c19729de860ea", email: "steve@example.com", name: "overridden-name" }
-}
+await UserFactory.get({ username: 'phantom-user99' });
+// { username: "phantom-user99", membership: "bronze" }
 ```
 
 #### Fetch data from factory
@@ -153,7 +176,7 @@ Factory.create('order', {
 ``` 
 
 ### Define a global factory
-Type inference here is not as good as with the module exports approach. But can be a good fallback if the schema
+Type inference here is not as good as with explicitly exported Factory consts. But can be a good fallback if the schema
 provided by your Feathers service is giving you type issues. It's also pretty handy if you're working in a
 non-TypeScript environment.
 ```js
@@ -187,10 +210,22 @@ export default async (FeathersApp) => {
 
 
 ### How does it work?
-Pretty simple - any property, function, method, promise, etc you define in the factory specification is resolved
-whenever you call `Factory.create()`, keeping your object structure, but using resolved data.
+Pretty simple - any property, function, method or promise you define in the factory specification is resolved
+whenever you call `Factory.create()`, keeping your object structure, but using the return type of all properties 
+within your factory.
 
-(E.g. `{ foo: () => 'bar') }` -> `{ foo: 'bar' }`)
+For example, a factory generator like the following 
+```ts
+{ 
+    foo: () => 'bar'
+    hello: async () => 'world'
+    someNumber: 22
+}
+```
+Resolves to:
+```ts
+{ foo: 'bar', hello: 'world', someNumber: 22 }
+```
 
 The resolved data is then passed directly into your 
 [Feathers service](https://crow.docs.feathersjs.com/guides/basics/services.html#service-methods) through its 
