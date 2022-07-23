@@ -1,0 +1,30 @@
+name: 'Publish Pre-Release'
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    types:
+      - synchronize
+      - opened
+
+jobs:
+  test:
+    name: 'Run Tests'
+    uses: '.github/workflows/test.yml'
+
+  publish:
+    name: 'Pre-release'
+    runs-on: ubuntu-20.04
+    steps:
+      - name: 'Checkout repository'
+        uses: actions/checkout@v3
+
+      - name: 'Setup Node.js'
+        uses: actions/setup-node@v3
+
+      - name: 'Add Version'
+        run: npm version prerelease
+
+      - name: 'Publish'
+        run: npm publish
