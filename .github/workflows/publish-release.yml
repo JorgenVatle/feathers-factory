@@ -1,5 +1,8 @@
 name: 'Publish Pre-Release'
 on:
+  release:
+    types:
+      - published
   push:
     branches:
       - master
@@ -10,9 +13,8 @@ jobs:
     uses: ./.github/workflows/test.yml
 
   publish:
-    name: 'Publish pre-release'
+    name: 'Publish package'
     uses: ./.github/workflows/release.yml
-    with:
-      version: prerelease
+    if: github.ref == 'refs/head/master'
     secrets:
       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

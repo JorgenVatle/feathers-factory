@@ -4,7 +4,7 @@ on:
     inputs:
       version:
         type: string
-        required: true
+        required: false
     secrets:
       NPM_TOKEN:
         required: true
@@ -32,6 +32,7 @@ jobs:
         run: npm ci
 
       - name: 'Add Version'
+        if: inputs.version != null
         run: npm version ${{ inputs.version }}
 
       - name: 'Publish'
