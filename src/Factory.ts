@@ -81,4 +81,4 @@ type FactoryCompatibleService<Schema> = {
 type ExtractFeathersSchema<T extends FactoryCompatibleService<any>> = T extends Service<infer Schema>
                                                                       ? Schema
                                                                       : (T extends AdapterService<infer Schema> ? Schema
-                                                                                                                : (T extends FactoryCompatibleService<infer Schema> ? Schema : never));
+                                                                      : (T extends FactoryCompatibleService<infer Schema> ? Schema : never));
