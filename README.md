@@ -58,9 +58,9 @@ describe('Users', () => {
 ```
 
 
-### Advanced usage
+## Advanced usage
 
-#### Use promises and other factories
+### Use promises and other factories
 You're not limited to functions and static data! Your factories can call on other factories to ensure there any 
 relational data is also created for your service.
 ```js
@@ -79,7 +79,7 @@ export const CommentFactory = new Factory(FeathersApp.service('/posts/comments')
 })  
 ```
 
-#### Override properties
+### Override properties
 You don't need to create a whole new factory if you just need to override one bit of data for a test.
 For example, if you want to test against comments left by a user with "Gold" membership for example.
 ```js
@@ -92,7 +92,7 @@ const commentByGoldUser = await CommentFactory.create({
 // { _id: "507f191e810c19729de860ea", "userId": "00000020f51bb4362eee2a4d", content: "lorem ipsum..." }
 ```
 
-#### Use a property from the current factory
+### Use a property from the current factory
 Using `this`, you can reference properties from the factory _result_. All properties are promises, so you may 
 need to `await` the property if you're going to modify it.
 
@@ -113,7 +113,7 @@ export const OrderFactory = new Factory(FeathersApp.service('/merchant/orders'),
 ```
 See [clues.js](https://www.npmjs.com/package/clues) for more details on how this works.
 
-#### Setting default service `create()` params
+### Setting default service `create()` params
 You can assign default [`create()` params](https://docs.feathersjs.com/api/services#createdata-params). Handy if your
 Feathers service hooks rely on some Hook [`context`](https://docs.feathersjs.com/api/hooks.html#contextparams) 
 params for handling the `create()` requests fired by Feathers-Factory.
@@ -132,7 +132,7 @@ export const CommentFacoryWithSlugs = new Factory(FeathersApp.service('/posts/co
 })
 ```
 
-#### Overriding params for a one-off `create()` call
+### Overriding params for a one-off `create()` call
 You can override default service `create` params. It's worth noting that merging with defaults only goes one level deep.
 ```js
 const SpecialComment = await CommentFactoryWithSlugs.create({}, {
@@ -142,7 +142,7 @@ const SpecialComment = await CommentFactoryWithSlugs.create({}, {
 });
 ```
 
-#### Creating multiple entries
+### Creating multiple entries
 You can create multiple database entries using the `createMany()` method. Handy if you need to generate a lot of 
 data for a particular service.
 ```js
@@ -153,14 +153,14 @@ await CommentFactoryWithSlugs.createMany(1337, {}, {
 });
 ```
 
-#### Only fetch data
+### Only fetch data
 You can resolve the factory data _without_ inserting it into the database using the Factory `get()` method.
 ```js
 await UserFactory.get({ username: 'phantom-user99' });
 // { username: "phantom-user99", membership: "bronze" }
 ```
 
-#### Fetch data from factory
+### Prepare factory result, but don't insert it into the service
 You can even use `this` to fetch the _result_ of your factory methods. Notice `merchantId` is accessed as if it was a 
 property. See [clues.js](https://www.npmjs.com/package/clues) for more info on how this works.
 ```js
@@ -175,8 +175,9 @@ Factory.create('order', {
 })
 ``` 
 
+## Alternative usage
 ### Define a global factory
-Type inference here is not as good as with explicitly exported Factory consts. But can be a good fallback if the schema
+Type inference here is not as good as with explicitly exported Factory modules. But can be a good fallback if the schema
 provided by your Feathers service is giving you type issues. It's also pretty handy if you're working in a
 non-TypeScript environment.
 ```js
@@ -209,7 +210,7 @@ export default async (FeathersApp) => {
 ```
 
 
-### How does it work?
+## How does it work?
 Pretty simple - any property, function, method or promise you define in the factory specification is resolved
 whenever you call `Factory.create()`, keeping your object structure, but using the return type of all properties 
 within your factory.
