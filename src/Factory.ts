@@ -4,7 +4,7 @@ import { FeathersServiceNotDefined } from './Errors/FeathersFactoryError';
 
 const Clues = require('clues');
 
-export default class Factory<FeathersService extends FactoryCompatibleService, Schema extends ExtractFeathersSchema<FeathersService>> {
+export default class Factory<FeathersService extends FactoryCompatibleService<any>, Schema extends ExtractFeathersSchema<FeathersService>> {
 
     /**
      * Factory constructor.
@@ -74,8 +74,11 @@ export type DataGenerator<Schema> = {
     [key in keyof Schema]: GeneratorValue<Schema[key], Schema>
 }
 
-type FactoryCompatibleService = {
-    create(data: any, params?: Params): Promise<any>;
+type FactoryCompatibleService<Schema> = {
+    create(data: any, params?: Params): Promise<Schema>;
 }
 
-type ExtractFeathersSchema<T extends FactoryCompatibleService> = T extends Service<infer Schema> ? Schema : (T extends AdapterService<infer Schema> ? Schema : never);
+type ExtractFeathersSchema<T extends FactoryCompatibleService<any>> = T extends Service<infer Schema>
+                                                                      ? Schema
+                                                                      : (T extends AdapterService<infer Schema> ? Schema
+                                                                                                                : (T extends FactoryCompatibleService<infer Schema> ? Schema : never));
