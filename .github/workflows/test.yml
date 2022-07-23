@@ -7,6 +7,7 @@ on:
     types:
       - synchronize
       - opened
+  workflow_call:
 
 jobs:
   test:
