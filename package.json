@@ -8,7 +8,7 @@
     "test": "cross-env NODE_ENV=test mocha",
     "prepack": "tsc",
     "prepublishOnly": "tsc && npm test",
-    "postpublish": "git push && git push --tags"
+    "postversion": "git push && git push --tags"
   },
   "repository": {
     "type": "git",
