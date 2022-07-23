@@ -56,6 +56,23 @@ export default class Factory<FeathersService extends FactoryCompatibleService<an
 
         return this.service.create(data, parameters);
     }
+    
+    /**
+     * Quickly populate the database running the factory a number of times.
+     */
+    public createMany(
+        quantity: number,
+        overrides?: Partial<DataGenerator<Schema>>,
+        params?: Params,
+    ): Promise<Schema[]> {
+        const promises: Promise<Schema>[] = [];
+        
+        for (let i = 0; i < quantity; i++) {
+            promises.push(this.create(overrides, params));
+        }
+        
+        return Promise.all(promises);
+    }
 
     /**
      * Just resolve a predefined DataGenerator object.
