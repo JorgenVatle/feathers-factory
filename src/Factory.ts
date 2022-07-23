@@ -3,23 +3,7 @@ import { FeathersServiceNotDefined } from './Errors/FeathersFactoryError';
 
 const Clues = require('clues');
 
-export default class Factory<FeathersService extends FactoryCompatibleService,
-    Generator extends DataGenerator<Partial<ResultType>>, ResultType = FeathersResult<FeathersService>> {
-
-    /**
-     * Feathers service
-     */
-    private readonly service: FeathersService;
-
-    /**
-     * Factory data generator.
-     */
-    private readonly generator: Generator;
-
-    /**
-     * Default service create() params.
-     */
-    private readonly params: DataGenerator<Params>;
+export default class Factory<FeathersService extends FactoryCompatibleService, Schema = ExtractFeathersSchema<FeathersService>> {
 
     /**
      * Factory constructor.
@@ -28,13 +12,14 @@ export default class Factory<FeathersService extends FactoryCompatibleService,
      * @param generator
      * @param defaultParams
      */
-    public constructor(service: FeathersService, generator: Generator, defaultParams: DataGenerator<Params> = {}) {
+    public constructor(
+        private readonly service: FeathersService,
+        private readonly generator: DataGenerator<Schema>,
+        private readonly defaultParams: DataGenerator<Params> = {}
+    ) {
         if (!service) {
             throw new FeathersServiceNotDefined('The provided service doesn\'t appear to exist!');
         }
-        this.service = service;
-        this.generator = generator;
-        this.params = defaultParams;
     }
 
 
@@ -61,12 +46,12 @@ export default class Factory<FeathersService extends FactoryCompatibleService,
      * @param overrides
      * @param params
      */
-    public async create<Overrides extends DataGenerator<ResultType>>(
+    public async create<Overrides extends DataGenerator<Schema>>(
         overrides?: Partial<Overrides>,
         params?: Params,
-    ): Promise<ResultType extends Array<any> ? ResultType[number] : ResultType> {
+    ): Promise<Schema extends Array<any> ? Schema[number] : Schema> {
         const data = await this.resolveData({ ...this.generator, ...overrides });
-        const parameters = await this.resolveData({ ...this.params, ...params });
+        const parameters = await this.resolveData({ ...this.defaultParams, ...params });
 
         return this.service.create(data, parameters);
     }
@@ -76,26 +61,20 @@ export default class Factory<FeathersService extends FactoryCompatibleService,
      *
      * @param overrides
      */
-    public get<Overrides extends DataGenerator<ResultType>>(overrides: Partial<Overrides> = {}) {
-        return this.resolveData({ ...this.generator, ...overrides }) as Promise<GeneratorResult<Generator & Overrides>>;
+    public get<Overrides extends DataGenerator<Schema>>(overrides: Partial<Overrides> = {}) {
+        return this.resolveData({ ...this.generator, ...overrides }) as Promise<Schema & Overrides>;
     }
 
 }
 
-type GeneratorResult<T extends DataGenerator<any>> = {
-    [key in keyof T]: Awaited<ReturnType<T[key]>>;
-};
+type GeneratorValue<SchemaValue, ThisType> = SchemaValue | ((this: ThisType) => SchemaValue | Promise<SchemaValue>)
+
 export type DataGenerator<Schema> = {
-    [key in keyof Schema]: Schema[key] | ((this: SchemaThisType<Schema extends Array<any>
-                                                                ? Required<Schema[number]>
-                                                                : Required<Schema>>) => Promise<Schema[key]> | Schema[key])
-}
-type SchemaThisType<Schema> = {
-    [key in keyof Schema]: Promise<Schema[key]>;
+    [key in keyof Schema]: GeneratorValue<Schema[key], Schema>
 }
 
 type FactoryCompatibleService = {
     create(data: any, params?: Params): Promise<any>;
 }
 
-type FeathersResult<T extends FactoryCompatibleService> = Awaited<ReturnType<T['create']>>
+type ExtractFeathersSchema<T extends FactoryCompatibleService> = Awaited<ReturnType<T['create']>>
