@@ -2,9 +2,9 @@
 A dead easy way to mock data for testing your [Feathers](https://feathersjs.com/) services. Heavily inspired by 
 [Meteor Factory](https://github.com/versolearning/meteor-factory)
 
+[![Tests](https://github.com/JorgenVatle/feathers-factory/actions/workflows/test.yml/badge.svg)](https://github.com/JorgenVatle/feathers-factory/actions)
 [![Downloads](https://img.shields.io/npm/dt/feathers-factory.svg)](https://www.npmjs.com/package/feathers-factory)
 [![Version](https://img.shields.io/npm/v/feathers-factory.svg)](https://www.npmjs.com/package/feathers-factory)
-[![Tests](https://github.com/JorgenVatle/feathers-factory/actions/workflows/test.yml/badge.svg)](https://github.com/JorgenVatle/feathers-factory/actions)
 
 ## Installation
 ```bash
