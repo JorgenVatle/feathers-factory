@@ -1,7 +1,7 @@
 import { Service } from '@feathersjs/feathers';
 import Expect from 'expect';
 
-import FeathersFactory from '../src/FeathersFactory';
+import FeathersFactory from '../src/GlobalFactories';
 import Feathers from './feathers/App';
 
 let service: Service<any>;

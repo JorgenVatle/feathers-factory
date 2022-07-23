@@ -179,9 +179,9 @@ Type inference here is not as good as with explicitly exported Factory modules. 
 provided by your Feathers service is giving you type issues. It's also pretty handy if you're working in a
 non-TypeScript environment.
 ```js
-import Factory from 'feathers-factory';
+import { GlobalFactories } from 'feathers-factory';
 
-Factory.define('my-factory', FeathersApp.service('service-to-mock-for'), {
+GlobalFactories.define('my-factory', FeathersApp.service('service-to-mock-for'), {
     
     // Define dynamic data. Perfect with Faker.
     email() {
