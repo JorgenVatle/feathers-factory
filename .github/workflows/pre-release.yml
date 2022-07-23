@@ -10,7 +10,7 @@ jobs:
     uses: ./.github/workflows/test.yml
 
   publish:
-    name: 'Run Tests'
+    name: 'Publish pre-release'
     uses: ./.github/workflows/release.yml
     with:
       version: prerelease
