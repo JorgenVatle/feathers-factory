@@ -11,62 +11,48 @@ A dead easy way to mock data for testing your [Feathers](https://feathersjs.com/
 npm install --save-dev feathers-factory
 ```
 
-## Usage
-Define factories for the services you want to mock data for. This works well with 
-[faker](https://github.com/faker-js/faker), allowing you to generate random data for every factory run.
+## Example Usage
+Feathers Factory provides an easy way define data generation templates for testing Feathers services. This works 
+really nicely together with a mock data generator like [faker](https://github.com/faker-js/faker).
 
-### Define a global factory
-Define a factory:
-```js
-import Factory from 'feathers-factory';
+### Create a factory
+Just new up the Feathers Factory class, provide your Feathers service, and a "Generator" object which defines what 
+values should be inserted into your service when the factory is called.
 
-Factory.define('my-factory', FeathersApp.service('service-to-mock-for'), {
-    
-    // Define dynamic data. Perfect with Faker.
-    email() {
-        return Faker.internet.email();
-    },
-    
-    // Or just define static data.
-    servicePlan: 'free',
-    
-});
-```
-
-Run the factory anywhere you need to mock a database entry with random data:
-```js
-export default async (FeathersApp) => {
-    const user = await Factory.create('my-factory');
-    
-    console.log(user); 
-    // -> { _id: "507f191e810c19729de860ea", email: "Damaris8@yahoo.com", servicePlan: "free" }
-    
-    await FeathersApp.get(user._id)
-    // -> { _id: "507f191e810c19729de860ea", email: "Damaris8@yahoo.com", servicePlan: "free" }
-};
-```
-
-### Or, define factories as modules
-Defining your factory as a module provides better type-inference for your factory results. Just import the factories,
-and use like you normally would with global factories;
-
-##### Define and export a factory
+##### Define and export a factory for your tests
 ```ts
-import Factory from 'feathers-factory/Factory';
+// ./tests/Factories.ts
+import FeathersApp from '../src/App'
+import { Factory } from 'feathers-factory';
 
 export const UserFactory = new Factory(FeathersApp.service('users'), {
     username: () => Faker.internet.userName(),
 });
 ```
 
+Types for the factory are inferred from the Feathers service you provide. 
+It's fairly strict by design, so it may give you some issues depending on how your service is defined. See [Overriding 
+inferred types](#overriding-service-types) for more info on work around this.
+
 ##### Import and use your factory
 ```ts
-import { UserFactory } from './Factories';
+// ./tests/services/users.test.ts
+import { UserFactory } from '../../Factories';
+import FeathersApp from '../../../src/App';
 
-const user = await UserFactory.create();
-
-console.log(user);
-// { _id: "507f191e810c19729de860ea", username: "Damaris8" }
+describe('Users', () => {
+    const service = FeathersApp.service('users');
+    
+    it('can be removed', async () => {
+        const user = await UserFactory.create(); // { _id: "507f191e810c19729de860ea", username: "Damaris8" }
+    
+        await expect(service.get(user._id)).resolves.toHaveProperty('_id', user._id);
+        
+        await service.remove(user._id)
+        
+        await expect(service.get(user._id)).rejects.toBeInstanceOf(NotFound);
+    })
+})
 ```
 
 
@@ -165,6 +151,39 @@ Factory.create('order', {
     } 
 })
 ``` 
+
+### Define a global factory
+Type inference here is not as good as with the module exports approach. But can be a good fallback if the schema
+provided by your Feathers service is giving you type issues. It's also pretty handy if you're working in a
+non-TypeScript environment.
+```js
+import Factory from 'feathers-factory';
+
+Factory.define('my-factory', FeathersApp.service('service-to-mock-for'), {
+    
+    // Define dynamic data. Perfect with Faker.
+    email() {
+        return Faker.internet.email();
+    },
+    
+    // Or just define static data.
+    servicePlan: 'free',
+    
+});
+```
+
+Run the factory anywhere you need to mock a database entry with random data:
+```js
+export default async (FeathersApp) => {
+    const user = await Factory.create('my-factory');
+    
+    console.log(user); 
+    // -> { _id: "507f191e810c19729de860ea", email: "Damaris8@yahoo.com", servicePlan: "free" }
+    
+    await FeathersApp.get(user._id)
+    // -> { _id: "507f191e810c19729de860ea", email: "Damaris8@yahoo.com", servicePlan: "free" }
+};
+```
 
 
 ### How does it work?
