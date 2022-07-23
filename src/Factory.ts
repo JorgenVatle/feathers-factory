@@ -1,3 +1,4 @@
+import { AdapterService } from '@feathersjs/adapter-commons';
 import { Params, Service } from '@feathersjs/feathers';
 import { FeathersServiceNotDefined } from './Errors/FeathersFactoryError';
 
@@ -77,4 +78,4 @@ type FactoryCompatibleService = {
     create(data: any, params?: Params): Promise<any>;
 }
 
-type ExtractFeathersSchema<T extends FactoryCompatibleService> = T extends Service<infer Schema> ? Schema : never;
+type ExtractFeathersSchema<T extends FactoryCompatibleService> = T extends Service<infer Schema> ? Schema : (T extends AdapterService<infer Schema> ? Schema : never);
