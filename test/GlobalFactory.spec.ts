@@ -1,7 +1,7 @@
 import { Service } from '@feathersjs/feathers';
 import Expect from 'expect';
 
-import FeathersFactory from '../src/GlobalFactories';
+import { GlobalFactories } from '../src/FeathersFactory';
 import Feathers from './feathers/App';
 
 let service: Service<any>;
@@ -13,7 +13,7 @@ before(() => {
 describe('Feathers Factory', () => {
 
     it('can define() factories', () => {
-        FeathersFactory.define('test', service, {
+        GlobalFactories.define('test', service, {
             id: () => process.hrtime().join('-'),
             property: 'ok',
             function: () => 'ok',
@@ -30,12 +30,12 @@ describe('Feathers Factory', () => {
     });
 
     it('can create() defined factories', async () => {
-        const entry = await FeathersFactory.create('test');
+        const entry = await GlobalFactories.create('test');
         await Expect(service.get(entry.id)).resolves.toBeTruthy();
     });
 
     it('can get() a factory\'s data.', async () => {
-        const entry = await FeathersFactory.get('test');
+        const entry = await GlobalFactories.get('test');
         Expect(entry.selfReference).toBe('ok');
         await Expect(service.get(entry.id)).rejects.toBeTruthy();
     });
@@ -44,7 +44,7 @@ describe('Feathers Factory', () => {
         let count = 0;
         let quantity = 5;
 
-        const entries = await FeathersFactory.createMany(quantity, 'test');
+        const entries = await GlobalFactories.createMany(quantity, 'test');
 
         await Promise.all(entries.map(async (entry) => {
             const dbEntry = await service.get(entry.id);
@@ -56,7 +56,7 @@ describe('Feathers Factory', () => {
     });
 
     it('can override data within predefined factories', async () => {
-        const entry = await FeathersFactory.create('test', {
+        const entry = await GlobalFactories.create('test', {
             method: 'overridden',
         });
         const dbEntry = await service.get(entry.id);
@@ -66,7 +66,7 @@ describe('Feathers Factory', () => {
     });
 
     it('resolves data as expected', async () => {
-        const entry = await FeathersFactory.create('test');
+        const entry = await GlobalFactories.create('test');
         const dbEntry = await service.get(entry.id);
 
         const validateContent = (key: string) => {
