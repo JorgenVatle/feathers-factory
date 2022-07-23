@@ -16,6 +16,5 @@ jobs:
     name: 'Publish package'
     needs: test
     uses: ./.github/workflows/release.yml
-    if: github.ref == 'refs/head/master'
     secrets:
       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
