@@ -46,10 +46,10 @@ export default class Factory<FeathersService extends FactoryCompatibleService, S
      * @param overrides
      * @param params
      */
-    public async create<Overrides extends DataGenerator<Schema>>(
-        overrides?: Partial<Overrides>,
+    public async create(
+        overrides?: Partial<DataGenerator<Schema>>,
         params?: Params,
-    ): Promise<Schema extends Array<any> ? Schema[number] : Schema> {
+    ): Promise<Schema> {
         const data = await this.resolveData({ ...this.generator, ...overrides });
         const parameters = await this.resolveData({ ...this.defaultParams, ...params });
 
@@ -61,8 +61,8 @@ export default class Factory<FeathersService extends FactoryCompatibleService, S
      *
      * @param overrides
      */
-    public get<Overrides extends DataGenerator<Schema>>(overrides: Partial<Overrides> = {}) {
-        return this.resolveData({ ...this.generator, ...overrides }) as Promise<Schema & Overrides>;
+    public get(overrides: Partial<DataGenerator<Schema>> = {}) {
+        return this.resolveData({ ...this.generator, ...overrides }) as Promise<Schema>;
     }
 
 }
