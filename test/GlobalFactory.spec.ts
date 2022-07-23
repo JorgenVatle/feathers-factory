@@ -10,7 +10,7 @@ before(() => {
     service = Feathers.service('/tests')
 });
 
-describe('Feathers Factory', () => {
+describe('Global Feathers Factory', () => {
 
     it('can define() factories', () => {
         GlobalFactories.define('test', service, {
