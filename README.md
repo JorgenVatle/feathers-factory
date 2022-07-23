@@ -13,7 +13,7 @@ npm install --save-dev feathers-factory
 
 ## Usage
 Define factories for the services you want to mock data for. This works well with 
-[faker](https://www.npmjs.com/package/faker), allowing you to generate random data for every factory run.
+[faker](https://github.com/faker-js/faker), allowing you to generate random data for every factory run.
 
 ### Define a global factory
 Define a factory:
