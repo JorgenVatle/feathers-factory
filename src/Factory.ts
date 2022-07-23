@@ -1,9 +1,9 @@
-import { Params } from '@feathersjs/feathers';
+import { Params, Service } from '@feathersjs/feathers';
 import { FeathersServiceNotDefined } from './Errors/FeathersFactoryError';
 
 const Clues = require('clues');
 
-export default class Factory<FeathersService extends FactoryCompatibleService, Schema = ExtractFeathersSchema<FeathersService>> {
+export default class Factory<FeathersService extends FactoryCompatibleService, Schema extends ExtractFeathersSchema<FeathersService>> {
 
     /**
      * Factory constructor.
@@ -77,4 +77,4 @@ type FactoryCompatibleService = {
     create(data: any, params?: Params): Promise<any>;
 }
 
-type ExtractFeathersSchema<T extends FactoryCompatibleService> = Awaited<ReturnType<T['create']>>
+type ExtractFeathersSchema<T extends FactoryCompatibleService> = T extends Service<infer Schema> ? Schema : never;
