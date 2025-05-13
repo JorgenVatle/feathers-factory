@@ -18,7 +18,7 @@ export default class Factory<
      */
     public constructor(
         private readonly service: FactoryCompatibleService<TSchema, TResult>,
-        private readonly generator: NoInfer<DataGenerator<TSchema>>,
+        private readonly generator: DataGenerator<TSchema>,
         private readonly defaultParams: DataGenerator<Params> = {},
     ) {
         if (!service) {
