@@ -11,4 +11,15 @@ describe('Factory Types', () => {
         expectTypeOf(myFactory.create()).resolves.toEqualTypeOf<{ foo: 'bar' }>();
     });
     
+    it('can fall back to the service create() data type for non-Feathers services', async () => {
+        const service = {
+            async create(data: { foo: 'bar' }) {
+                return data;
+            }
+        };
+        const myFactory = new Factory(service, {} as any)
+        
+        expectTypeOf(myFactory.create()).resolves.toEqualTypeOf<{ foo: 'bar' }>();
+    })
+    
 })
