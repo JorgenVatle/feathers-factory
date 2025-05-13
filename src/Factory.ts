@@ -1,13 +1,12 @@
 import { Params } from '@feathersjs/feathers';
 import { FeathersServiceNotDefined } from './Errors/FeathersFactoryError';
-import type { ExtractFeathersSchema, FactoryCompatibleService } from './Types';
+import type { FactoryCompatibleService } from './Types';
 
 const Clues = require('clues');
 
 export default class Factory<
-    TSchema = any,
-    FeathersService extends FactoryCompatibleService<any> = FactoryCompatibleService<TSchema>,
-    Schema extends ExtractFeathersSchema<any> = ExtractFeathersSchema<FeathersService>
+    TSchema,
+    TResult = TSchema,
 > {
     
     /**
@@ -18,8 +17,8 @@ export default class Factory<
      * @param defaultParams
      */
     public constructor(
-        private readonly service: FeathersService,
-        private readonly generator: DataGenerator<Schema>,
+        private readonly service: FactoryCompatibleService<TSchema, TResult>,
+        private readonly generator: NoInfer<DataGenerator<TSchema>>,
         private readonly defaultParams: DataGenerator<Params> = {},
     ) {
         if (!service) {
@@ -34,9 +33,9 @@ export default class Factory<
      * @param params
      */
     public async create(
-        overrides?: Partial<DataGenerator<Schema>>,
+        overrides?: Partial<DataGenerator<TSchema>>,
         params?: Params,
-    ): Promise<Schema> {
+    ): Promise<TResult> {
         const data = await this.resolveData({ ...this.generator, ...overrides });
         const parameters = await this.resolveData({ ...this.defaultParams, ...params });
         
@@ -48,10 +47,10 @@ export default class Factory<
      */
     public createMany(
         quantity: number,
-        overrides?: Partial<DataGenerator<Schema>>,
+        overrides?: Partial<DataGenerator<TSchema>>,
         params?: Params,
-    ): Promise<Schema[]> {
-        const promises: Promise<Schema>[] = [];
+    ): Promise<TResult[]> {
+        const promises: Promise<TResult>[] = [];
         
         for (let i = 0; i < quantity; i++) {
             promises.push(this.create(overrides, params));
@@ -65,8 +64,8 @@ export default class Factory<
      *
      * @param overrides
      */
-    public get(overrides: Partial<DataGenerator<Schema>> = {}) {
-        return this.resolveData({ ...this.generator, ...overrides }) as Promise<Schema>;
+    public get(overrides: Partial<DataGenerator<TSchema>> = {}) {
+        return this.resolveData({ ...this.generator, ...overrides }) as Promise<TSchema>;
     }
     
     /**
