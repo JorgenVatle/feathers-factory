@@ -5,8 +5,9 @@ import type { ExtractFeathersSchema, FactoryCompatibleService } from './Types';
 const Clues = require('clues');
 
 export default class Factory<
-    FeathersService extends FactoryCompatibleService<any>,
-    Schema extends ExtractFeathersSchema<FeathersService>
+    TSchema = any,
+    FeathersService extends FactoryCompatibleService<any> = FactoryCompatibleService<TSchema>,
+    Schema extends ExtractFeathersSchema<any> = ExtractFeathersSchema<FeathersService>
 > {
     
     /**
