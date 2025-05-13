@@ -1,6 +1,6 @@
-import { AdapterService } from '@feathersjs/adapter-commons';
-import { Params, Service } from '@feathersjs/feathers';
+import { Params } from '@feathersjs/feathers';
 import { FeathersServiceNotDefined } from './Errors/FeathersFactoryError';
+import type { ExtractFeathersSchema, FactoryCompatibleService } from './Types';
 
 const Clues = require('clues');
 
@@ -92,17 +92,3 @@ type GeneratorValue<SchemaValue, ThisType> = SchemaValue | ((this: ThisType) => 
 export type DataGenerator<Schema> = {
     [key in keyof Schema]: GeneratorValue<Schema[key], Schema>
 }
-
-type FactoryCompatibleService<Schema> = {
-    create(data: any, params?: Params): Promise<Schema>;
-}
-
-type ExtractFeathersSchema<
-    T extends FactoryCompatibleService<any>
-> = T extends Service<infer Schema>
-    ? Schema
-    : (T extends AdapterService<infer Schema>
-       ? Schema
-       : (T extends FactoryCompatibleService<infer Schema>
-          ? Schema
-          : never));
