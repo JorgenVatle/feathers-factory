@@ -6,9 +6,12 @@
   "types": "dist/FeathersFactory.d.ts",
   "scripts": {
     "test": "cross-env NODE_ENV=test mocha",
-    "prepack": "tsc",
-    "prepublishOnly": "tsc && npm test",
-    "postversion": "git push && git push --tags"
+    "prepack": "npm run build",
+    "prepublishOnly": "npm run lint && npm test",
+    "postversion": "git push && git push --tags",
+
+    "build": "tsup",
+    "lint": "tsc --noEmit"
   },
   "repository": {
     "type": "git",
