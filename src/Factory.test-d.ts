@@ -28,7 +28,7 @@ describe('Factory Types', () => {
             numberField: number,
         }>;
         
-        const factory = new Factory(service, {
+        new Factory(service, {
             // @ts-expect-error
             stringField: 1,
             
