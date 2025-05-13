@@ -1,4 +1,4 @@
-import Expect from 'expect';
+import { describe, expect, it } from 'vitest';
 import { ArticleFactory } from './Factories';
 
 describe('Feathers Test Factories', () => {
@@ -8,7 +8,7 @@ describe('Feathers Test Factories', () => {
                 id: 'test',
             });
 
-            Expect(article).toHaveProperty('id', 'test');
+            expect(article).toHaveProperty('id', 'test');
         });
 
         it('properly applies overrides defined as async functions', async () => {
@@ -16,7 +16,7 @@ describe('Feathers Test Factories', () => {
                 id: async () => 'async test',
             });
 
-            Expect(article).toHaveProperty('id', 'async test');
+            expect(article).toHaveProperty('id', 'async test');
         });
     });
 

@@ -1,12 +1,12 @@
 import { Service } from '@feathersjs/feathers';
-import Expect from 'expect';
+import { beforeAll, describe, expect, it } from 'vitest';
 
 import { GlobalFactories } from '../src';
 import Feathers from './feathers/App';
 
 let service: Service<any>;
 
-before(() => {
+beforeAll(() => {
     service = Feathers.service('/tests')
 });
 
@@ -31,13 +31,13 @@ describe('Global Feathers Factory', () => {
 
     it('can create() defined factories', async () => {
         const entry = await GlobalFactories.create('test');
-        await Expect(service.get(entry.id)).resolves.toBeTruthy();
+        await expect(service.get(entry.id)).resolves.toBeTruthy();
     });
 
     it('can get() a factory\'s data.', async () => {
         const entry = await GlobalFactories.get('test');
-        Expect(entry.selfReference).toBe('ok');
-        await Expect(service.get(entry.id)).rejects.toBeTruthy();
+        expect(entry.selfReference).toBe('ok');
+        await expect(service.get(entry.id)).rejects.toBeTruthy();
     });
 
     it('can createMany()', async () => {
@@ -48,11 +48,11 @@ describe('Global Feathers Factory', () => {
 
         await Promise.all(entries.map(async (entry) => {
             const dbEntry = await service.get(entry.id);
-            Expect(dbEntry.selfReference).toBe('ok');
+            expect(dbEntry.selfReference).toBe('ok');
             count++;
         }));
 
-        Expect(count).toBe(quantity);
+        expect(count).toBe(quantity);
     });
 
     it('can override data within predefined factories', async () => {
@@ -61,8 +61,8 @@ describe('Global Feathers Factory', () => {
         });
         const dbEntry = await service.get(entry.id);
 
-        Expect(entry.method).toBe('overridden');
-        Expect(dbEntry.method).toBe('overridden');
+        expect(entry.method).toBe('overridden');
+        expect(dbEntry.method).toBe('overridden');
     });
 
     it('resolves data as expected', async () => {
@@ -71,8 +71,8 @@ describe('Global Feathers Factory', () => {
 
         const validateContent = (key: string) => {
             if (key === 'id') return;
-            Expect(entry[key]).toBe('ok');
-            Expect(dbEntry[key]).toBe('ok');
+            expect(entry[key]).toBe('ok');
+            expect(dbEntry[key]).toBe('ok');
         };
 
         Object.keys(entry).map(validateContent);

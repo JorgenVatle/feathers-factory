@@ -1,4 +1,4 @@
-import Expect from 'expect';
+import { describe, expect, it } from 'vitest';
 import App from '../feathers/App';
 import { ArticleFactory, CommentOnOwnArticleFactory } from '../feathers/Factories';
 
@@ -6,11 +6,11 @@ describe('relational/cross-dependent factories', () => {
     it('creates user documents for articles', async () => {
         const article = await ArticleFactory.create();
 
-        Expect(article).toHaveProperty('userId');
+        expect(article).toHaveProperty('userId');
 
         const user = await App.service('users').get(article.userId);
 
-        Expect(user).toHaveProperty('id', article.userId);
+        expect(user).toHaveProperty('id', article.userId);
     });
 
     it('can create articles with comments from the author', async () => {
@@ -18,8 +18,8 @@ describe('relational/cross-dependent factories', () => {
         const user = await App.service('users').get(comment.userId);
         const article = await App.service('articles').get(comment.articleId);
 
-        Expect(comment).toBeTruthy();
-        Expect(user).toHaveProperty('id', comment.userId);
-        Expect(article).toHaveProperty('id', comment.articleId);
+        expect(comment).toBeTruthy();
+        expect(user).toHaveProperty('id', comment.userId);
+        expect(article).toHaveProperty('id', comment.articleId);
     });
 })
