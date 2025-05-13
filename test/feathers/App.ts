@@ -1,26 +1,34 @@
 import { AdapterService } from '@feathersjs/adapter-commons';
-import Feathers, { Service } from '@feathersjs/feathers';
+import Feathers, { type Params } from '@feathersjs/feathers';
 
 const services = {
-    'tests': require('feathers-memory')({ multi: true }) as Service<{}>,
-    'users': require('feathers-memory')({ multi: true }) as Service<{
+    'tests': createService<{}>(),
+    'users': createService<{
         id: string;
         username: string;
-    }>,
-    'articles': require('feathers-memory')({ multi: true }) as Service<{
+    }>(),
+    'articles': createService<{
         id: string;
         userId: string;
-    }>,
-    'comments': require('feathers-memory')({ multi: true }) as Service<{
+    }>(),
+    'comments': createService<{
         id: string;
         userId: string;
         articleId: string;
         content: string;
-    }>,
-    'adapter-service': require('feathers-memory')({ multi: true }) as AdapterService<{
+    }>(),
+    'adapter-service': createService() as AdapterService<{
         id: string;
     }>,
 };
+
+function createService<TSchema = unknown>() {
+    return require('feathers-memory')({ multi: true }) as ServiceWrapper<TSchema>;
+}
+
+interface ServiceWrapper<TSchema> extends AdapterService<TSchema> {
+    create(data: TSchema, params?: Params): Promise<TSchema>;
+}
 
 const App = Feathers<typeof services>();
 
