@@ -22,4 +22,19 @@ describe('Factory Types', () => {
         expectTypeOf(myFactory.create()).resolves.toEqualTypeOf<{ foo: 'bar' }>();
     })
     
+    it(`disallows generator types that don't match the underlying schema `, () => {
+        const service = {} as Service<{
+            stringField: string,
+            numberField: number,
+        }>;
+        
+        const factory = new Factory(service, {
+            // @ts-expect-error
+            stringField: 1,
+            
+            // @ts-expect-error
+            numberField: () => 'foobar'
+        });
+    })
+    
 })
