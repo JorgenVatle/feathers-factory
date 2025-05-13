@@ -2,8 +2,17 @@
   "name": "feathers-factory",
   "version": "4.0.2",
   "description": "Create data factories for your Feathers services",
-  "main": "./dist/FeathersFactory.js",
-  "types": "dist/FeathersFactory.d.ts",
+  "main": "./dist/index.js",
+  "types": "dist/index.d.ts",
+
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+
   "scripts": {
     "test": "cross-env NODE_ENV=test mocha",
     "prepack": "npm run build",
