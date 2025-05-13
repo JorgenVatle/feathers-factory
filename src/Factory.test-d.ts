@@ -1,8 +1,37 @@
 import type { Service } from '@feathersjs/feathers';
 import { describe, expectTypeOf, it } from 'vitest';
 import Factory from './Factory';
+import type { FactoryCompatibleService } from './Types';
+
+/**
+ * Generic feathers services modify the schema you provide
+ * with something way too loose. This mimics that behaviour.
+ */
+type GenericFeathersDataInput<T> = Partial<T> | Partial<T>[];
 
 describe('Factory Types', () => {
+    
+    describe('FactoryCompatibleService', () => {
+        
+        function createFactory<
+            TSchema,
+            TOutput = TSchema
+        >(service: FactoryCompatibleService<TSchema, TOutput>): NoInfer<(data: TSchema) => TOutput> {
+            return {} as any;
+        }
+        
+        it('is compatible with Feathers services', () => {
+            type Schema = { foo: 'bar' }
+            const service = {} as Service<Schema>;
+            const create = createFactory(service);
+            
+            
+            expectTypeOf(create).parameter(0).toEqualTypeOf<
+                GenericFeathersDataInput<Schema>
+            >();
+        })
+        
+    })
     
     it('can infer types from a generic Feathers service', async () => {
         const service = {} as Service<{ foo: 'bar' }>;
