@@ -8,6 +8,7 @@ import type { FactoryCompatibleService } from './Types';
  * with something way too loose. This mimics that behaviour.
  */
 type GenericFeathersDataInput<T> = Partial<T> | Partial<T>[];
+type GenericFeathersDataOutput<T> = T | T[];
 
 describe('Factory Types', () => {
     
@@ -26,9 +27,8 @@ describe('Factory Types', () => {
             const create = createFactory(service);
             
             
-            expectTypeOf(create).parameter(0).toEqualTypeOf<
-                GenericFeathersDataInput<Schema>
-            >();
+            expectTypeOf(create).parameter(0)
+                .toEqualTypeOf<GenericFeathersDataInput<Schema>>();
         })
         
     })
@@ -37,7 +37,8 @@ describe('Factory Types', () => {
         const service = {} as Service<{ foo: 'bar' }>;
         const myFactory = new Factory(service, {} as any)
         
-        expectTypeOf(myFactory.create()).resolves.toEqualTypeOf<{ foo: 'bar' }>();
+        expectTypeOf(myFactory.create()).resolves
+            .toEqualTypeOf<GenericFeathersDataOutput<{ foo: 'bar' }>>();
     });
     
     it('can fall back to the service create() data type for non-Feathers services', async () => {
