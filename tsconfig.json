@@ -3,11 +3,8 @@
     "target": "es2015",
     "module": "commonjs",
     "declaration": true,
+    "noEmit": true,
     "outDir": "./dist",
-    "rootDirs": [
-      "src",
-      "test"
-    ],
 
     "strict": true,
     "noUnusedLocals": true,
@@ -17,8 +14,4 @@
     "esModuleInterop": true
 
   },
-  "exclude": [
-    "test",
-    "dist"
-  ]
 }
