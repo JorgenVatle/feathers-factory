@@ -36,7 +36,7 @@ export default class Factory<
         overrides?: Partial<DataGenerator<TSchema>>,
         params?: Params,
     ): Promise<TResult> {
-        const data = await this.resolveData({ ...this.generator, ...overrides });
+        const data: any = await this.resolveData({ ...this.generator, ...overrides });
         const parameters = await this.resolveData({ ...this.defaultParams, ...params });
         
         return this.service.create(data, parameters);
