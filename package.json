@@ -4,7 +4,6 @@
   "description": "Create data factories for your Feathers services",
   "main": "./dist/index.js",
   "types": "dist/index.d.ts",
-
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -12,13 +11,11 @@
       "require": "./dist/index.js"
     }
   },
-
   "scripts": {
-    "test": "cross-env NODE_ENV=test mocha",
+    "test": "vitest",
     "prepack": "npm run build",
     "prepublishOnly": "npm run lint && npm test",
     "postversion": "git push && git push --tags",
-
     "build": "tsup",
     "lint": "tsc --noEmit"
   },
@@ -45,13 +42,9 @@
     "@faker-js/faker": "^6.2.0",
     "@feathersjs/adapter-commons": "^4.5.12",
     "@feathersjs/feathers": "^4.5.7",
-    "@types/expect": "^1.20.4",
-    "@types/mocha": "^5.2.6",
     "@types/node": "^20.17.46",
     "cross-env": "^5.2.0",
-    "expect": "^24.7.0",
     "feathers-memory": "^3.0.2",
-    "mocha": "^6.0.2",
     "ts-node": "^8.0.3",
     "tsup": "^8.4.0",
     "typescript": "^5.8.3",
