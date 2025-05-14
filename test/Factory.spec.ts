@@ -18,19 +18,20 @@ describe('Factory', () => {
         },
     });
     
+    const _id = vi.spyOn(simpleFaker.string, 'uuid');
+    const firstName = vi.spyOn(faker.person, 'firstName');
+    const lastName = vi.spyOn(faker.person, 'lastName');
+    const email = vi.spyOn(faker.internet, 'email');
+    
+    afterEach(() => {
+        vi.resetAllMocks();
+    });
+    
+    afterAll(() => {
+        vi.restoreAllMocks();
+    });
+    
     describe('generator functions', () => {
-        const _id = vi.spyOn(simpleFaker.string, 'uuid');
-        const firstName = vi.spyOn(faker.person, 'firstName');
-        const lastName = vi.spyOn(faker.person, 'lastName');
-        const email = vi.spyOn(faker.internet, 'email');
-        
-        afterEach(() => {
-            vi.resetAllMocks();
-        });
-        
-        afterAll(() => {
-            vi.restoreAllMocks();
-        });
         
         it('can be spied on', async () => {
             await factory.create();
@@ -76,6 +77,13 @@ describe('Factory', () => {
                     firstName: expect.stringMatching(firstName),
                 })
             )
+        })
+        
+        it('does not call original generator functions', async () => {
+            await factory.create({
+                lastName: 'Doe'
+            })
+            expect(lastName).not.toHaveBeenCalled();
         })
         
     })
