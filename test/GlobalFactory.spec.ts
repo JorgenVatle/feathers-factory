@@ -4,51 +4,55 @@ import { beforeAll, describe, expect, it } from 'vitest';
 import { Factory, GlobalFactories } from '../src';
 import Feathers from './feathers/App';
 
-let service: Service<any>;
+let _service: Service<any>;
 
 beforeAll(() => {
-    service = Feathers.service('/tests')
+    _service = Feathers.service('/tests')
 });
 
 describe('Global Feathers Factory', () => {
+    const service = {
+        create(data: {
+            id: string,
+            property: string,
+            method: string;
+            function: string,
+            getter: string,
+            async: string,
+            selfReference: string[],
+        }) {
+            return data;
+        },
+        get(id: string) {
+            return _service.get(id);
+        }
+    }
     
-
+    const factory = new Factory(service, {
+        id: () => process.hrtime().join('-'),
+        property: 'ok',
+        function: () => 'ok',
+        method() { return 'ok' },
+        get getter() { return 'ok' },
+        async: async () => 'ok',
+        async selfReference() {
+            const properties = [
+                this.get('property'),
+                this.get('function'),
+                this.get('method'),
+                this.get('getter'),
+                this.get('async')
+            ];
+            
+            for (const property of await Promise.all(properties)) {
+                expect(property).toBe('ok');
+            }
+            
+            return Promise.all(properties);
+        }
+    })
+    
     it('can define() factories', () => {
-        const factory = new Factory({
-            create(data: {
-                id: string,
-                property: string,
-                method: string;
-                function: string,
-                getter: string,
-                async: string,
-                selfReference: string[],
-            }) {
-                return data;
-            }
-        }, {
-            id: () => process.hrtime().join('-'),
-            property: 'ok',
-            function: () => 'ok',
-            method() { return 'ok' },
-            get getter() { return 'ok' },
-            async: async () => 'ok',
-            async selfReference() {
-                const properties = [
-                    this.get('property'),
-                    this.get('function'),
-                    this.get('method'),
-                    this.get('getter'),
-                    this.get('async')
-                ];
-                
-                for (const property of await Promise.all(properties)) {
-                    expect(property).toBe('ok');
-                }
-                
-                return Promise.all(properties);
-            }
-        })
         GlobalFactories.define('test', service, {});
     });
 
