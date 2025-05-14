@@ -1,7 +1,7 @@
 import { Service } from '@feathersjs/feathers';
 import { beforeAll, describe, expect, it } from 'vitest';
 
-import { GlobalFactories } from '../src';
+import { Factory, GlobalFactories } from '../src';
 import Feathers from './feathers/App';
 
 let service: Service<any>;
@@ -11,9 +11,22 @@ beforeAll(() => {
 });
 
 describe('Global Feathers Factory', () => {
+    
 
     it('can define() factories', () => {
-        GlobalFactories.define('test', service, {
+        const factory = new Factory({
+            create(data: {
+                id: string,
+                property: string,
+                method: string;
+                function: string,
+                getter: string,
+                async: string,
+                selfReference: string,
+            }) {
+                return data;
+            }
+        }, {
             id: () => process.hrtime().join('-'),
             property: 'ok',
             function: () => 'ok',
@@ -23,10 +36,11 @@ describe('Global Feathers Factory', () => {
             async selfReference() {
                 const properties = [this.property, this.function, this.method, this.getter, await this.async];
                 const okProperties = properties.filter((value) => value === 'ok');
-
+                
                 return properties.length === okProperties.length ? 'ok' : 'error';
             }
-        });
+        })
+        GlobalFactories.define('test', service, {});
     });
 
     it('can create() defined factories', async () => {
