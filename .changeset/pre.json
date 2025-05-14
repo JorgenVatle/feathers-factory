@@ -1,0 +1,8 @@
+{
+  "mode": "pre",
+  "tag": "beta",
+  "initialVersions": {
+    "feathers-factory": "4.0.2"
+  },
+  "changesets": []
+}
