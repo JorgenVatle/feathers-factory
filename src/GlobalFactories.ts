@@ -1,6 +1,7 @@
-import { Params, ServiceMethods } from '@feathersjs/feathers';
+import { Params } from '@feathersjs/feathers';
 import Factory from './Factory';
 import type { DataGenerator, GeneratorSchema } from './FactoryDataGenerator';
+import type { FactoryCompatibleService } from './Types';
 
 export default new class GlobalFactories {
 
@@ -23,7 +24,7 @@ export default new class GlobalFactories {
         TFactory extends Record<string, unknown>
     >(
         factoryName: string,
-        service: ServiceMethods<TSchema>,
+        service: FactoryCompatibleService<TSchema, TResult>,
         generator: DataGenerator<TSchema, TFactory>,
         defaultParams?: Params,
     ) {
