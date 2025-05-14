@@ -98,7 +98,7 @@ export type DataGenerator<
                              : GeneratorValue<TFactory[key], TResolvedFactory>
 }
 
-type ResolvedFactory<TFactory> = {
+export type ResolvedFactory<TFactory> = {
     [key in keyof TFactory]: TFactory[key] extends GeneratorValue<infer T> ? T : never
 }
 
