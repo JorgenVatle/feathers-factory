@@ -19,7 +19,7 @@ export class FactoryDataGenerator<
      * Apply overrides to base props and resolve the outcome of the factory
      * @param overrides
      */
-    public async resolve(overrides: object): Promise<ResolvedFactory<TSchema>> {
+    public async resolve(overrides: object = {}): Promise<ResolvedFactory<TSchema>> {
         const data = this.merge(overrides);
         const resolver = new Resolver(data);
         
