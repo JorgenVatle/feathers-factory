@@ -4,8 +4,8 @@ import { FactoryDataGenerator } from './FactoryDataGenerator';
 
 describe('FactoryDataGenerator', () => {
     const generator = new FactoryDataGenerator({
-        fullName: function() {
-            return `${this.get('firstName')} ${this.get('lastName')}`;
+        fullName: async function() {
+            return `${await this.get('firstName')} ${await this.get('lastName')}`;
         },
         summary: async function() {
             return `${await this.get('firstName')} ${await this.get('lastName')} (Tel: ${await this.get('phoneNumber')})`;
