@@ -46,7 +46,7 @@ describe('Factory', () => {
     
     
     it('Does not call factory functions more than once', async () => {
-        
+        await factory.create();
         expect(_id).toHaveBeenCalledTimes(1);
         expect(firstName).toHaveBeenCalledTimes(1);
         expect(lastName).toHaveBeenCalledTimes(1);
