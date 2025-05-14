@@ -103,7 +103,7 @@ export const OrderFactory = new Factory(FeathersApp.service('/merchant/orders'),
         return merchant._id;
     },
     async productId() {
-        const merchantId = await this.merchantId;
+        const merchantId = await this.get('merchantId');
         const product = await ProductFactory.create();
         return product._id;
     }
@@ -168,7 +168,7 @@ Factory.create('order', {
         return (await Factory.create('merchant'))._id;
     },
     async productId() {
-        return (await Factory.create('product', { merchantId: await this.merchantId }))
+        return (await Factory.create('product', { merchantId: await this.get('merchantId') }))
     } 
 })
 ``` 
