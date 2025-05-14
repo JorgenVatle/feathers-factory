@@ -1,8 +1,8 @@
 import { Params } from '@feathersjs/feathers';
+import Clues from 'clues';
 import { FeathersServiceNotDefined } from './Errors/FeathersFactoryError';
+import type { DataGenerator } from './FactoryDataGenerator';
 import type { FactoryCompatibleService } from './Types';
-
-const Clues = require('clues');
 
 export default class Factory<
     TSchema,
@@ -88,21 +88,3 @@ export default class Factory<
     
 }
 
-export type DataGenerator<
-    TSchema,
-    TFactory extends Record<string, unknown> = {},
-    TResolvedFactory = ResolvedFactory<TFactory>,
-> = {
-    [key in keyof TFactory]: key extends keyof TSchema
-                             ? GeneratorValue<TSchema[key], TResolvedFactory>
-                             : GeneratorValue<TFactory[key], TResolvedFactory>
-}
-
-export type ResolvedFactory<TFactory> = {
-    [key in keyof TFactory]: TFactory[key] extends GeneratorValue<infer T> ? T : never
-}
-
-type GeneratorValue<
-    SchemaValue,
-    ThisType = unknown
-> = SchemaValue | ((this: ThisType) => SchemaValue | Promise<SchemaValue>)

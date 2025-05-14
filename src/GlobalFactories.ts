@@ -1,5 +1,6 @@
 import { Params, ServiceMethods } from '@feathersjs/feathers';
-import Factory, { DataGenerator } from './Factory';
+import Factory from './Factory';
+import type { DataGenerator } from './FactoryDataGenerator';
 
 export default new class GlobalFactories {
 
