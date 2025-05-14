@@ -34,15 +34,24 @@ export class FactoryDataGenerator<
 }
 
 class Resolver<TFactory extends Record<string, any>> {
-    public readonly output: TFactory;
+    public output: TFactory;
     constructor(protected readonly factory: TFactory) {
         this.output = {
             ...factory,
         };
+        
+        Object.entries(this.output).map(([key, value]) => {
+            if (typeof value === 'function') {
+                this.output[key as keyof TFactory] = value.bind(this);
+            }
+        })
     }
     
-    public async get<TKey extends keyof TFactory>(key: TKey): Promise<ResolvedFactory<TFactory>[TKey]> {
-        return Object.assign(this.output[key], await Clues(this.output, key as string));
+    public get<TKey extends keyof TFactory>(key: TKey): Promise<ResolvedFactory<TFactory>[TKey]> {
+        return Object.assign(
+            this.output[key],
+            Clues(this.output, key as string)
+        );
     }
 }
 

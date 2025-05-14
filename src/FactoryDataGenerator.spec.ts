@@ -5,10 +5,10 @@ import { FactoryDataGenerator } from './FactoryDataGenerator';
 describe('FactoryDataGenerator', () => {
     const generator = new FactoryDataGenerator({
         fullName: function() {
-            return `${this.firstName()} ${this.lastName()}`;
+            return `${this.get('firstName')} ${this.get('lastName')}`;
         },
         summary: function() {
-            return `${this.firstName()} ${this.lastName()} (Tel: ${this.phoneNumber()})`;
+            return `${this.get('firstName')} ${this.get('lastName')} (Tel: ${this.get('phoneNumber')})`;
         },
         firstName: () => faker.person.firstName(),
         lastName: () => faker.person.lastName(),
