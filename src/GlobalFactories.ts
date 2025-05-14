@@ -16,10 +16,14 @@ export default new class GlobalFactories {
      * @param generator
      * @param defaultParams
      */
-    public define(
+    public define<
+        TSchema,
+        TResult,
+        TFactory extends Record<string, unknown>
+    >(
         factoryName: string,
-        service: ServiceMethods<any>,
-        generator: DataGenerator<any>,
+        service: ServiceMethods<TSchema>,
+        generator: DataGenerator<TSchema, TFactory>,
         defaultParams?: Params,
     ) {
         this.factories[factoryName] = new Factory(service, generator, defaultParams);
