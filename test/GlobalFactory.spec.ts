@@ -77,7 +77,9 @@ describe('Global Feathers Factory', () => {
 
         await Promise.all(entries.map(async (entry) => {
             const dbEntry = await service.get(entry.id);
-            expect(dbEntry.selfReference).toBe('ok');
+            Object.keys(dbEntry.selfReference).forEach((key) => {
+                expect(dbEntry.selfReference).toHaveProperty(key, 'ok')
+            })
             count++;
         }));
 
