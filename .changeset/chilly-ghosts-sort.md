@@ -21,11 +21,11 @@ const customFactory = new Factory({
 
 ```
 
-### Breaking changes
+## Breaking changes
 The runtime behavior is not much different from prior versions. However the `this` type for factories has been revamped
 to expose contextual properties using a `this.get(propName)` signature instead.
 
-#### Feathers Factory v4
+### Feathers Factory v4
 ```ts
 new Factory(UserService, {
     firstName: faker.person.firstName,
@@ -36,7 +36,7 @@ new Factory(UserService, {
 })
 ```
 
-#### Feathers Factory v5
+### Feathers Factory v5
 You can still access properties using `this.firstName` - though they are omitted from your `this` type to encourage
 the use of the helper method instead.
 
