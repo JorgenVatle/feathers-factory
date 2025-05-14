@@ -62,6 +62,23 @@ describe('Factory', () => {
             );
         })
     })
+    
+    describe('overrides', () => {
+        
+        it('uses the provided overrides', async () => {
+            const firstName = 'John M.'
+            const result = await factory.create({
+                firstName,
+            });
+            
+            expect(result).toEqual(
+                expect.objectContaining({
+                    firstName: expect.stringMatching(firstName),
+                })
+            )
+        })
+        
+    })
 });
 
 
