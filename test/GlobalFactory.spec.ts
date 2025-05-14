@@ -34,10 +34,19 @@ describe('Global Feathers Factory', () => {
             get getter() { return 'ok' },
             async: async () => 'ok',
             async selfReference() {
-                const properties = [this.property, this.function, this.method, this.getter, await this.async];
-                const okProperties = properties.filter((value) => value === 'ok');
+                const properties = [
+                    this.get('property'),
+                    this.get('function'),
+                    this.get('method'),
+                    this.get('getter'),
+                    this.get('async')
+                ];
                 
-                return properties.length === okProperties.length ? 'ok' : 'error';
+                for (const property of await Promise.all(properties)) {
+                    expect(property).toBe('ok');
+                }
+                
+                return properties;
             }
         })
         GlobalFactories.define('test', service, {});
