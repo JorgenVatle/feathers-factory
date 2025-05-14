@@ -53,7 +53,7 @@ describe('Global Feathers Factory', () => {
     })
     
     it('can define() factories', () => {
-        GlobalFactories.define('test', service, {});
+        GlobalFactories.define('test', factory);
     });
 
     it('can create() defined factories', async () => {
