@@ -4,5 +4,7 @@
   "initialVersions": {
     "feathers-factory": "4.0.2"
   },
-  "changesets": []
+  "changesets": [
+    "chilly-ghosts-sort"
+  ]
 }
