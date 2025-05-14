@@ -49,6 +49,11 @@ class Resolver<TFactory extends Record<string, any>> {
         })
     }
     
+    /**
+     * Resolve and persist to current factory output. Supsequent requests within this
+     * context will resolve to the same value.
+     * @param key
+     */
     public get<TKey extends keyof TFactory>(key: TKey): Promise<ResolvedFactory<TFactory>[TKey]> {
         const existingClue = this.clues.get(key);
         if (existingClue) {
@@ -59,6 +64,19 @@ class Resolver<TFactory extends Record<string, any>> {
         this.clues.set(key, clue);
         
         return clue;
+    }
+    
+    /**
+     * Call a factory function without persisting it to the current factory output.
+     * Useful if you want to extend some of the existing factory results from within an
+     * override method.
+     */
+    public callFactory<TKey extends keyof TFactory>(key: TKey): Promise<ResolvedFactory<TFactory>[TKey]> {
+        const store = {
+            ...this.output,
+            [key]: this.factory[key]
+        }
+        return Clues(store, key as string);
     }
     
     public async getOutput(): Promise<any> {
