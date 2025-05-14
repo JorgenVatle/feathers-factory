@@ -91,10 +91,9 @@ describe('Factory', () => {
 
 
 function createService<TInput, TOutput = TInput>(): FactoryService<TInput, TOutput> {
-    const data: TOutput[] = [];
     return {
         create(result: any) {
-            data.push(result);
+            console.debug(result);
             return result;
         }
     }
