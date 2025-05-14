@@ -59,7 +59,7 @@ describe('Factory', () => {
                 _id: expect.any(String),
                 firstName: expect.any(String),
                 lastName: expect.any(String),
-                email: expect.any(String),
+                email: expect.stringContaining('@'),
             })
         );
     })
