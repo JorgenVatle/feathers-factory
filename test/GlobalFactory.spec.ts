@@ -12,7 +12,7 @@ beforeAll(() => {
 
 describe('Global Feathers Factory', () => {
     const service = {
-        create(data: {
+        async create(data: {
             id: string,
             property: string,
             method: string;
@@ -21,6 +21,7 @@ describe('Global Feathers Factory', () => {
             async: string,
             selfReference: string[],
         }) {
+            await _service.create(data);
             return data;
         },
         get(id: string) {
