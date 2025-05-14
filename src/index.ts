@@ -1,7 +1,3 @@
-import Factory from './Factory';
-import GlobalFactories from './GlobalFactories';
-
-export {
-    Factory,
-    GlobalFactories,
-}
+export { default as Factory } from './Factory';
+export { default as GlobalFactories } from './GlobalFactories';
+export { FactoryService } from './Types';
