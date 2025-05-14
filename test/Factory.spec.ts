@@ -13,8 +13,8 @@ describe('Factory', () => {
                 lastName: await this.get('lastName'),
             });
         },
-        fullName() {
-            return `${this.get('firstName')} ${this.get('lastName')}`;
+        async fullName() {
+            return `${await this.get('firstName')} ${await this.get('lastName')}`;
         },
     });
     
@@ -92,8 +92,8 @@ describe('Factory', () => {
         const userFactory2 = new Factory(userService, {
             _id: () => simpleFaker.string.uuid(),
             email: () => faker.internet.email({}),
-            fullName() {
-                return `${this.get('firstName')} ${this.get('lastName')}`;
+            async fullName() {
+                return `${await this.get('firstName')} ${await this.get('lastName')}`;
             },
             firstName: () => faker.person.firstName(),
             lastName: () => faker.person.lastName(),
