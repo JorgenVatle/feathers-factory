@@ -87,6 +87,26 @@ describe('Factory', () => {
         })
         
     })
+    
+    describe('self referencing', () => {
+        const userFactory2 = new Factory(userService, {
+            fullName() {
+                return `${this.firstName} ${this.lastName}`;
+            },
+            firstName: () => faker.person.firstName(),
+            lastName: () => faker.person.lastName(),
+        });
+        
+        it('does not matter which order properties are defined in', async () => {
+            const result = await factory.create();
+            const result2 = await userFactory2.create();
+            
+            expect(result.fullName).toContain(result.firstName);
+            expect(result.fullName).toContain(result.lastName);
+            expect(result2.fullName).toContain(result2.firstName);
+            expect(result2.fullName).toContain(result2.lastName);
+        })
+    })
 });
 
 
