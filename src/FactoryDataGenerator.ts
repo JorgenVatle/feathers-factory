@@ -74,11 +74,10 @@ class Resolver<TFactory extends Record<string, any>> {
 export type DataGenerator<
     TSchema,
     TFactory extends Record<string, unknown> = {},
-    TResolvedFactory = ResolvedFactory<TFactory>,
 > = {
     [key in keyof TFactory]: key extends keyof TSchema
-                             ? GeneratorValue<TSchema[key], TResolvedFactory>
-                             : GeneratorValue<TFactory[key], TResolvedFactory>
+                             ? GeneratorValue<TSchema[key], Resolver<TFactory>>
+                             : GeneratorValue<TFactory[key], Resolver<TFactory>>
 }
 export type ResolvedFactory<TFactory> = {
     [key in keyof TFactory]: TFactory[key] extends GeneratorValue<infer T> ? T : never
