@@ -26,6 +26,7 @@ describe('FactoryDataGenerator', () => {
         const result = await generator.resolve({
             firstName: async () => firstName,
         });
+        console.log(result);
         expect(result).toHaveProperty('fullName', expect.stringContaining(firstName));
     })
     
