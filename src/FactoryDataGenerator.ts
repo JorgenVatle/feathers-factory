@@ -29,12 +29,12 @@ export class FactoryDataGenerator<
         
         await Promise.all(dataResolvers);
         
-        return resolver.output as any;
+        return resolver.getOutput();
     }
 }
 
 class Resolver<TFactory extends Record<string, any>> {
-    public output: TFactory;
+    protected output: Record<any, any>;
     constructor(protected readonly factory: TFactory) {
         this.output = {
             ...factory,
@@ -42,7 +42,7 @@ class Resolver<TFactory extends Record<string, any>> {
         
         Object.entries(this.output).map(([key, value]) => {
             if (typeof value === 'function') {
-                this.output[key as keyof TFactory] = value.bind(this);
+                this.output[key] = value.bind(this);
             }
         })
     }
@@ -52,6 +52,22 @@ class Resolver<TFactory extends Record<string, any>> {
             this.output[key],
             Clues(this.output, key as string)
         );
+    }
+    
+    public async getOutput(): Promise<any> {
+        const resolvedOutput: Record<any, any> = {
+            ...this.output,
+        };
+        const entries: Array<Promise<any>> = Object.entries(this.output).map(
+            async ([key, value]) => {
+                if (typeof value === 'function') {
+                    return [key, await this.get(key)];
+                }
+                return [key, this.output[key]];
+            }
+        )
+        Object.assign(resolvedOutput, await Promise.all(entries));
+        return resolvedOutput;
     }
 }
 
