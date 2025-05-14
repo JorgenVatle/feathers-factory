@@ -7,8 +7,8 @@ describe('FactoryDataGenerator', () => {
         fullName: function() {
             return `${this.get('firstName')} ${this.get('lastName')}`;
         },
-        summary: function() {
-            return `${this.get('firstName')} ${this.get('lastName')} (Tel: ${this.get('phoneNumber')})`;
+        summary: async function() {
+            return `${await this.get('firstName')} ${await this.get('lastName')} (Tel: ${await this.get('phoneNumber')})`;
         },
         firstName: () => faker.person.firstName(),
         lastName: () => faker.person.lastName(),
