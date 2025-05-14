@@ -39,7 +39,7 @@ export default class Factory<
         const data: any = await this.resolveData({ ...this.generator, ...overrides });
         const parameters = await this.resolveData({ ...this.defaultParams, ...params });
         
-        return this.service.create(data, parameters);
+        return this.service.create(data, parameters) as Promise<TResult>;
     }
     
     /**
