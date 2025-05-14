@@ -1,4 +1,4 @@
-import Faker from '@faker-js/faker';
+import { faker as Faker } from '@faker-js/faker';
 import { Factory } from '../../src';
 import App from './App';
 
