@@ -1,7 +1,7 @@
 import { Params } from '@feathersjs/feathers';
 import Clues from 'clues';
 import { FeathersServiceNotDefined } from './Errors/FeathersFactoryError';
-import type { DataGenerator } from './FactoryDataGenerator';
+import { type DataGenerator, FactoryDataGenerator } from './FactoryDataGenerator';
 import type { FactoryCompatibleService } from './Types';
 
 export default class Factory<
@@ -9,6 +9,7 @@ export default class Factory<
     TResult = TSchema,
     TFactory extends Record<string, unknown> = {},
 > {
+    protected generator: FactoryDataGenerator<any, { data: TSchema, params: Params }>;
     
     /**
      * Factory constructor.
@@ -19,12 +20,16 @@ export default class Factory<
      */
     public constructor(
         private readonly service: FactoryCompatibleService<TSchema, TResult>,
-        private readonly generator: DataGenerator<TSchema, TFactory>,
-        private readonly defaultParams: DataGenerator<Params> = {},
+        generator: DataGenerator<TSchema, TFactory>,
+        defaultParams: DataGenerator<Params> = {},
     ) {
         if (!service) {
             throw new FeathersServiceNotDefined('The provided service doesn\'t appear to exist!');
         }
+        this.generator = new FactoryDataGenerator({
+            data: generator,
+            params: defaultParams,
+        });
     }
     
     /**
@@ -34,13 +39,15 @@ export default class Factory<
      * @param params
      */
     public async create(
-        overrides?: Partial<DataGenerator<TSchema>>,
-        params?: Params,
+        overrides?: DataGenerator<TSchema>,
+        params?: DataGenerator<Params>,
     ): Promise<TResult> {
-        const data: any = await this.resolveData({ ...this.generator, ...overrides });
-        const parameters = await this.resolveData({ ...this.defaultParams, ...params });
+        const result = await this.generator.resolve({
+            data: overrides,
+            params: params,
+        });
         
-        return this.service.create(data, parameters) as Promise<TResult>;
+        return this.service.create(result.data, result.parameters) as Promise<TResult>;
     }
     
     /**
@@ -48,8 +55,8 @@ export default class Factory<
      */
     public createMany(
         quantity: number,
-        overrides?: Partial<DataGenerator<TSchema>>,
-        params?: Params,
+        overrides?: DataGenerator<TSchema>,
+        params?: DataGenerator<Params>,
     ): Promise<TResult[]> {
         const promises: Promise<TResult>[] = [];
         

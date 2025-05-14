@@ -1,11 +1,11 @@
 import Clues from 'clues';
 
 export class FactoryDataGenerator<
-    TProps extends Record<string, unknown>,
-    TFactory extends Record<string, unknown> = {},
+    TSchema,
+    TFactory extends Record<string, unknown>,
 > {
     constructor(
-        protected readonly props: FactoryDataGenerator<TProps, TFactory>
+        protected readonly props: DataGenerator<TSchema, TFactory>
     ) {}
     
     protected merge(overrides: object) {
@@ -19,7 +19,7 @@ export class FactoryDataGenerator<
      * Apply overrides to base props and resolve the outcome of the factory
      * @param overrides
      */
-    public async resolve(overrides: object): Promise<ResolvedFactory<TProps>> {
+    public async resolve(overrides: object): Promise<ResolvedFactory<TSchema>> {
         const output: { [s: string]: any } = {};
         const data = this.merge(overrides);
         
