@@ -11,16 +11,17 @@ beforeAll(() => {
 });
 
 describe('Global Feathers Factory', () => {
+    type ServiceType = {
+        id: string,
+        property: string,
+        method: string;
+        function: string,
+        getter: string,
+        async: string,
+        selfReference: Record<string, string>,
+    }
     const service = {
-        async create(data: {
-            id: string,
-            property: string,
-            method: string;
-            function: string,
-            getter: string,
-            async: string,
-            selfReference: string[],
-        }) {
+        async create(data: ServiceType) {
             await _service.create(data);
             return data;
         },
@@ -37,15 +38,19 @@ describe('Global Feathers Factory', () => {
         get getter() { return 'ok' },
         async: async () => 'ok',
         async selfReference() {
-            const properties = [
-                this.get('property'),
-                this.get('function'),
-                this.get('method'),
-                this.get('getter'),
-                this.get('async')
+            const checkSelf = async <T extends keyof ServiceType>(key: T): Promise<[T, ServiceType[T]]> => {
+                return [key, await this.get(key)] as const
+            }
+            
+            const entries = [
+                checkSelf('property'),
+                checkSelf('function'),
+                checkSelf('method'),
+                checkSelf('getter'),
+                checkSelf('async')
             ];
             
-            return await Promise.all(properties);
+            return Object.fromEntries(await Promise.all(entries));
         }
     })
     
@@ -60,7 +65,7 @@ describe('Global Feathers Factory', () => {
 
     it('can get() a factory\'s data.', async () => {
         const entry = await GlobalFactories.get('test');
-        expect(entry.selfReference).toBe('ok');
+        expect(entry.selfReference.property).toBe('ok');
         await expect(service.get(entry.id)).rejects.toBeTruthy();
     });
 
