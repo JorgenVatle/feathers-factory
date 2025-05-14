@@ -19,6 +19,14 @@ describe('FactoryDataGenerator', () => {
         const result = await generator.resolve();
         expect(result).toHaveProperty('fullName');
         expect(result).toHaveProperty('lastName');
+    });
+    
+    it('will resolve async functions', async () => {
+        const firstName = 'async';
+        const result = await generator.resolve({
+            firstName: async () => firstName,
+        });
+        expect(result).toHaveProperty('fullName', expect.stringContaining(firstName));
     })
     
 })
