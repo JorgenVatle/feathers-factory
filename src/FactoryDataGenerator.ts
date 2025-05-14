@@ -20,16 +20,29 @@ export class FactoryDataGenerator<
      * @param overrides
      */
     public async resolve(overrides: object): Promise<ResolvedFactory<TSchema>> {
-        const output: { [s: string]: any } = {};
         const data = this.merge(overrides);
+        const resolver = new Resolver(data);
         
         const dataResolvers = Object.keys(data).map(async (key: string) => {
-            output[key] = await Clues(data, key);
+            await resolver.get(key);
         });
         
         await Promise.all(dataResolvers);
         
-        return output as any;
+        return resolver.output as any;
+    }
+}
+
+class Resolver<TFactory extends Record<string, any>> {
+    public readonly output: TFactory;
+    constructor(protected readonly factory: TFactory) {
+        this.output = {
+            ...factory,
+        };
+    }
+    
+    public async get<TKey extends keyof TFactory>(key: TKey): Promise<ResolvedFactory<TFactory>[TKey]> {
+        return Object.assign(this.output[key], await Clues(this.output, key as string));
     }
 }
 
