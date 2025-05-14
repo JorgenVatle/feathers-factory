@@ -9,7 +9,7 @@ const AdapterService = App.service('adapter-service');
 
 export const UserFactory = new Factory(UsersService, {
     id: () => process.hrtime().join('-'),
-    username: Faker.internet.userName,
+    username: Faker.internet.username,
 })
 
 export const ArticleFactory = new Factory(ArticlesService, {
