@@ -9,12 +9,12 @@ describe('Factory', () => {
         lastName: () => faker.person.lastName(),
         email() {
             return faker.internet.email({
-                firstName: this.firstName,
-                lastName: this.lastName,
+                firstName: this.get('firstName'),
+                lastName: this.get('lastName'),
             });
         },
         fullName() {
-            return `${this.firstName} ${this.lastName}`;
+            return `${this.get('firstName')} ${this.get('lastName')}`;
         },
     });
     
@@ -91,7 +91,7 @@ describe('Factory', () => {
     describe('self referencing', () => {
         const userFactory2 = new Factory(userService, {
             fullName() {
-                return `${this.firstName} ${this.lastName}`;
+                return `${this.get('firstName')} ${this.get('lastName')}`;
             },
             firstName: () => faker.person.firstName(),
             lastName: () => faker.person.lastName(),
