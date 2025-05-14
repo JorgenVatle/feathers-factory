@@ -90,7 +90,7 @@ export type DataGenerator<
                              : GeneratorValue<TSchema[key], Resolver<TSchema>>
 }
 
-type GeneratorSchema = Record<string, unknown>
+export type GeneratorSchema = Record<string, unknown>
 export type ResolvedFactory<TFactory> = {
     [key in keyof TFactory]: TFactory[key] extends GeneratorValue<infer T> ? T : never
 }

@@ -1,11 +1,11 @@
 import { Params } from '@feathersjs/feathers';
 import Clues from 'clues';
 import { FeathersServiceNotDefined } from './Errors/FeathersFactoryError';
-import { type DataGenerator, FactoryDataGenerator } from './FactoryDataGenerator';
+import { type DataGenerator, FactoryDataGenerator, type GeneratorSchema } from './FactoryDataGenerator';
 import type { FactoryCompatibleService } from './Types';
 
 export default class Factory<
-    TSchema,
+    TSchema extends GeneratorSchema,
     TResult = TSchema,
     TFactory extends Record<string, unknown> = {},
 > {
