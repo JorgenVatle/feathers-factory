@@ -7,10 +7,10 @@ describe('Factory', () => {
         _id: () => simpleFaker.string.uuid(),
         firstName: () => faker.person.firstName(),
         lastName: () => faker.person.lastName(),
-        email() {
+        async email() {
             return faker.internet.email({
-                firstName: this.get('firstName'),
-                lastName: this.get('lastName'),
+                firstName: await this.get('firstName'),
+                lastName: await this.get('lastName'),
             });
         },
         fullName() {
@@ -90,6 +90,8 @@ describe('Factory', () => {
     
     describe('self referencing', () => {
         const userFactory2 = new Factory(userService, {
+            _id: () => simpleFaker.string.uuid(),
+            email: () => faker.internet.email({}),
             fullName() {
                 return `${this.get('firstName')} ${this.get('lastName')}`;
             },
