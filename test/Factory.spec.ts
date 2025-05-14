@@ -33,7 +33,7 @@ describe('Factory', () => {
     const email = vi.spyOn(faker.internet, 'email');
     
     afterEach(() => {
-        vi.restoreAllMocks();
+        vi.resetAllMocks();
     })
     
     it('is able to spy on the factory functions', async () => {
@@ -47,10 +47,10 @@ describe('Factory', () => {
     
     it('Does not call factory functions more than once', async () => {
         await factory.create();
-        expect(_id).toHaveBeenCalledTimes(1);
-        expect(firstName).toHaveBeenCalledTimes(1);
-        expect(lastName).toHaveBeenCalledTimes(1);
-        expect(email).toHaveBeenCalledTimes(1);
+        expect.soft(_id).toHaveBeenCalledOnce();
+        expect.soft(firstName).toHaveBeenCalledOnce();
+        expect.soft(lastName).toHaveBeenCalledOnce();
+        expect.soft(email).toHaveBeenCalledOnce();
     })
     
     it('has the expected output format', async () =>{
