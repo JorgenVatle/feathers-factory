@@ -25,7 +25,7 @@ describe('Global Feathers Factory', () => {
             await _service.create(data);
             return data;
         },
-        get(id: string) {
+        get(id: string): Promise<ServiceType> {
             return _service.get(id);
         }
     }
