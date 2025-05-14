@@ -1,7 +1,7 @@
 import Clues from 'clues';
 
 export class FactoryDataGenerator<
-    TSchema,
+    TSchema extends GeneratorSchema,
     TFactory extends Record<string, unknown>,
 > {
     constructor(
@@ -82,13 +82,15 @@ class Resolver<TFactory extends Record<string, any>> {
 }
 
 export type DataGenerator<
-    TSchema,
-    TFactory extends Record<string, unknown> = {},
+    TSchema extends GeneratorSchema,
+    TFactory extends GeneratorSchema = {},
 > = {
-    [key in keyof TFactory]: key extends keyof TSchema
-                             ? GeneratorValue<TSchema[key], Resolver<TFactory>>
-                             : GeneratorValue<TFactory[key], Resolver<TFactory>>
+    [key in keyof TSchema]: key extends keyof TFactory
+                             ? GeneratorValue<TFactory[key], Resolver<TSchema>>
+                             : GeneratorValue<TSchema[key], Resolver<TSchema>>
 }
+
+type GeneratorSchema = Record<string, unknown>
 export type ResolvedFactory<TFactory> = {
     [key in keyof TFactory]: TFactory[key] extends GeneratorValue<infer T> ? T : never
 }
