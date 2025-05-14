@@ -46,7 +46,7 @@ describe('Factory', () => {
     
     it('has the expected output format', async () =>{
         const result = await factory.create()
-        await expect(result).resolves.toEqual(
+        expect(result).toEqual(
             expect.objectContaining({
                 _id: expect.any(String),
                 firstName: expect.any(String),
