@@ -8,6 +8,7 @@ export class FactoryDataGenerator<
         protected readonly props: DataGenerator<TSchema, TFactory>
     ) {}
     
+    
     protected merge(overrides: object) {
         return {
             ...this.props,
@@ -34,6 +35,7 @@ export class FactoryDataGenerator<
 }
 
 class Resolver<TFactory extends Record<string, any>> {
+    protected clues = new Map<any, any>();
     protected output: Record<any, any>;
     constructor(protected readonly factory: TFactory) {
         this.output = {
@@ -48,10 +50,15 @@ class Resolver<TFactory extends Record<string, any>> {
     }
     
     public get<TKey extends keyof TFactory>(key: TKey): Promise<ResolvedFactory<TFactory>[TKey]> {
-        return Object.assign(
-            this.output[key],
-            Clues(this.output, key as string)
-        );
+        const existingClue = this.clues.get(key);
+        if (existingClue) {
+            return existingClue;
+        }
+        
+        const clue = Clues(this.output, key as string);
+        this.clues.set(key, clue);
+        
+        return clue;
     }
     
     public async getOutput(): Promise<any> {
@@ -60,10 +67,13 @@ class Resolver<TFactory extends Record<string, any>> {
         };
         const entries: Array<Promise<any>> = Object.entries(this.output).map(
             async ([key, value]) => {
+                if (value instanceof Promise) {
+                    return [key, await value];
+                }
                 if (typeof value === 'function') {
                     return [key, await this.get(key)];
                 }
-                return [key, this.output[key]];
+                return [key, await this.output[key]];
             }
         )
         Object.assign(resolvedOutput, Object.fromEntries(await Promise.all(entries)));
