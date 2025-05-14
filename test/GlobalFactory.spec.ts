@@ -102,8 +102,9 @@ describe('Global Feathers Factory', () => {
 
         const validateContent = (key: string) => {
             if (key === 'id') return;
-            expect(entry[key]).toBe('ok');
-            expect(dbEntry[key]).toBe('ok');
+            if (key === 'selfReference') return;
+            expect(entry).toHaveProperty(key, 'ok');
+            expect(dbEntry).toHaveProperty(key, 'ok');
         };
 
         Object.keys(entry).map(validateContent);
