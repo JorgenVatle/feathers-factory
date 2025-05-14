@@ -22,7 +22,7 @@ describe('Global Feathers Factory', () => {
                 function: string,
                 getter: string,
                 async: string,
-                selfReference: string,
+                selfReference: string[],
             }) {
                 return data;
             }
@@ -46,7 +46,7 @@ describe('Global Feathers Factory', () => {
                     expect(property).toBe('ok');
                 }
                 
-                return properties;
+                return Promise.all(properties);
             }
         })
         GlobalFactories.define('test', service, {});
