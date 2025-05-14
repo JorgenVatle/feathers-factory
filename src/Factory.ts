@@ -7,6 +7,7 @@ const Clues = require('clues');
 export default class Factory<
     TSchema,
     TResult = TSchema,
+    TFactory extends Record<string, unknown> = {},
 > {
     
     /**
@@ -18,7 +19,7 @@ export default class Factory<
      */
     public constructor(
         private readonly service: FactoryCompatibleService<TSchema, TResult>,
-        private readonly generator: DataGenerator<TSchema>,
+        private readonly generator: DataGenerator<TSchema, TFactory>,
         private readonly defaultParams: DataGenerator<Params> = {},
     ) {
         if (!service) {
@@ -87,8 +88,21 @@ export default class Factory<
     
 }
 
-type GeneratorValue<SchemaValue, ThisType> = SchemaValue | ((this: ThisType) => SchemaValue | Promise<SchemaValue>)
-
-export type DataGenerator<Schema> = {
-    [key in keyof Schema]: GeneratorValue<Schema[key], Schema>
+export type DataGenerator<
+    TSchema,
+    TFactory extends Record<string, unknown> = {},
+    TResolvedFactory = ResolvedFactory<TFactory>,
+> = {
+    [key in keyof TFactory]: key extends keyof TSchema
+                             ? GeneratorValue<TSchema[key], TResolvedFactory>
+                             : GeneratorValue<TFactory[key], TResolvedFactory>
 }
+
+type ResolvedFactory<TFactory> = {
+    [key in keyof TFactory]: TFactory[key] extends GeneratorValue<infer T> ? T : never
+}
+
+type GeneratorValue<
+    SchemaValue,
+    ThisType = unknown
+> = SchemaValue | ((this: ThisType) => SchemaValue | Promise<SchemaValue>)
