@@ -16,6 +16,7 @@
     "prepack": "npm run build",
     "prepublishOnly": "npm run lint && npm test",
     "postversion": "git push && git push --tags",
+    "release": "npm ",
     "build": "tsup",
     "lint": "tsc --noEmit"
   },
@@ -39,6 +40,7 @@
   },
   "homepage": "https://github.com/JorgenVatle/feathers-factory#readme",
   "devDependencies": {
+    "@changesets/cli": "^2.29.4",
     "@faker-js/faker": "^9.7.0",
     "@feathersjs/adapter-commons": "^4.5.12",
     "@feathersjs/feathers": "^4.5.7",
