@@ -66,7 +66,7 @@ class Resolver<TFactory extends Record<string, any>> {
                 return [key, this.output[key]];
             }
         )
-        Object.assign(resolvedOutput, await Promise.all(entries));
+        Object.assign(resolvedOutput, Object.fromEntries(await Promise.all(entries)));
         return resolvedOutput;
     }
 }
