@@ -3,13 +3,6 @@ import { describe, expectTypeOf, it } from 'vitest';
 import Factory from './Factory';
 import type { FactoryCompatibleService } from './Types';
 
-/**
- * Generic feathers services modify the schema you provide
- * with something way too loose. This mimics that behaviour.
- */
-type GenericFeathersDataInput<T> = Partial<T> | Partial<T>[];
-type GenericFeathersDataOutput<T> = T | T[];
-
 describe('Factory Types', () => {
     
     describe('FactoryCompatibleService', () => {
@@ -27,8 +20,9 @@ describe('Factory Types', () => {
             const create = createFactory(service);
             
             
-            expectTypeOf(create).parameter(0)
-                .toEqualTypeOf<GenericFeathersDataInput<Schema>>();
+            expectTypeOf(create)
+                .parameter(0)
+                .toEqualTypeOf<Partial<Schema>>();
         })
         
     })
@@ -38,7 +32,7 @@ describe('Factory Types', () => {
         const myFactory = new Factory(service, {} as any)
         
         expectTypeOf(myFactory.create()).resolves
-            .toEqualTypeOf<GenericFeathersDataOutput<{ foo: 'bar' }>>();
+            .toEqualTypeOf<{ foo: 'bar' }>();
     });
     
     it('can fall back to the service create() data type for non-Feathers services', async () => {
