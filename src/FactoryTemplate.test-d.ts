@@ -3,22 +3,26 @@ import { FactoryTemplate } from './FactoryTemplate';
 
 describe('FactoryTemplate', () => {
     
-    const template = new FactoryTemplate({
-        _id: () => 'test',
-        createdAt: () => new Date(),
-        firstName: 'test',
-        lastName: 'test',
-    });
     
-    it('can be type cast to the resulting data type', async () => {
+    describe('Resolved data types', async () => {
+        const template = new FactoryTemplate({
+            _id: () => 'test',
+            createdAt: () => new Date(),
+            firstName: 'test',
+            lastName: 'test',
+        });
         const resolvedTemplate = await template.resolve();
         
-        expectTypeOf(resolvedTemplate).toEqualTypeOf<{
-            _id: string;
-            createdAt: Date;
-            firstName: string;
-            lastName: string;
-        }>()
+        it('will unwrap functions to their return values', async () => {
+            expectTypeOf(resolvedTemplate._id).toEqualTypeOf<'test'>();
+            expectTypeOf(resolvedTemplate.createdAt).toEqualTypeOf<Date>();
+        });
+        
+        it('will not unwrap non-function values', async () => {
+            expectTypeOf(resolvedTemplate.firstName).toEqualTypeOf<string>();
+            expectTypeOf(resolvedTemplate.lastName).toEqualTypeOf<string>();
+        })
+        
     })
     
 })
