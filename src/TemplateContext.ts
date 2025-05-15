@@ -34,7 +34,7 @@ export class TemplateContext<TTemplate> {
     }
     
     public get(key: keyof TTemplate) {
-        return Clues(this.state, key as string);
+        return Clues(this.state, key as string, { CONTEXT: this });
     }
 }
 
