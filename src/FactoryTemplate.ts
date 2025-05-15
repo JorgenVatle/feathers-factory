@@ -1,7 +1,9 @@
 export class FactoryTemplate<TTemplate> {
     constructor(protected readonly template: TTemplate) {}
     
-    public resolve(): Promise<TemplateResult<TTemplate>> {
+    public resolve(
+        overrides: Partial<TTemplate & TemplateResult<TTemplate>>
+    ): Promise<TemplateResult<TTemplate>> {
         // todo
         return {} as any;
     }
