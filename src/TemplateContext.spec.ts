@@ -12,12 +12,12 @@ describe('TemplateContext', () => {
             })
         )
         
-        it('can resolve static fields', () => {
-            expect(context.get('staticField')).toEqual('ok');
+        it('can resolve static fields', async () => {
+            expect(await context.get('staticField')).toEqual('ok');
         })
         
-        it('can resolve arrow functions', () => {
-            expect(context.get('arrowFunction')).toEqual('ok');
+        it('can resolve arrow functions', async () => {
+            expect(await context.get('arrowFunction')).toEqual('ok');
         })
     })
     
