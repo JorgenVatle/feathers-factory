@@ -64,7 +64,7 @@ describe('FactoryTemplate', () => {
         
         it.todo('does not allow unknown fields', () => {
             expectTypeOf(template.resolve).toBeCallableWith({
-                // @ts-expect-error
+                // @ts-ignore TODO
                 unknownField: 'test',
             });
         })
