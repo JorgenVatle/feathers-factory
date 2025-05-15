@@ -70,71 +70,74 @@ describe('FactoryTemplate', () => {
         
     })
     
-    describe('Template "this" context', () => {
-        it('can reference sibling fields in the same template', async () => {
-            const template = new FactoryTemplate({
-                firstName: 'test',
-                lastName: 'test',
-                age: (): number => 50,
-                async fullName() {
-                    expectTypeOf(await this.get('firstName')).toEqualTypeOf<string>();
-                    expectTypeOf(await this.get('lastName')).toEqualTypeOf<string>();
-                    expectTypeOf(await this.get('age')).toEqualTypeOf<number>();
-                },
-            });
+    describe('Template context', () => {
+        describe('Within "this" type', () => {
+            it('can reference sibling fields in the same template', async () => {
+                const template = new FactoryTemplate({
+                    firstName: 'test',
+                    lastName: 'test',
+                    age: (): number => 50,
+                    async fullName() {
+                        expectTypeOf(await this.get('firstName')).toEqualTypeOf<string>();
+                        expectTypeOf(await this.get('lastName')).toEqualTypeOf<string>();
+                        expectTypeOf(await this.get('age')).toEqualTypeOf<number>();
+                    },
+                });
+            })
+            
+            it('is accessible within resolver overrides', async () => {
+                const template = new FactoryTemplate({
+                    firstName: 'test',
+                    lastName: 'test',
+                    age: (): number => 50,
+                    fullName: () => 'test',
+                });
+                
+                await template.resolve({
+                    async fullName() {
+                        expectTypeOf(await this.get('firstName')).toEqualTypeOf<string>();
+                        expectTypeOf(await this.get('lastName')).toEqualTypeOf<string>();
+                        expectTypeOf(await this.get('age')).toEqualTypeOf<number>();
+                        return 'test';
+                    },
+                })
+            })
         })
         
-        it('is accessible within resolver overrides', async () => {
-            const template = new FactoryTemplate({
-                firstName: 'test',
-                lastName: 'test',
-                age: (): number => 50,
-                fullName: () => 'test',
-            });
+        describe('Function parameter', () => {
+            it('is available as a parameter for use in arrow functions', () => {
+                const template = new FactoryTemplate({
+                    firstName: 'test',
+                    lastName: 'test',
+                    age: (): number => 50,
+                    fullName: async (ctx) => {
+                        expectTypeOf(await ctx.get('firstName')).toEqualTypeOf<string>();
+                        expectTypeOf(await ctx.get('lastName')).toEqualTypeOf<string>();
+                        expectTypeOf(await ctx.get('age')).toEqualTypeOf<number>();
+                    },
+                });
+            })
             
-            await template.resolve({
-                async fullName() {
-                    expectTypeOf(await this.get('firstName')).toEqualTypeOf<string>();
-                    expectTypeOf(await this.get('lastName')).toEqualTypeOf<string>();
-                    expectTypeOf(await this.get('age')).toEqualTypeOf<number>();
-                    return 'test';
-                },
+            it('is available as a parameter in resolver overrides', async () => {
+                const template = new FactoryTemplate({
+                    firstName: 'test',
+                    lastName: 'test',
+                    age: (): number => 50,
+                    fullName: () => 'test',
+                });
+                
+                await template.resolve({
+                    fullName: async (ctx) => {
+                        expectTypeOf(await ctx.get('firstName')).toEqualTypeOf<string>();
+                        expectTypeOf(await ctx.get('lastName')).toEqualTypeOf<string>();
+                        expectTypeOf(await ctx.get('age')).toEqualTypeOf<number>();
+                        return 'test';
+                    },
+                })
             })
         })
     });
     
-    describe('Template context', () => {
-        it('is provided as a parameter for in arrow functions', () => {
-            const template = new FactoryTemplate({
-                firstName: 'test',
-                lastName: 'test',
-                age: (): number => 50,
-                fullName: async (ctx) => {
-                    expectTypeOf(await ctx.get('firstName')).toEqualTypeOf<string>();
-                    expectTypeOf(await ctx.get('lastName')).toEqualTypeOf<string>();
-                    expectTypeOf(await ctx.get('age')).toEqualTypeOf<number>();
-                },
-            });
-        })
-        
-        it('is provided as a parameter in resolver overrides', async () => {
-            const template = new FactoryTemplate({
-                firstName: 'test',
-                lastName: 'test',
-                age: (): number => 50,
-                fullName: () => 'test',
-            });
-            
-            await template.resolve({
-                fullName: async (ctx) => {
-                    expectTypeOf(await ctx.get('firstName')).toEqualTypeOf<string>();
-                    expectTypeOf(await ctx.get('lastName')).toEqualTypeOf<string>();
-                    expectTypeOf(await ctx.get('age')).toEqualTypeOf<number>();
-                    return 'test';
-                },
-            })
-        })
-    })
     
     describe('Template extensions', async () => {
         const newTemplate = template.extend({
