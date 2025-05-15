@@ -5,7 +5,7 @@ export class TemplateContext<TTemplate> {
     protected readonly state: ContextState<TTemplate>;
     
     constructor(protected readonly template: FactoryTemplate<TTemplate>) {
-        this.state = Object.create(template);
+        this.state = Object.create(template._schema);
     }
     
     public get(key: keyof TTemplate) {
