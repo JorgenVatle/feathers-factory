@@ -173,7 +173,7 @@ describe('FactoryTemplate', () => {
                     async fullName() {
                         expectTypeOf(await this.get('firstName')).toEqualTypeOf<string>();
                         expectTypeOf(await this.get('lastName')).toEqualTypeOf<string>();
-                        expectTypeOf(await this.get('dateOfBirth')).toEqualTypeOf<Date>();
+                        expectTypeOf(await this.get('createdAt')).toEqualTypeOf<Date>();
                         
                         return `${await this.get('firstName')} ${await this.get('lastName')}`
                     },
