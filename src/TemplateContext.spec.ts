@@ -11,6 +11,9 @@ describe('TemplateContext', () => {
             new FactoryTemplate({
                 staticField: 'ok',
                 arrowFunction: () => 'ok',
+                staticPromise: Promise.resolve('ok'),
+                asyncPromise: async () => 'ok',
+                asyncDate: () => new Date(),
             })
         )
         
@@ -22,17 +25,44 @@ describe('TemplateContext', () => {
         
         it('can resolve arrow functions', async () => {
             const arrowFunction = await context.get('arrowFunction');
+            
             expect(arrowFunction).toEqual('ok');
             expectTypeOf(arrowFunction).toEqualTypeOf<string>();
         });
+        
+        it('can resolve static promises', async () => {
+            const staticPromise = await context.get('staticPromise');
+            
+            expect(staticPromise).toEqual('ok');
+            expectTypeOf(staticPromise).toEqualTypeOf<string>();
+        })
+        
+        it('can resolve async functions', async () => {
+            const asyncPromise = await context.get('asyncPromise');
+            
+            expect(asyncPromise).toEqual('ok');
+            expectTypeOf(asyncPromise).toEqualTypeOf<string>();
+        })
+        
+        it('can resolve async object types', async () => {
+            const asyncDate = await context.get('asyncDate');
+            
+            expect(asyncDate).toEqual(expect.any(Date));
+            expectTypeOf(asyncDate).toEqualTypeOf<Date>();
+        })
         
         it('did not add unexpected fields to the resulting state', () => {
             expect(context._state).toEqual({
                 staticField: 'ok',
                 arrowFunction: 'ok',
+                staticPromise: 'ok',
+                asyncPromise: 'ok',
+                asyncDate: expect.any(Date),
             })
         })
     })
+    
+    describe.todo('Promise rejection')
     
     describe('Sibling fields', () => {
         it('can resolve sibling fields using "this"', async () => {
