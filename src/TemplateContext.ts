@@ -104,6 +104,19 @@ export class TemplateContext<TTemplate> {
         }
         return true;
     }
+    
+    /**
+     * Attempt to resolve the current context state.
+     * Used primarily for testing. The internal state does change during
+     * resolve and could yield unexpected results.
+     * @private
+     */
+    public async _resolveState() {
+        const result = Object.keys(this._state).map(async (key) => {
+            return [key, await this.get(key as any)]
+        });
+        return Object.fromEntries(await Promise.all(result));
+    };
 }
 
 /**
