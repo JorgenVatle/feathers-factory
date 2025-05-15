@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { FactoryTemplate } from './FactoryTemplate';
 import { TemplateContext } from './TemplateContext';
 
@@ -58,6 +58,30 @@ describe('TemplateContext', () => {
         })
         
     });
+    
+    describe('Peer dependencies', () => {
+        it(`will not call template functions more than once for a given field`, async () => {
+            const firstName = vi.fn(() => 'John');
+            const lastName = vi.fn(() => 'Doe');
+            const fullName = vi.fn(() => `${firstName()} ${lastName()}`);
+            
+            const context = new TemplateContext(
+                new FactoryTemplate({
+                    firstName,
+                    lastName,
+                    fullName,
+                })
+            );
+            
+            await context.get('firstName');
+            await context.get('lastName');
+            await context.get('fullName');
+            
+            expect(firstName).toHaveBeenCalledTimes(1);
+            expect(lastName).toHaveBeenCalledTimes(1);
+            expect(fullName).toHaveBeenCalledTimes(1);
+        })
+    })
     
     
 })
