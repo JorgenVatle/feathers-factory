@@ -5,7 +5,7 @@ describe('FactoryTemplate', () => {
     
     
     const template = new FactoryTemplate({
-        _id: () => 'test',
+        _id: () => 1,
         createdAt: () => new Date(),
         firstName: 'test',
         lastName: 'test',
@@ -15,7 +15,7 @@ describe('FactoryTemplate', () => {
         const resolvedTemplate = await template.resolve();
         
         it('will unwrap functions to their return values', async () => {
-            expectTypeOf(resolvedTemplate._id).toEqualTypeOf<'test'>();
+            expectTypeOf(resolvedTemplate._id).toEqualTypeOf<number>();
             expectTypeOf(resolvedTemplate.createdAt).toEqualTypeOf<Date>();
         });
         
@@ -40,7 +40,7 @@ describe('FactoryTemplate', () => {
             });
             
             expectTypeOf(template.resolve).toBeCallableWith({
-                _id: 'test' as const,
+                _id: 5,
             });
         })
         
