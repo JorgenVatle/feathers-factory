@@ -184,7 +184,7 @@ describe('FactoryTemplate', () => {
                 const newTemplate = template.extend({
                     streetAddress: () => faker.location.streetAddress(),
                     city: () => faker.location.city(),
-                    zip: () => faker.location.zipCode(),
+                    zip: () => parseInt(faker.location.zipCode()), // don't do this :)
                     async fullAddress() {
                         expectTypeOf(await this.get('streetAddress')).toEqualTypeOf<string>();
                         expectTypeOf(await this.get('city')).toEqualTypeOf<string>();
