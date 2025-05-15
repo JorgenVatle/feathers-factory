@@ -3,7 +3,7 @@
  * Defines the fields that will be generated when factories are called.
  */
 export class FactoryTemplate<TTemplate> {
-    constructor(protected readonly template: TemplateSchema<TTemplate>) {}
+    constructor(public readonly _schema: TemplateSchema<TTemplate>) {}
     
     /**
      * Run all factory functions in the template and return final result to be
@@ -17,7 +17,7 @@ export class FactoryTemplate<TTemplate> {
     public extend<TOverrides>(overrides: ExtendedTemplateSchema<TTemplate, TOverrides>): ExtendedFactoryTemplate<TTemplate, TOverrides> {
         // @ts-expect-error Incompatible types
         return new FactoryTemplate({
-            ...this.template,
+            ...this._schema,
             ...overrides,
         })
     }
