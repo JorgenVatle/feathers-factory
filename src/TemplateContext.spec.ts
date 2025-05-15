@@ -1,6 +1,7 @@
 import { faker } from '@faker-js/faker';
 import { describe, expect, it, vi } from 'vitest';
 import { FactoryTemplate } from './FactoryTemplate';
+import { sleep } from './lib/Utilities';
 import { TemplateContext } from './TemplateContext';
 
 describe('TemplateContext', () => {
@@ -63,14 +64,16 @@ describe('TemplateContext', () => {
     describe('Peer dependencies', () => {
         const firstName = vi.fn(() => faker.person.firstName());
         const lastName = vi.fn(() => faker.person.lastName());
+        const createdAt = vi.fn(() => performance.now());
         
         const context = new TemplateContext(
             new FactoryTemplate({
-                firstName,
-                lastName,
                 fullName: async (ctx) => {
                     return `${await ctx.get('firstName')} ${await ctx.get('lastName')}`
                 },
+                firstName,
+                lastName,
+                createdAt,
             })
         );
         
@@ -87,10 +90,22 @@ describe('TemplateContext', () => {
             const fullName = await context.get('fullName');
             const firstName = await context.get('firstName');
             const lastName = await context.get('lastName');
+            const createdAt = await context.get('createdAt');
+            const localCreatedAt = performance.now();
             
             
             expect(fullName).toEqual(`${firstName} ${lastName}`);
-        })
+            
+            await sleep(500);
+            
+            // Ensure fetching createdAt again will not update the timestamp
+            await expect(context.get('createdAt')).resolves.toEqual(createdAt);
+            
+            // Ensure the timestamp captured right after resolving createdAt
+            // still is greater even when requesting the field again.
+            expect(localCreatedAt).toBeGreaterThanOrEqual(await context.get('createdAt'));
+        });
+        
     })
     
     
