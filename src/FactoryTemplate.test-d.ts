@@ -59,7 +59,7 @@ describe('FactoryTemplate', () => {
             expectTypeOf(template.resolve).toBeCallableWith({
                 firstName: () => 'some other name',
             });
-        })
+        });
         
     })
     
@@ -75,6 +75,23 @@ describe('FactoryTemplate', () => {
                     expectTypeOf(await this.get('age')).toEqualTypeOf<number>();
                 },
             });
+        })
+        
+        it('is accessible within resolver overrides', async () => {
+            const template = new FactoryTemplate({
+                firstName: 'test',
+                lastName: 'test',
+                age: (): number => 50,
+                fullName: () => 'test',
+            });
+            
+            await template.resolve({
+                async fullName() {
+                    expectTypeOf(await this.get('firstName')).toEqualTypeOf<string>();
+                    expectTypeOf(await this.get('lastName')).toEqualTypeOf<string>();
+                    expectTypeOf(await this.get('age')).toEqualTypeOf<number>();
+                },
+            })
         })
     })
     
