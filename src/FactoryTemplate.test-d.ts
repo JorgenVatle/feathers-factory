@@ -70,7 +70,7 @@ describe('FactoryTemplate', () => {
         
     })
     
-    describe('Internal context', () => {
+    describe('Template "this" context', () => {
         it('can reference sibling fields in the same template', async () => {
             const template = new FactoryTemplate({
                 firstName: 'test',
@@ -100,6 +100,21 @@ describe('FactoryTemplate', () => {
                     return 'test';
                 },
             })
+        })
+    });
+    
+    describe('Template context', () => {
+        it('is provided as a parameter for in arrow functions', () => {
+            const template = new FactoryTemplate({
+                firstName: 'test',
+                lastName: 'test',
+                age: (): number => 50,
+                fullName: async (ctx) => {
+                    expectTypeOf(await ctx.get('firstName')).toEqualTypeOf<string>();
+                    expectTypeOf(await ctx.get('lastName')).toEqualTypeOf<string>();
+                    expectTypeOf(await ctx.get('age')).toEqualTypeOf<number>();
+                },
+            });
         })
     })
     
