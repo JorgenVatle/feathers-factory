@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker';
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, expectTypeOf, it, vi } from 'vitest';
 import { FactoryTemplate } from './FactoryTemplate';
 import { sleep } from './lib/Utilities';
 import { TemplateContext } from './TemplateContext';
@@ -15,11 +15,15 @@ describe('TemplateContext', () => {
         )
         
         it('can resolve static fields', async () => {
-            expect(await context.get('staticField')).toEqual('ok');
+            const staticField = await context.get('staticField');
+            expect(staticField).toEqual('ok');
+            expectTypeOf(staticField).toEqualTypeOf<string>();
         })
         
         it('can resolve arrow functions', async () => {
-            expect(await context.get('arrowFunction')).toEqual('ok');
+            const arrowFunction = await context.get('arrowFunction');
+            expect(arrowFunction).toEqual('ok');
+            expectTypeOf(arrowFunction).toEqualTypeOf<string>();
         });
         
         it('did not add unexpected fields to the resulting state', () => {
