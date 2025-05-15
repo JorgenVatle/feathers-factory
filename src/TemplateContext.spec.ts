@@ -62,7 +62,17 @@ describe('TemplateContext', () => {
         })
     })
     
-    describe.todo('Promise rejection')
+    describe('Promise rejection', () => {
+        const context = new TemplateContext(
+            new FactoryTemplate({
+                genericError: () => Promise.reject(new Error('Generic error')),
+            })
+        )
+        
+        it('will reject context get calls', async () => {
+            await expect(context.get('genericError')).rejects.toThrow('Generic error');
+        })
+    })
     
     describe('Sibling fields', () => {
         it('can resolve sibling fields using "this"', async () => {
