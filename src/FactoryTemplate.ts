@@ -1,5 +1,5 @@
 export class FactoryTemplate<TTemplate> {
-    constructor(protected readonly template: TemplateContext<TTemplate>) {}
+    constructor(protected readonly template: TemplateDefinition<TTemplate>) {}
     
     /**
      * Run all factory functions in the template and return final result to be
@@ -11,9 +11,11 @@ export class FactoryTemplate<TTemplate> {
     }
 }
 
-export type TemplateContext<TTemplate> = {
+type TemplateDefinition<TTemplate> = {
     [key in keyof TTemplate]: TemplateField<TTemplate[key]>;
-} & ThisType<{
+} & ThisType<TemplateContext<TTemplate>>
+
+interface TemplateContext<TTemplate> {
     /**
      * Resolve the value of a template field within the current generator
      * context. Fields are only resolved once per generator context.
@@ -64,7 +66,8 @@ export type TemplateContext<TTemplate> = {
      *     ]
      */
     call<TField extends keyof TTemplate>(field: TField): Promise<InferFieldType<TTemplate[TField]>>;
-}>
+}
+
 
 /**
  * Factory Template field.
