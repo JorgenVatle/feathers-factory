@@ -1,6 +1,6 @@
 import { Params } from '@feathersjs/feathers';
 import Factory from './Factory';
-import type { DataGenerator, GeneratorSchema } from './FactoryDataGenerator';
+import type { TemplateOverrides } from './FactoryTemplate';
 
 export default new class GlobalFactories {
 
@@ -13,12 +13,11 @@ export default new class GlobalFactories {
      * Define a new factory.
      */
     public define<
-        TSchema extends GeneratorSchema,
-        TResult,
-        TFactory extends Record<string, unknown>
+        TSchema,
+        TResult = TSchema,
     >(
         factoryName: string,
-        factory: Factory<TSchema, TResult, TFactory>,
+        factory: Factory<TSchema, TResult>,
     ) {
         this.factories[factoryName] = factory;
     }
@@ -46,7 +45,7 @@ export default new class GlobalFactories {
      * @param overrides
      * @param params
      */
-    public create(factoryName: string, overrides?: DataGenerator<any>, params?: Params) {
+    public create(factoryName: string, overrides?: TemplateOverrides<any>, params?: Params) {
         const factory = this.getFactory(factoryName);
 
         return factory.create(overrides, params);
@@ -60,7 +59,7 @@ export default new class GlobalFactories {
      * @param overrides
      * @param params
      */
-    public createMany(quantity: number, factoryName: string, overrides?: DataGenerator<any>, params?: Params) {
+    public createMany(quantity: number, factoryName: string, overrides?: TemplateOverrides<any>, params?: Params) {
         const factory = this.getFactory(factoryName);
         return factory.createMany(quantity, overrides, params);
     }
@@ -72,7 +71,7 @@ export default new class GlobalFactories {
      * @param factoryName
      * @param overrides
      */
-    public get(factoryName: string, overrides?: DataGenerator<any>) {
+    public get(factoryName: string, overrides?: TemplateOverrides<any>) {
         const factory = this.factories[factoryName];
 
         if (!factory) {
