@@ -5,7 +5,7 @@ export class FactoryTemplate<TTemplate> {
      * Run all factory functions in the template and return final result to be
      * stored in the database.
      */
-    public resolve(overrides: TemplateOverrides<TTemplate>): Promise<TemplateResult<TTemplate>> {
+    public resolve(overrides?: TemplateOverrides<TTemplate>): Promise<TemplateResult<TTemplate>> {
         // todo
         return {} as any;
     }
