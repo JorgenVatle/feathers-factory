@@ -51,8 +51,8 @@ describe('TemplateContext', () => {
             expectTypeOf(asyncDate).toEqualTypeOf<Date>();
         })
         
-        it('did not add unexpected fields to the resulting state', () => {
-            expect(context._state).toEqual({
+        it('did not add unexpected fields to the resulting state', async () => {
+            expect(await context._resolveState()).toEqual({
                 staticField: 'ok',
                 arrowFunction: 'ok',
                 staticPromise: 'ok',
