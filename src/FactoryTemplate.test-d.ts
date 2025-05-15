@@ -68,7 +68,10 @@ describe('FactoryTemplate', () => {
             const template = new FactoryTemplate({
                 firstName: 'test',
                 lastName: 'test',
-                fullName: async () => `${await this.get('firstName')} ${await this.get('lastName')}`,
+                fullName: async () => {
+                    expectTypeOf(await this.get('firstName')).toEqualTypeOf<string>();
+                    expectTypeOf(await this.get('lastName')).toEqualTypeOf<string>();
+                },
             });
         })
     })
