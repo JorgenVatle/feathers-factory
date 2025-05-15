@@ -1,3 +1,7 @@
+/**
+ * Factory boilerplate template.
+ * Defines the fields that will be generated when factories are called.
+ */
 export class FactoryTemplate<TTemplate> {
     constructor(protected readonly template: TemplateSchema<TTemplate>) {}
     
