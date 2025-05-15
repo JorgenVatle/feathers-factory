@@ -103,7 +103,7 @@ export type TemplateResult<TTemplate> = {
  */
 type TemplateOverrides<TTemplate> = {
     [key in keyof TTemplate]?: TemplateField<InferFieldType<TTemplate[key]>>;
-}
+} & ThisType<TemplateContext<TTemplate>>;
 
 /**
  * Infer the resolved output type of a given template field.
