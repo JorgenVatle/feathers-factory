@@ -90,6 +90,7 @@ describe('FactoryTemplate', () => {
                     expectTypeOf(await this.get('firstName')).toEqualTypeOf<string>();
                     expectTypeOf(await this.get('lastName')).toEqualTypeOf<string>();
                     expectTypeOf(await this.get('age')).toEqualTypeOf<number>();
+                    return 'test';
                 },
             })
         })
