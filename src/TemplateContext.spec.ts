@@ -4,14 +4,22 @@ import { TemplateContext } from './TemplateContext';
 
 describe('TemplateContext', () => {
     
-    it('can resolve static fields', () => {
+    describe('basic usage', () => {
         const context = new TemplateContext(
             new FactoryTemplate({
                 staticField: 'ok',
+                arrowFunction: () => 'ok',
             })
         )
         
-        expect(context.get('staticField')).toEqual('ok');
+        it('can resolve static fields', () => {
+            expect(context.get('staticField')).toEqual('ok');
+        })
+        
+        it('can resolve arrow functions', () => {
+            expect(context.get('arrowFunction')).toEqual('ok');
+        })
     })
+    
     
 })
