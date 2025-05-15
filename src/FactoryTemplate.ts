@@ -11,10 +11,20 @@ export class FactoryTemplate<TTemplate> {
     }
 }
 
+/**
+ * Factory Template definition.
+ * Defines the fields that will be generated when the factory is called.
+ */
 type TemplateDefinition<TTemplate> = {
     [key in keyof TTemplate]: TemplateField<TTemplate[key]>;
 } & ThisType<TemplateContext<TTemplate>>
 
+/**
+ * Factory Template context.
+ * Provides access to the current generation context.
+ *
+ * The `this` type within your template's generator functions.
+ */
 interface TemplateContext<TTemplate> {
     /**
      * Resolve the value of a template field within the current generator
