@@ -1,6 +1,6 @@
 import type { FactoryTemplate } from './FactoryTemplate';
 
-class TemplateContext<TTemplate> {
+export class TemplateContext<TTemplate> {
     protected readonly state: ContextState<TTemplate>;
     
     constructor(protected readonly template: FactoryTemplate<TTemplate>) {
