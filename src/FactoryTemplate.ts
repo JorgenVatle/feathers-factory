@@ -47,6 +47,21 @@ export type TemplateContext<TTemplate> = {
      * another field. Do keep in mind that you might want to use it sparingly
      * in case the field has side-effects. E.g. creating new records in the
      * database.
+     *
+     * @example
+     * template = ({
+     *     firstName: () => faker.person.firstName(),
+     *     lastName: () => faker.person.lastName(),
+     *
+     *     fullName: () => `${this.get('firstName')} ${this.get('lastName')}`,
+     *     // -> John Doe
+     *
+     *     family: () => [
+     *         this.call('fullName'), // -> <New random name>
+     *         this.call('fullName'), // -> <New random name>
+     *
+     *         this.get('fullName'), // -> John Doe
+     *     ]
      */
     call<TField extends keyof TTemplate>(field: TField): Promise<InferFieldType<TTemplate[TField]>>;
 }>
