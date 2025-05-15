@@ -55,6 +55,12 @@ describe('FactoryTemplate', () => {
             
         })
         
+        it('allows overriding static fields with functions', () => {
+            expectTypeOf(template.resolve).toBeCallableWith({
+                firstName: () => 'some other name',
+            });
+        })
+        
     })
     
 })
