@@ -1,5 +1,5 @@
 export class FactoryTemplate<TTemplate> {
-    constructor(protected readonly template: TTemplate) {}
+    constructor(protected readonly template: TemplateContext<TTemplate>) {}
     
     /**
      * Run all factory functions in the template and return final result to be
@@ -13,7 +13,9 @@ export class FactoryTemplate<TTemplate> {
 
 export type TemplateContext<TTemplate> = {
     [key in keyof TTemplate]: TemplateField<TTemplate[key]>;
-}
+} & ThisType<{
+    get<TField extends keyof TTemplate>(field: TField): Promise<InferFieldType<TTemplate[TField]>>;
+}>
 
 /**
  * Factory Template field.
