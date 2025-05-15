@@ -45,9 +45,14 @@ describe('FactoryTemplate', () => {
         })
         
         it('has to adhere to the original schema', () => {
-            expectTypeOf(template.resolve).parameter(1).not.toBeCallableWith({
+            expectTypeOf(template.resolve).toBeCallableWith({
+                // @ts-expect-error
                 _id: () => 'INVALID_ID',
+                
+                // @ts-expect-error
+                firstName: 1,
             })
+            
         })
         
     })
