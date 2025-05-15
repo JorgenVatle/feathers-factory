@@ -145,5 +145,6 @@ type ContextField<TType> =
  * is async.
  */
 type ContextFieldOutcome<TType> =
-    | TType
-    | Promise<TType>;
+    TType extends ContextField<infer T>
+    ? Promise<T> | T
+    : never;
