@@ -103,4 +103,15 @@ describe('FactoryTemplate', () => {
         })
     })
     
+    describe('Template extensions', () => {
+        it('can extend existing templates with new fields', async () => {
+            const newTemplate = template.extend({
+                dateOfBirth: () => new Date(),
+            });
+            const resolved = await newTemplate.resolve();
+            
+            expectTypeOf(resolved.dateOfBirth).toEqualTypeOf<Date>();
+        })
+    })
+    
 })
