@@ -63,4 +63,14 @@ describe('FactoryTemplate', () => {
         
     })
     
+    describe('Internal context', () => {
+        it('can reference sibling fields in the same template', async () => {
+            const template = new FactoryTemplate({
+                firstName: 'test',
+                lastName: 'test',
+                fullName: async () => `${await this.get('firstName')} ${await this.get('lastName')}`,
+            });
+        })
+    })
+    
 })
