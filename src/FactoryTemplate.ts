@@ -59,7 +59,7 @@ export type TemplateResult<TTemplate> = {
  * Defines the fields that can be overridden before resolving the final
  * template.
  */
-type TemplateOverrides<TTemplate> = {
+export type TemplateOverrides<TTemplate> = {
     [key in keyof TTemplate]?: TemplateField<InferFieldType<TTemplate[key]>, TTemplate>;
 } & ThisType<TemplateContext<TTemplate>>;
 
