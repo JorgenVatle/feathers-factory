@@ -29,9 +29,9 @@ describe('FactoryTemplate', () => {
     describe('Overrides', () => {
         
         it('allows partial overrides', async () => {
-            expectTypeOf(template.resolve).parameter(1).toBeCallableWith({
-                _id: () => 'test',
-            })
+            expectTypeOf(template.resolve).toBeCallableWith({
+                firstName: 'newFirstName',
+            });
         })
         
         it('has to adhere to the original schema', () => {
