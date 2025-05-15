@@ -1,5 +1,5 @@
 export class FactoryTemplate<TTemplate> {
-    constructor(protected readonly template: TemplateDefinition<TTemplate>) {}
+    constructor(protected readonly template: TemplateSchema<TTemplate>) {}
     
     /**
      * Run all factory functions in the template and return final result to be
@@ -15,7 +15,7 @@ export class FactoryTemplate<TTemplate> {
  * Factory Template definition.
  * Defines the fields that will be generated when the factory is called.
  */
-type TemplateDefinition<TTemplate> = {
+export type TemplateSchema<TTemplate> = {
     [key in keyof TTemplate]: TemplateField<TTemplate[key]>;
 } & ThisType<TemplateContext<TTemplate>>
 
@@ -84,7 +84,7 @@ interface TemplateContext<TTemplate> {
  * Specifies a function to run every time the factory is called. Or a static
  * value that will always remain the same.
  */
-export type TemplateField<
+type TemplateField<
     TValue = unknown,
 > = TValue | (() => TValue | Promise<TValue>);
 
@@ -92,7 +92,7 @@ export type TemplateField<
  * Factory Template result.
  * The raw output of type of the template after resolving all fields.
  */
-type TemplateResult<TTemplate> = {
+export type TemplateResult<TTemplate> = {
     [key in keyof TTemplate]: InferFieldType<TTemplate[key]>;
 }
 
