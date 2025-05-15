@@ -1,6 +1,10 @@
 export class FactoryTemplate<TTemplate> {
     constructor(protected readonly template: TTemplate) {}
     
+    /**
+     * Run all factory functions in the template and return final result to be
+     * stored in the database.
+     */
     public resolve(
         overrides: Partial<TTemplate & TemplateResult<TTemplate>>
     ): Promise<TemplateResult<TTemplate>> {
