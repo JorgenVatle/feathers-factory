@@ -58,7 +58,7 @@ export default class Factory<
     
     /**
      * Just resolve a predefined factory template without inserting it into
-     * the underlying service..
+     * the underlying service.
      *
      * @param overrides
      */
