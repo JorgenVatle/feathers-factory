@@ -116,6 +116,24 @@ describe('FactoryTemplate', () => {
                 },
             });
         })
+        
+        it('is provided as a parameter in resolver overrides', async () => {
+            const template = new FactoryTemplate({
+                firstName: 'test',
+                lastName: 'test',
+                age: (): number => 50,
+                fullName: () => 'test',
+            });
+            
+            await template.resolve({
+                fullName: async (ctx) => {
+                    expectTypeOf(await ctx.get('firstName')).toEqualTypeOf<string>();
+                    expectTypeOf(await ctx.get('lastName')).toEqualTypeOf<string>();
+                    expectTypeOf(await ctx.get('age')).toEqualTypeOf<number>();
+                    return 'test';
+                },
+            })
+        })
     })
     
     describe('Template extensions', async () => {
