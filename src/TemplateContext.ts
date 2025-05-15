@@ -1,5 +1,5 @@
 import Clues from 'clues';
-import type { FactoryTemplate, InferFieldType } from './FactoryTemplate';
+import type { FactoryTemplate } from './FactoryTemplate';
 
 /**
  * Factory Template context.
@@ -42,7 +42,7 @@ export class TemplateContext<TTemplate> {
      * })
      *
      */
-    public get<TKey extends keyof TTemplate>(key: TKey): InferFieldType<TTemplate[TKey]> {
+    public get<TKey extends keyof TTemplate>(key: TKey): ContextFieldOutcome<TTemplate[TKey]> {
         return Clues(this._state, key as string, { CONTEXT: this });
     }
     
@@ -71,7 +71,7 @@ export class TemplateContext<TTemplate> {
      *         this.get('fullName'), // -> John Doe
      *     ]
      */
-    public call<TKey extends keyof TTemplate>(key: TKey): Promise<InferFieldType<TTemplate[TKey]>> {
+    public call<TKey extends keyof TTemplate>(key: TKey): ContextFieldOutcome<TTemplate[TKey]> {
         // todo
         return {} as any;
     }
@@ -125,3 +125,12 @@ type ContextField<TType> =
     | TType
     | Promise<TType>
     | (() => Promise<TType> | TType);
+
+/**
+ * After resolving a field, it'll either be it's final type or a promise
+ * in cases where there's peer dependencies or the field function actually
+ * is async.
+ */
+type ContextFieldOutcome<TType> =
+    | TType
+    | Promise<TType>;
