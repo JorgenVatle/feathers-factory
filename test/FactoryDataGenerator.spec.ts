@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
 import { describe, expect, it } from 'vitest';
-import { FactoryDataGenerator } from './FactoryDataGenerator';
+import { FactoryDataGenerator } from '../src/FactoryDataGenerator';
 
 describe('FactoryDataGenerator', () => {
     const generator = new FactoryDataGenerator({
