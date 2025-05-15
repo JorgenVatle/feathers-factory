@@ -63,14 +63,25 @@ describe('TemplateContext', () => {
     })
     
     describe('Promise rejection', () => {
+        class CustomError extends Error {}
         const context = new TemplateContext(
             new FactoryTemplate({
                 genericError: () => Promise.reject(new Error('Generic error')),
+                customError: () => Promise.reject(new CustomError('Custom error')),
             })
         )
         
         it('will reject context get calls', async () => {
             await expect(context.get('genericError')).rejects.toThrow('Generic error');
+        });
+        
+        it('will not swallow stack traces', async () => {
+            await context.get('genericError').catch((error) => console.log(error));
+            await expect(context.get('genericError')).rejects.toHaveProperty('stack');
+        });
+        
+        it('keeps error instance types', async () => {
+            await expect(context.get('customError')).rejects.toBeInstanceOf(CustomError);
         })
     })
     
