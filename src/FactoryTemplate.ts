@@ -14,7 +14,7 @@ export class FactoryTemplate<TTemplate> {
         return {} as any;
     }
     
-    public extend<TOverrides>(overrides: TOverrides): ExtendTemplate<TTemplate, TOverrides> {
+    public extend<TOverrides>(overrides: TOverrides & ThisType<TemplateContext<TTemplate & TOverrides>>): ExtendTemplate<TTemplate, TOverrides> {
         // @ts-expect-error Incompatible types
         return new FactoryTemplate({
             ...this.template,
