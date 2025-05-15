@@ -18,7 +18,25 @@ describe('TemplateContext', () => {
         
         it('can resolve arrow functions', async () => {
             expect(await context.get('arrowFunction')).toEqual('ok');
+        });
+        
+    })
+    
+    describe('Sibling fields', () => {
+        it('can resolve sibling fields using "this"', async () => {
+            const context = new TemplateContext(
+                new FactoryTemplate({
+                    firstName: 'John',
+                    lastName: 'Doe',
+                    async fullName() {
+                        return `${await this.get('firstName')} ${await this.get('lastName')}`
+                    }
+                })
+            );
+            
+            expect(await context.get('fullName')).toEqual('John Doe');
         })
+        
     })
     
     
