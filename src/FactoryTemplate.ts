@@ -14,6 +14,13 @@ export class FactoryTemplate<TTemplate> {
 export type TemplateContext<TTemplate> = {
     [key in keyof TTemplate]: TemplateField<TTemplate[key]>;
 } & ThisType<{
+    /**
+     * Resolve the value of a template field within the current generator
+     * context. Fields are only resolved once per generator context.
+     *
+     * This ensures that you can safely reference the same field multiple times
+     * within the same generation context and from different fields.
+     */
     get<TField extends keyof TTemplate>(field: TField): Promise<InferFieldType<TTemplate[TField]>>;
 }>
 
