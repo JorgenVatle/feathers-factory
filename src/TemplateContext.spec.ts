@@ -4,7 +4,7 @@ import { TemplateContext } from './TemplateContext';
 
 describe('TemplateContext', () => {
     
-    describe('basic usage', () => {
+    describe('Basic field resolving', () => {
         const context = new TemplateContext(
             new FactoryTemplate({
                 staticField: 'ok',
