@@ -2,16 +2,16 @@ import Clues from 'clues';
 import type { FactoryTemplate } from './FactoryTemplate';
 
 export class TemplateContext<TTemplate> {
-    protected readonly state: ContextState<TTemplate>;
+    public readonly _state: ContextState<TTemplate>;
     
     constructor(protected readonly template: FactoryTemplate<TTemplate>) {
-        this.state = Object.create(this);
+        this._state = Object.create(this);
         
         const entries = Object.entries(this.template._schema).map(([key, value]) => {
             return [key, this.wrapTemplateField(value)]
         })
         
-        Object.assign(this.state, Object.fromEntries(entries));
+        Object.assign(this._state, Object.fromEntries(entries));
     }
     
     protected wrapTemplateField(field: unknown) {
@@ -34,7 +34,7 @@ export class TemplateContext<TTemplate> {
     }
     
     public get(key: keyof TTemplate) {
-        return Clues(this.state, key as string, { CONTEXT: this });
+        return Clues(this._state, key as string, { CONTEXT: this });
     }
 }
 

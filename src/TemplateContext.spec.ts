@@ -20,6 +20,12 @@ describe('TemplateContext', () => {
             expect(await context.get('arrowFunction')).toEqual('ok');
         });
         
+        it('did not add unexpected fields to the resulting state', () => {
+            expect(context._state).toEqual({
+                staticField: 'ok',
+                arrowFunction: 'ok',
+            })
+        })
     })
     
     describe('Sibling fields', () => {
