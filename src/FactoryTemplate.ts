@@ -22,6 +22,18 @@ export type TemplateContext<TTemplate> = {
      * within the same generation context and from different fields.
      */
     get<TField extends keyof TTemplate>(field: TField): Promise<InferFieldType<TTemplate[TField]>>;
+    
+    /**
+     * Run the generator function for a given field. This will not cache the
+     * result within the current context. Meaning you can call it multiple times
+     * within the same generation context and it will always return a new value.
+     *
+     * This is useful if you want to extend the result of a field from within
+     * another field. Do keep in mind that you might want to use it sparingly
+     * in case the field has side-effects. E.g. creating new records in the
+     * database.
+     */
+    call<TField extends keyof TTemplate>(field: TField): Promise<InferFieldType<TTemplate[TField]>>;
 }>
 
 /**
