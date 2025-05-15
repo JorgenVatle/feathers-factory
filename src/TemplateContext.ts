@@ -8,6 +8,12 @@ import type { FactoryTemplate } from './FactoryTemplate';
  * The `this` type within your template's generator functions.
  */
 export class TemplateContext<TTemplate> {
+    /**
+     * Internal state for the getter machine.
+     * The structure of this field can be unexpected unless explicitly accessed
+     * through the {@link this.get} method.
+     * @private
+     */
     public readonly _state: ContextState<TTemplate>;
     
     constructor(protected readonly template: FactoryTemplate<TTemplate>) {
