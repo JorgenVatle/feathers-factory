@@ -14,7 +14,7 @@ export class FactoryTemplate<TTemplate> {
         return {} as any;
     }
     
-    public extend<TOverrides>(overrides: TOverrides & ThisType<TemplateContext<TTemplate & TOverrides>>): ExtendTemplate<TTemplate, TOverrides> {
+    public extend<TOverrides>(overrides: ExtendedTemplateSchema<TTemplate, TOverrides>): ExtendedFactoryTemplate<TTemplate, TOverrides> {
         // @ts-expect-error Incompatible types
         return new FactoryTemplate({
             ...this.template,
@@ -126,7 +126,7 @@ type InferFieldType<T> = T extends TemplateField<infer T> ? T : never;
 /**
  * Merge two template definitions to create a new template using one as a base.
  */
-type ExtendTemplate<
+type ExtendedFactoryTemplate<
     TTemplate,
     TOverrides,
     TResult = TTemplate & TOverrides,
@@ -136,3 +136,14 @@ type ExtendTemplate<
                                 : TResult[key];
     }
 > = FactoryTemplate<TMerged>;
+
+type ExtendedTemplateSchema<
+    TTemplate,
+    TOverrides,
+    TResult = TTemplate & TOverrides,
+    TMerged = {
+        [key in keyof TResult]: key extends keyof TOverrides
+                                ? TOverrides[key]
+                                : TResult[key];
+    }
+> = TOverrides & ThisType<TemplateContext<TMerged>>;
