@@ -10,8 +10,8 @@ describe('FactoryTemplate', () => {
         lastName: 'test',
     });
     
-    it('can be type cast to the resulting data type', () => {
-        const resolvedTemplate = template.resolve();
+    it('can be type cast to the resulting data type', async () => {
+        const resolvedTemplate = await template.resolve();
         
         expectTypeOf(resolvedTemplate).toEqualTypeOf<{
             _id: string;
