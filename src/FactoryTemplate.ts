@@ -28,7 +28,7 @@ export class FactoryTemplate<TTemplate> {
  * Defines the fields that will be generated when the factory is called.
  */
 export type TemplateSchema<TTemplate> = {
-    [key in keyof TTemplate]: TemplateField<TTemplate[key]>;
+    [key in keyof TTemplate]: TemplateField<TTemplate[key], TTemplate>;
 } & ThisType<TemplateContext<TTemplate>>
 
 /**
@@ -98,7 +98,8 @@ interface TemplateContext<TTemplate> {
  */
 type TemplateField<
     TValue = unknown,
-> = TValue | (() => TValue | Promise<TValue>);
+    TTemplate = unknown,
+> = TValue | ((context: TemplateContext<TTemplate>) => TValue | Promise<TValue>);
 
 /**
  * Factory Template result.
@@ -114,7 +115,7 @@ export type TemplateResult<TTemplate> = {
  * template.
  */
 type TemplateOverrides<TTemplate> = {
-    [key in keyof TTemplate]?: TemplateField<InferFieldType<TTemplate[key]>>;
+    [key in keyof TTemplate]?: TemplateField<InferFieldType<TTemplate[key]>, TTemplate>;
 } & ThisType<TemplateContext<TTemplate>>;
 
 /**
