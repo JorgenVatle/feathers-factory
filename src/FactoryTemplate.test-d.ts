@@ -1,3 +1,4 @@
+import { faker } from '@faker-js/faker';
 import { describe, expectTypeOf, it } from 'vitest';
 import { FactoryTemplate } from './FactoryTemplate';
 
@@ -177,6 +178,20 @@ describe('FactoryTemplate', () => {
                         return `${await this.get('firstName')} ${await this.get('lastName')}`
                     },
                 });
+            });
+            
+            it('can access new template fields through "this"', async () => {
+                const newTemplate = template.extend({
+                    streetAddress: () => faker.location.streetAddress(),
+                    city: () => faker.location.city(),
+                    zip: () => faker.location.zipCode(),
+                    async fullAddress() {
+                        expectTypeOf(await this.get('streetAddress')).toEqualTypeOf<string>();
+                        expectTypeOf(await this.get('city')).toEqualTypeOf<string>();
+                        expectTypeOf(await this.get('zip')).toEqualTypeOf<number>();
+                        return '';
+                    }
+                })
             })
         })
        
