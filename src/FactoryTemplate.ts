@@ -20,6 +20,21 @@ export type TemplateContext<TTemplate> = {
      *
      * This ensures that you can safely reference the same field multiple times
      * within the same generation context and from different fields.
+     *
+     * @example
+     * template = ({
+     *     firstName: () => faker.person.firstName(),
+     *     lastName: () => faker.person.lastName(),
+     *
+     *     fullName: () => `${this.get('firstName')} ${this.get('lastName')}`,
+     *     // -> John Doe
+     *
+     *     // Functions are only called once, then cached to ensure consistent
+     *     // results within the same generation context.
+     *     email: () => `${this.get('firstName')}.${this.get('lastName')}@example.com`
+     *     // -> John.Doe@example.com,
+     * })
+     *
      */
     get<TField extends keyof TTemplate>(field: TField): Promise<InferFieldType<TTemplate[TField]>>;
     
