@@ -61,6 +61,13 @@ describe('FactoryTemplate', () => {
             });
         });
         
+        it.todo('does not allow unknown fields', () => {
+            expectTypeOf(template.resolve).toBeCallableWith({
+                // @ts-expect-error
+                unknownField: 'test',
+            });
+        })
+        
     })
     
     describe('Internal context', () => {
