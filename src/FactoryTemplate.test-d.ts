@@ -164,7 +164,22 @@ describe('FactoryTemplate', () => {
             expectTypeOf(newTemplate.resolve).toBeCallableWith({
                 _id: { objectId: '123' },
             });
+        });
+        
+        describe(`"this" context`, () => {
+            it('can access original template fields through "this"', async () => {
+                const newTemplate = template.extend({
+                    async fullName() {
+                        expectTypeOf(await this.get('firstName')).toEqualTypeOf<string>();
+                        expectTypeOf(await this.get('lastName')).toEqualTypeOf<string>();
+                        expectTypeOf(await this.get('dateOfBirth')).toEqualTypeOf<Date>();
+                        
+                        return `${await this.get('firstName')} ${await this.get('lastName')}`
+                    },
+                });
+            })
         })
+       
     })
     
 })
