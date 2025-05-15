@@ -1,3 +1,4 @@
+import { faker } from '@faker-js/faker';
 import { describe, expect, it, vi } from 'vitest';
 import { FactoryTemplate } from './FactoryTemplate';
 import { TemplateContext } from './TemplateContext';
@@ -60,26 +61,35 @@ describe('TemplateContext', () => {
     });
     
     describe('Peer dependencies', () => {
+        const firstName = vi.fn(() => faker.person.firstName());
+        const lastName = vi.fn(() => faker.person.lastName());
+        
+        const context = new TemplateContext(
+            new FactoryTemplate({
+                firstName,
+                lastName,
+                fullName: async (ctx) => {
+                    return `${await ctx.get('firstName')} ${await ctx.get('lastName')}`
+                },
+            })
+        );
+        
         it(`will not call template functions more than once for a given field`, async () => {
-            const firstName = vi.fn(() => 'John');
-            const lastName = vi.fn(() => 'Doe');
-            
-            const context = new TemplateContext(
-                new FactoryTemplate({
-                    firstName,
-                    lastName,
-                    fullName: async (ctx) => {
-                        return `${await ctx.get('firstName')} ${await ctx.get('lastName')}`
-                    },
-                })
-            );
-            
             await context.get('firstName');
             await context.get('lastName');
             await context.get('fullName');
             
             expect(firstName).toHaveBeenCalledTimes(1);
             expect(lastName).toHaveBeenCalledTimes(1);
+        });
+        
+        it('will always return the same value for a given field', async () => {
+            const fullName = await context.get('fullName');
+            const firstName = await context.get('firstName');
+            const lastName = await context.get('lastName');
+            
+            
+            expect(fullName).toEqual(`${firstName} ${lastName}`);
         })
     })
     
