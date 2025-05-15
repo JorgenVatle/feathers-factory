@@ -6,7 +6,31 @@ export class TemplateContext<TTemplate> {
     
     constructor(protected readonly template: FactoryTemplate<TTemplate>) {
         this.state = Object.create(this);
-        Object.assign(this.state, this.template._schema);
+        
+        const entries = Object.entries(this.template._schema).map(([key, value]) => {
+            return [key, this.wrapTemplateField(value)]
+        })
+        
+        Object.assign(this.state, Object.fromEntries(entries));
+    }
+    
+    protected wrapTemplateField(field: unknown) {
+        if (!this.shouldWrap(field)) {
+            return field;
+        }
+        return ['CONTEXT', function(this: unknown, CONTEXT: TemplateContext<TTemplate>) {
+            return field.apply(this, [CONTEXT])
+        }]
+    }
+    
+    protected shouldWrap(field: unknown): field is Function {
+        if (typeof field !== 'function') {
+            return false;
+        }
+        if (Object.getOwnPropertyDescriptor(field, 'prototype')?.writable === false) {
+            return false;
+        }
+        return true;
     }
     
     public get(key: keyof TTemplate) {
