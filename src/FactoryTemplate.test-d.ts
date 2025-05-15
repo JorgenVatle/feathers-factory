@@ -119,6 +119,16 @@ describe('FactoryTemplate', () => {
             expectTypeOf(resolved.firstName).toEqualTypeOf<string>();
             expectTypeOf(resolved.lastName).toEqualTypeOf<string>();
         })
+        
+        it('can override original field types', async () => {
+            const newTemplate = template.extend({
+                _id: () => ({ objectId: 'foo' }),
+            });
+            
+            expectTypeOf(newTemplate.resolve).toBeCallableWith({
+                _id: { objectId: '123' },
+            });
+        })
     })
     
 })
