@@ -87,23 +87,27 @@ describe('TemplateContext', () => {
         });
         
         it('will always return the same value for a given field', async () => {
-            const fullName = await context.get('fullName');
-            const firstName = await context.get('firstName');
-            const lastName = await context.get('lastName');
-            const createdAt = await context.get('createdAt');
+            const resolved = {
+                fullName: await context.get('fullName'),
+                firstName: await context.get('firstName'),
+                lastName: await context.get('lastName'),
+                createdAt: await context.get('createdAt'),
+            }
             const localCreatedAt = performance.now();
             
             
-            expect(fullName).toEqual(`${firstName} ${lastName}`);
+            expect(resolved.fullName).toEqual(`${resolved.firstName} ${resolved.lastName}`);
             
             await sleep(500);
             
             // Ensure fetching createdAt again will not update the timestamp
-            await expect(context.get('createdAt')).resolves.toEqual(createdAt);
+            await expect(context.get('createdAt')).resolves.toEqual(resolved.createdAt);
             
             // Ensure the timestamp captured right after resolving createdAt
             // still is greater even when requesting the field again.
             expect(localCreatedAt).toBeGreaterThanOrEqual(await context.get('createdAt'));
+            
+            expect(createdAt).toHaveBeenCalledOnce();
         });
         
     })
