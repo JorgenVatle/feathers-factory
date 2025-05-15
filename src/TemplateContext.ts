@@ -14,6 +14,16 @@ export class TemplateContext<TTemplate> {
         Object.assign(this._state, Object.fromEntries(entries));
     }
     
+    public get(key: keyof TTemplate) {
+        return Clues(this._state, key as string, { CONTEXT: this });
+    }
+    
+    /**
+     * Wrap any template functions around an array to indicate to Clues.js
+     * what parameters are expected. Which is just this class instance.
+     *
+     * Enables use of the context parameter in arrow functions.
+     */
     protected wrapTemplateField(field: unknown) {
         if (!this.shouldWrap(field)) {
             return field;
@@ -23,6 +33,10 @@ export class TemplateContext<TTemplate> {
         }]
     }
     
+    /**
+     * Check whether the provided field is a function we should wrap to help
+     * Clues.js resolve input types.
+     */
     protected shouldWrap(field: unknown): field is Function {
         if (typeof field !== 'function') {
             return false;
@@ -31,10 +45,6 @@ export class TemplateContext<TTemplate> {
             return false;
         }
         return true;
-    }
-    
-    public get(key: keyof TTemplate) {
-        return Clues(this._state, key as string, { CONTEXT: this });
     }
 }
 
