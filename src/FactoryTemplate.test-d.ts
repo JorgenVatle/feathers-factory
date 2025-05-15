@@ -34,6 +34,16 @@ describe('FactoryTemplate', () => {
             });
         })
         
+        it('allows overriding functions with static values', () => {
+            expectTypeOf(template.resolve).toBeCallableWith({
+                createdAt: new Date(),
+            });
+            
+            expectTypeOf(template.resolve).toBeCallableWith({
+                _id: 'test' as const,
+            });
+        })
+        
         it('has to adhere to the original schema', () => {
             expectTypeOf(template.resolve).parameter(1).not.toBeCallableWith({
                 _id: () => 'INVALID_ID',
