@@ -1,3 +1,4 @@
+import Clues from 'clues';
 import type { FactoryTemplate } from './FactoryTemplate';
 
 export class TemplateContext<TTemplate> {
@@ -8,7 +9,7 @@ export class TemplateContext<TTemplate> {
     }
     
     public get(key: keyof TTemplate) {
-        // todo
+        return Clues(this.state, key as string);
     }
 }
 
