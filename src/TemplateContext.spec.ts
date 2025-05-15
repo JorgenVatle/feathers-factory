@@ -112,6 +112,13 @@ describe('TemplateContext', () => {
             expect(mocks.createdAt).toHaveBeenCalledOnce();
         });
         
+        it('can bypass context caching using "this.call()"', async () => {
+            const initialName = await context.get('fullName');
+            const newName = await context.call('firstName');
+            
+            expect(initialName).not.toEqual(newName);
+        })
+        
     })
     
     
