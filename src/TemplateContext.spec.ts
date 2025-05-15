@@ -62,18 +62,20 @@ describe('TemplateContext', () => {
     });
     
     describe('Peer dependencies', () => {
-        const firstName = vi.fn(() => faker.person.firstName());
-        const lastName = vi.fn(() => faker.person.lastName());
-        const createdAt = vi.fn(() => performance.now());
+        const mocks = {
+            firstName: vi.fn(() => faker.person.firstName()),
+            lastName: vi.fn(() => faker.person.lastName()),
+            createdAt: vi.fn(() => performance.now()),
+        }
         
         const context = new TemplateContext(
             new FactoryTemplate({
                 fullName: async (ctx) => {
                     return `${await ctx.get('firstName')} ${await ctx.get('lastName')}`
                 },
-                firstName,
-                lastName,
-                createdAt,
+                firstName: mocks.firstName,
+                lastName: mocks.lastName,
+                createdAt: mocks.createdAt,
             })
         );
         
@@ -82,8 +84,8 @@ describe('TemplateContext', () => {
             await context.get('lastName');
             await context.get('fullName');
             
-            expect(firstName).toHaveBeenCalledTimes(1);
-            expect(lastName).toHaveBeenCalledTimes(1);
+            expect(mocks.firstName).toHaveBeenCalledTimes(1);
+            expect(mocks.lastName).toHaveBeenCalledTimes(1);
         });
         
         it('will always return the same value for a given field', async () => {
@@ -107,7 +109,7 @@ describe('TemplateContext', () => {
             // still is greater even when requesting the field again.
             expect(localCreatedAt).toBeGreaterThanOrEqual(await context.get('createdAt'));
             
-            expect(createdAt).toHaveBeenCalledOnce();
+            expect(mocks.createdAt).toHaveBeenCalledOnce();
         });
         
     })
