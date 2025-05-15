@@ -5,9 +5,7 @@ export class FactoryTemplate<TTemplate> {
      * Run all factory functions in the template and return final result to be
      * stored in the database.
      */
-    public resolve(
-        overrides: Partial<TTemplate & TemplateResult<TTemplate>>
-    ): Promise<TemplateResult<TTemplate>> {
+    public resolve(overrides: TemplateOverrides<TTemplate>): Promise<TemplateResult<TTemplate>> {
         // todo
         return {} as any;
     }
@@ -40,7 +38,7 @@ type TemplateResult<TTemplate> = {
  * template.
  */
 type TemplateOverrides<TTemplate> = {
-    [key in keyof TTemplate]?: TemplateField<TTemplate[key]>;
+    [key in keyof TTemplate]?: TemplateField<InferFieldType<TTemplate[key]>>;
 }
 
 /**
