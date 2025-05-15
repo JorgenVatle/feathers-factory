@@ -31,7 +31,7 @@ export type TemplateField<
  * The raw output of type of the template after resolving all fields.
  */
 type TemplateResult<TTemplate> = {
-    [key in keyof TTemplate]: TTemplate[key] extends TemplateField<infer T> ? T : never;
+    [key in keyof TTemplate]: InferFieldType<TTemplate[key]>;
 }
 
 /**
@@ -42,3 +42,8 @@ type TemplateResult<TTemplate> = {
 type TemplateOverrides<TTemplate> = {
     [key in keyof TTemplate]?: TemplateField<TTemplate[key]>;
 }
+
+/**
+ * Infer the resolved output type of a given template field.
+ */
+type InferFieldType<T> = T extends TemplateField<infer T> ? T : never;
