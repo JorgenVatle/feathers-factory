@@ -1,4 +1,4 @@
-import type { TemplateContext } from './TemplateContext';
+import { TemplateContext } from './TemplateContext';
 
 /**
  * Factory boilerplate template.
@@ -12,8 +12,10 @@ export class FactoryTemplate<TTemplate> {
      * stored in the database.
      */
     public resolve(overrides?: TemplateOverrides<TTemplate>): Promise<TemplateResult<TTemplate>> {
-        // todo
-        return {} as any;
+        const template = this.extend(overrides || {});
+        const context = new TemplateContext(template);
+        
+        return context._resolveState();
     }
     
     public extend<TOverrides>(overrides: ExtendedTemplateSchema<TTemplate, TOverrides>): ExtendedFactoryTemplate<TTemplate, TOverrides> {
