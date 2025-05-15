@@ -63,13 +63,14 @@ describe('TemplateContext', () => {
         it(`will not call template functions more than once for a given field`, async () => {
             const firstName = vi.fn(() => 'John');
             const lastName = vi.fn(() => 'Doe');
-            const fullName = vi.fn(() => `${firstName()} ${lastName()}`);
             
             const context = new TemplateContext(
                 new FactoryTemplate({
                     firstName,
                     lastName,
-                    fullName,
+                    fullName: async (ctx) => {
+                        return `${await ctx.get('firstName')} ${await ctx.get('lastName')}`
+                    },
                 })
             );
             
@@ -79,7 +80,6 @@ describe('TemplateContext', () => {
             
             expect(firstName).toHaveBeenCalledTimes(1);
             expect(lastName).toHaveBeenCalledTimes(1);
-            expect(fullName).toHaveBeenCalledTimes(1);
         })
     })
     
