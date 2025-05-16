@@ -38,6 +38,7 @@ const orderTemplate = new FactoryTemplate({
     
     relatedOffers: (ctx) => [
         ctx.call('shop'), // Creates a new shop and products
+        ctx.call('shop'), // And yet another shop
     ] 
 })
 ```
