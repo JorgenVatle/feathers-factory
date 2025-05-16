@@ -1,5 +1,11 @@
 # feathers-factory
 
+## 5.0.1
+
+### Patch Changes
+
+- 7b70337: Fix type inference edge-cases with FactoryTemplate output and 'this' context with some async contexts.
+
 ## 5.0.0
 
 ### Major Changes
