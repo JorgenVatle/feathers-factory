@@ -1,5 +1,11 @@
 # feathers-factory
 
+## 5.0.0-beta.5
+
+### Minor Changes
+
+- 2033f26: Infer service Params type from service type definition instead of relying on external Feathers Params type.
+
 ## 5.0.0-beta.4
 
 ### Patch Changes
