@@ -1,5 +1,11 @@
 # feathers-factory
 
+## 5.0.0-beta.4
+
+### Patch Changes
+
+- 5bc6553: Add missing implementation for TemplateContext call() method
+
 ## 5.0.0-beta.3
 
 ### Patch Changes
