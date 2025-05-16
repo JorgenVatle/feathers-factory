@@ -2,12 +2,31 @@ import { Params } from '@feathersjs/feathers';
 import Factory from './Factory';
 import type { TemplateOverrides } from './FactoryTemplate';
 
+
+/**
+ * We are intentionally leaving this empty here so you can add type
+ * declarations for globally accessible factories.
+ *
+ * @example
+ * const MyUserFactory = new Factory(...);
+ *
+ * declare module 'feathers-factory' {
+ *     interface GlobalFactories {
+ *          'user-factory': typeof MyUserFactory
+ *     }
+ * }
+ */
+export interface GlobalFactories {
+
+}
+
+
 export default new class GlobalFactories {
 
     /**
      * Defined factories.
      */
-    public factories: { [s: string]: Factory<any, any> } = {};
+    public factories = {} as FactoryRegistry;
 
     /**
      * Define a new factory.
@@ -16,7 +35,7 @@ export default new class GlobalFactories {
         TSchema,
         TResult = TSchema,
     >(
-        factoryName: string,
+        factoryName: FactoryName,
         factory: Factory<TSchema, TResult>,
     ) {
         this.factories[factoryName] = factory;
@@ -27,7 +46,7 @@ export default new class GlobalFactories {
      *
      * @param name
      */
-    public getFactory(name: string) {
+    public getFactory<TName extends FactoryName>(name: TName): GlobalFactory<TName> {
         const factory = this.factories[name];
     
         if (!factory) {
@@ -45,7 +64,9 @@ export default new class GlobalFactories {
      * @param overrides
      * @param params
      */
-    public create(factoryName: string, overrides?: TemplateOverrides<any>, params?: Params) {
+    public create<
+        TName extends FactoryName
+    >(factoryName: TName, overrides?: GlobalFactoryOverrides<TName>, params?: Params) {
         const factory = this.getFactory(factoryName);
 
         return factory.create(overrides, params);
@@ -59,7 +80,9 @@ export default new class GlobalFactories {
      * @param overrides
      * @param params
      */
-    public createMany(quantity: number, factoryName: string, overrides?: TemplateOverrides<any>, params?: Params) {
+    public createMany<
+        TName extends FactoryName
+    >(quantity: number, factoryName: TName, overrides?: TemplateOverrides<any>, params?: Params) {
         const factory = this.getFactory(factoryName);
         return factory.createMany(quantity, overrides, params);
     }
@@ -71,7 +94,9 @@ export default new class GlobalFactories {
      * @param factoryName
      * @param overrides
      */
-    public get(factoryName: string, overrides?: TemplateOverrides<any>) {
+    public get<
+        TName extends FactoryName
+    >(factoryName: TName, overrides?: TemplateOverrides<TName>) {
         const factory = this.factories[factoryName];
 
         if (!factory) {
@@ -82,3 +107,22 @@ export default new class GlobalFactories {
     }
 
 }
+
+type FactoryName = keyof FactoryRegistry;
+type GlobalFactory<TName extends FactoryName> = FactoryRegistry[TName];
+
+type GlobalFactoryOverrides<
+    TName extends FactoryName
+> = GlobalFactory<TName> extends Factory<infer TSchema, infer TResult>
+    ? TemplateOverrides<TSchema>
+    : never;
+
+type FactoryRegistry = HasBeenAugmented<GlobalFactories> extends true ? {
+    [key in keyof GlobalFactories]: GlobalFactories[key];
+} : {
+    [key: string]: Factory<any, any>;
+}
+
+type HasBeenAugmented<T> = [keyof T] extends [never] ? false : true;
+
+
