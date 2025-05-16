@@ -1,5 +1,11 @@
 # feathers-factory
 
+## 5.0.0-beta.3
+
+### Patch Changes
+
+- cc64e9d: Move type-fest from devDependencies into dependencies to avoid missing types in peer projects.
+
 ## 5.0.0-beta.2
 
 ### Minor Changes
