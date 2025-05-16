@@ -1,3 +1,3 @@
 export { default as Factory } from './Factory';
 export { default as GlobalFactories } from './GlobalFactories';
-export { FactoryService } from './Types';
+export { FactoryService } from './ServiceTypes';
