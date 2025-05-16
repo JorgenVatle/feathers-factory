@@ -43,8 +43,8 @@ export type TemplateSchema<TTemplate, TContext = {}> = {
  */
 type TemplateField<
     TValue = unknown,
-    TTemplate = unknown,
-> = TValue | Promise<TValue> | ((context: TTemplate) => TValue | Promise<TValue>);
+    TContext = unknown,
+> = TValue | Promise<TValue> | ((context: TContext) => TValue | Promise<TValue>);
 
 /**
  * Factory Template result.
