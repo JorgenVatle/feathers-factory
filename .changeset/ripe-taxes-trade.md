@@ -41,3 +41,12 @@ const orderTemplate = new FactoryTemplate({
     ] 
 })
 ```
+
+### Use with factories
+Factory templates can optionally be passed directly to the factories you define.
+```ts
+// import orderTemplate from example above
+
+const orderFactory = new Factory(app.service('/orders'), orderTemplate);
+```
+
