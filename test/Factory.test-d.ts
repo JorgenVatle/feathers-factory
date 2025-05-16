@@ -78,6 +78,17 @@ describe('Factory Types', () => {
             // @ts-expect-error
             factory.create({}, { custom: 'invalid' })
         })
+        
+        it('will infer standard params types', () => {
+            const factory = new Factory({} as Service<{ foo: 'bar' }>, {
+                foo: 'bar',
+            });
+            
+            factory.create({}, { custom: 'param' });
+            
+            // @ts-expect-error
+            factory.create({}, { paginate: 'invalid' })
+        })
     })
     
     
