@@ -136,6 +136,20 @@ describe('FactoryTemplate', () => {
                     },
                 })
             })
+            
+            it.todo('function parameters can reference another function parameter', () => {
+                const template = new FactoryTemplate({
+                    firstName: 'test',
+                    lastName: 'test',
+                    age: (ctx): number => 50,
+                    fullName: async (ctx) => {
+                        expectTypeOf(await ctx.get('firstName')).toEqualTypeOf<string>();
+                        expectTypeOf(await ctx.get('lastName')).toEqualTypeOf<string>();
+                        // @ts-expect-error Todo: Multiple context params seem to break type inference.
+                        expectTypeOf(await ctx.get('age')).toEqualTypeOf<number>();
+                    },
+                });
+            })
         })
     });
     
