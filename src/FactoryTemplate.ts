@@ -55,6 +55,19 @@ export type TemplateResult<TTemplate> = {
 }
 
 /**
+ * Infer the resulting data type of the provided factory template.
+ * @example
+ * const userTemplate = new FactoryTemplate({
+ *     userId: () => 123,
+ *     createdAt: () => new Date()
+ * })
+ *
+ * const data: InferOutput<typeof userTemplate>
+ *     // -> { userId: number, createdAt: Date }
+ */
+export type InferOutput<TTemplate> = TTemplate extends FactoryTemplate<infer T> ? T : never;
+
+/**
  * Template overrides.
  * Defines the fields that can be overridden before resolving the final
  * template.
