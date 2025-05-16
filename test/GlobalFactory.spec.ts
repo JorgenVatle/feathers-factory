@@ -2,6 +2,7 @@ import { Service } from '@feathersjs/feathers';
 import { beforeAll, describe, expect, it } from 'vitest';
 
 import { Factory, GlobalFactories } from '../src';
+import { FactoryTemplate, type InferOutput } from '../src/FactoryTemplate';
 import Feathers from './feathers/App';
 
 let _service: Service<any>;
@@ -11,48 +12,8 @@ beforeAll(() => {
 });
 
 describe('Global Feathers Factory', () => {
-    type ServiceType = {
-        id: string,
-        property: string,
-        method: string;
-        function: string,
-        getter: string,
-        async: string,
-        selfReference: Record<string, string>,
-    }
-    const service = {
-        async create(data: ServiceType) {
-            await _service.create(data);
-            return data;
-        },
-        get(id: string): Promise<ServiceType> {
-            return _service.get(id);
-        }
-    }
+    const factory = new Factory(service, ServiceTemplate);
     
-    const factory = new Factory(service, {
-        id: () => process.hrtime().join('-'),
-        property: 'ok',
-        function: () => 'ok',
-        method() { return 'ok' },
-        get getter() { return 'ok' },
-        async: async () => 'ok',
-        async selfReference() {
-            const checkSelf = async <T extends keyof ServiceType>(key: T): Promise<[T, ServiceType[T]]> => {
-                return [key, await this.get(key)] as const
-            }
-            
-            const entries = [
-                checkSelf('property'),
-                checkSelf('function'),
-                checkSelf('method'),
-                checkSelf('getter'),
-                checkSelf('async')
-            ];
-            
-            return Object.fromEntries(await Promise.all(entries));
-        }
-    })
     
     it('can define() factories', () => {
         GlobalFactories.define('test', factory);
@@ -112,3 +73,37 @@ describe('Global Feathers Factory', () => {
     });
 
 });
+
+const ServiceTemplate = new FactoryTemplate({
+    id: () => process.hrtime().join('-'),
+    property: 'ok',
+    function: () => 'ok',
+    method() { return 'ok' },
+    get getter() { return 'ok' },
+    async: async () => 'ok',
+    async selfReference() {
+        const checkSelf = async <T>(key: T): Promise<[T, [T]]> => {
+            return [key, await this.get(key as any)] as const
+        }
+        
+        const entries = [
+            checkSelf('property'),
+            checkSelf('function'),
+            checkSelf('method'),
+            checkSelf('getter'),
+            checkSelf('async')
+        ];
+        
+        return Object.fromEntries(await Promise.all(entries));
+    }
+});
+
+const service = {
+    async create(data: InferOutput<typeof ServiceTemplate>) {
+        await _service.create(data);
+        return data;
+    },
+    get(id: string): Promise<InferOutput<typeof ServiceTemplate>> {
+        return _service.get(id);
+    }
+}
