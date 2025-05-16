@@ -1,6 +1,7 @@
 import { Params } from '@feathersjs/feathers';
 import Factory from './Factory';
 import type { TemplateOverrides } from './FactoryTemplate';
+import type { HasBeenAugmented } from './lib/Utilities';
 
 
 /**
@@ -117,12 +118,11 @@ type GlobalFactoryOverrides<
     ? TemplateOverrides<TSchema>
     : never;
 
-type FactoryRegistry = HasBeenAugmented<GlobalFactories> extends true ? {
-    [key in keyof GlobalFactories]: GlobalFactories[key];
-} : {
+type FactoryRegistry = HasBeenAugmented<GlobalFactories> extends true
+                       ? GlobalFactories
+                       : DefaultFactoryRegistry
+
+type DefaultFactoryRegistry = {
     [key: string]: Factory<any, any>;
 }
-
-type HasBeenAugmented<T> = [keyof T] extends [never] ? false : true;
-
 
