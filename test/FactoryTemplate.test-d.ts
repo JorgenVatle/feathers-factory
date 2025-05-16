@@ -228,7 +228,7 @@ describe('FactoryTemplate', () => {
     })
     
     describe('Template output', () => {
-        it('will resolve any functions and promises in the final output type', () => {
+        it('will resolve any functions and promises in the final output type', async () => {
             const template = new FactoryTemplate({
                 firstName: 'test',
                 lastName: 'test',
