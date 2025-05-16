@@ -31,7 +31,7 @@ export class FactoryTemplate<TTemplate, TContext extends TemplateContext<TTempla
  * Factory Template definition.
  * Defines the fields that will be generated when the factory is called.
  */
-export type TemplateSchema<TTemplate, TContext = {}> = {
+export type TemplateSchema<TTemplate, TContext = TemplateContext<TTemplate>> = {
     [key in keyof TTemplate]: TemplateField<TTemplate[key], TContext>;
 } & ThisType<TContext>;
 
