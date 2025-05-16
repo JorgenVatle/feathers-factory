@@ -9,7 +9,7 @@ const AdapterService = App.service('adapter-service');
 
 export const UserFactory = new Factory(UsersService, {
     id: () => process.hrtime().join('-'),
-    username: Faker.internet.username,
+    username: () => Faker.internet.username(),
 })
 
 export const ArticleFactory = new Factory(ArticlesService, {
@@ -30,7 +30,7 @@ export const CommentOnOwnArticleFactory = new Factory(CommentService, {
         const article = await ArticlesService.get(await this.get('articleId'));
         return article.userId;
     },
-    content: Faker.lorem.paragraph,
+    content: () => Faker.lorem.paragraph(),
 });
 
 export const AdapterFactory = new Factory(AdapterService, {
