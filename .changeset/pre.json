@@ -5,6 +5,7 @@
     "feathers-factory": "4.0.2"
   },
   "changesets": [
-    "chilly-ghosts-sort"
+    "chilly-ghosts-sort",
+    "ripe-taxes-trade"
   ]
 }
