@@ -241,6 +241,8 @@ describe('FactoryTemplate', () => {
             
             expectTypeOf(resolved.fullName).toEqualTypeOf<string>();
             expectTypeOf(resolved.staticAsync).toEqualTypeOf<'foo'>();
+            expectTypeOf(resolved.firstName).toEqualTypeOf<string>()
+            expectTypeOf(resolved.lastName).toEqualTypeOf<string>()
         })
     })
     
