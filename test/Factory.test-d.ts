@@ -59,6 +59,26 @@ describe('Factory Types', () => {
             // @ts-expect-error
             numberField: () => 'foobar'
         });
+    });
+    
+    
+    describe('Service params', () => {
+        it('will infer non-standard params types', () => {
+            const customService = {
+                create(data: { foo: 'bar' }, params: { custom: 'param' }) {
+                
+                }
+            }
+            const factory = new Factory(customService, {
+                foo: 'bar',
+            });
+            
+            factory.create({}, { custom: 'param' });
+            
+            // @ts-expect-error
+            factory.create({}, { custom: 'invalid' })
+        })
     })
+    
     
 })
