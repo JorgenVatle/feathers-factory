@@ -4,7 +4,7 @@ import { TemplateContext } from './TemplateContext';
  * Factory boilerplate template.
  * Defines the fields that will be generated when factories are called.
  */
-export class FactoryTemplate<TTemplate, TContext extends TemplateContext<TTemplate>= TemplateContext<TTemplate>> {
+export class FactoryTemplate<TTemplate, TContext extends TemplateContext<TTemplate> = TemplateContext<TTemplate>> {
     constructor(public readonly _schema: TemplateSchema<TTemplate, TContext>) {}
     
     /**
@@ -44,7 +44,7 @@ export type TemplateSchema<TTemplate, TContext = {}> = {
 type TemplateField<
     TValue = unknown,
     TTemplate = unknown,
-> = TValue | Promise<TValue> | ((context: TemplateContext<TTemplate>) => TValue | Promise<TValue>);
+> = TValue | Promise<TValue> | ((context: TTemplate) => TValue | Promise<TValue>);
 
 /**
  * Factory Template result.
