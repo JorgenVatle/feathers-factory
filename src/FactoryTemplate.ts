@@ -18,7 +18,7 @@ export class FactoryTemplate<TTemplate> {
         return context._resolveState();
     }
     
-    public extend<TOverrides>(overrides: ExtendedTemplateSchema<TTemplate, TOverrides>): ExtendedFactoryTemplate<TTemplate, TOverrides> {
+    public extend<TOverrides>(overrides: ExtendSchema<TTemplate, TOverrides>): ExtendTemplate<TTemplate, TOverrides> {
         // @ts-expect-error Incompatible types
         return new FactoryTemplate({
             ...this._schema,
@@ -84,7 +84,7 @@ export type InferFieldType<T> = T extends TemplateField<infer T> ? T : never;
 /**
  * Merge two template definitions to create a new template using one as a base.
  */
-type ExtendedFactoryTemplate<
+export type ExtendTemplate<
     TTemplate,
     TOverrides,
     TResult = TTemplate & TOverrides,
@@ -95,7 +95,10 @@ type ExtendedFactoryTemplate<
     }
 > = FactoryTemplate<TMerged>;
 
-type ExtendedTemplateSchema<
+/**
+ * Combine a target schema with a baseline schema.
+ */
+export type ExtendSchema<
     TTemplate,
     TOverrides,
     TResult = TTemplate & TOverrides,
