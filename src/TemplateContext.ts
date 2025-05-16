@@ -78,9 +78,10 @@ export class TemplateContext<TTemplate> {
      *         this.get('fullName'), // -> John Doe
      *     ]
      */
-    public call<TKey extends keyof TTemplate>(key: TKey): ContextFieldOutcome<TTemplate[TKey]> {
-        // todo
-        return {} as any;
+    public call<TKey extends Paths<TTemplate> & string>(key: TKey): ContextFieldOutcome<Get<TTemplate, TKey>> {
+        const freshContext = new TemplateContext(this.template);
+        
+        return freshContext.get(key);
     }
     
     /**
