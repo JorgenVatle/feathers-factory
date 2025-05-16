@@ -1,4 +1,5 @@
 import Clues from 'clues';
+import type { Get, Paths } from 'type-fest';
 import type { FactoryTemplate } from './FactoryTemplate';
 
 /**
@@ -48,7 +49,7 @@ export class TemplateContext<TTemplate> {
      * })
      *
      */
-    public get<TKey extends keyof TTemplate>(key: TKey): ContextFieldOutcome<TTemplate[TKey]> {
+    public get<TKey extends Paths<TTemplate> & string>(key: TKey): ContextFieldOutcome<Get<TTemplate, TKey>> {
         return Clues(this._state, key as string, { CONTEXT: this });
     }
     
