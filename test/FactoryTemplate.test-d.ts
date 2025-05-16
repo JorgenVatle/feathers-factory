@@ -227,4 +227,21 @@ describe('FactoryTemplate', () => {
        
     })
     
+    describe('Template output', () => {
+        it('will resolve any functions and promises in the final output type', () => {
+            const template = new FactoryTemplate({
+                firstName: 'test',
+                lastName: 'test',
+                async fullName() {
+                    return `${await this.get('firstName')} ${await this.get('lastName')}`
+                },
+                staticAsync: Promise.resolve('foo' as const)
+            });
+            const resolved = await template.resolve();
+            
+            expectTypeOf(resolved.fullName).toEqualTypeOf<string>();
+            expectTypeOf(resolved.staticAsync).toEqualTypeOf<'foo'>();
+        })
+    })
+    
 })
