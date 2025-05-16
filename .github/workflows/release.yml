@@ -6,6 +6,11 @@ on:
       - master
       - beta
 
+permissions:
+  contents: write
+  pull-requests: write
+  statuses: read
+
 jobs:
   publish:
     name: 'Release'
