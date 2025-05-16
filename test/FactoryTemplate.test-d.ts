@@ -194,6 +194,36 @@ describe('FactoryTemplate', () => {
                 })
             })
         })
+        
+        it('it overrides optional fields from the original template', () => {
+            const original = new FactoryTemplate({
+                async address() {
+                    if (Math.random() > 0.5) {
+                        return;
+                    }
+                    return {
+                        street: faker.location.streetAddress(),
+                        city: faker.location.city(),
+                        zip: faker.location.zipCode(),
+                    }
+                },
+            });
+            
+            const newTemplate = original.extend({
+                address: () => ({
+                    street: '',
+                    city: '',
+                    zip: '',
+                }),
+                async fullAddress() {
+                    const address = await this.get('address');
+                    expectTypeOf(address.street).toEqualTypeOf<string>();
+                    expectTypeOf(address.city).toEqualTypeOf<string>();
+                    expectTypeOf(address.zip).toEqualTypeOf<string>();
+                    return '';
+                }
+            })
+        })
        
     })
     
