@@ -15,14 +15,19 @@ export default class Factory<
      */
     public constructor(
         private readonly service: FactoryCompatibleService<TSchema, TResult>,
-        data: TemplateSchema<TSchema>,
+        data: TemplateSchema<TSchema> | FactoryTemplate<TSchema>,
         defaultParams: TemplateSchema<Params> = {},
     ) {
         if (!service) {
             throw new FeathersServiceNotDefined('The provided service doesn\'t appear to exist!');
         }
         
-        this.data = new FactoryTemplate(data);
+        if (data instanceof FactoryTemplate) {
+            this.data = data;
+        } else {
+            this.data = new FactoryTemplate(data);
+        }
+        
         this.params = new FactoryTemplate(defaultParams);
     }
     
