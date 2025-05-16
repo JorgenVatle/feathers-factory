@@ -10,14 +10,16 @@ import { Params } from '@feathersjs/feathers';
 export type FactoryService<
     TSchema = unknown,
     TResult = TSchema,
-> = FactoryCompatibleService<TSchema, TResult>
+    TParams = Params,
+> = FactoryCompatibleService<TSchema, TResult, TParams>
 
 export interface FactoryCompatibleService<
     TSchema,
     TResult = TSchema,
+    TParams = Params,
     
     TData = TSchema | TSchema[],
     TReturn = TResult | TResult[],
 > {
-    create(data: TData, params?: Params): TReturn | Promise<TReturn>;
+    create(data: TData, params?: TParams): TReturn | Promise<TReturn>;
 }

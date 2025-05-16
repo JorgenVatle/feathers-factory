@@ -1,12 +1,11 @@
 import type { Service } from '@feathersjs/feathers';
 import { describe, expectTypeOf, it } from 'vitest';
 import Factory from '../src/Factory';
-import type { FactoryCompatibleService } from '../src/Types';
+import type { FactoryCompatibleService } from '../src/ServiceTypes';
 
 describe('Factory Types', () => {
     
     describe('FactoryCompatibleService', () => {
-        
         function createFactory<
             TSchema,
             TOutput = TSchema
@@ -18,7 +17,6 @@ describe('Factory Types', () => {
             type Schema = { foo: 'bar' }
             const service = {} as Service<Schema>;
             const create = createFactory(service);
-            
             
             expectTypeOf(create)
                 .parameter(0)
@@ -37,11 +35,9 @@ describe('Factory Types', () => {
     
     it('can fall back to the service create() data type for non-Feathers services', async () => {
         const service = {
-            async create(data: { foo: 'bar' }) {
-                return data;
-            }
+            async create(data: { foo: 'bar' }) { return data }
         };
-        const myFactory = new Factory(service, {} as any)
+        const myFactory = new Factory(service, {} as any);
         
         expectTypeOf(myFactory.create()).resolves.toEqualTypeOf<{ foo: 'bar' }>();
     })
@@ -55,10 +51,32 @@ describe('Factory Types', () => {
         new Factory(service, {
             // @ts-expect-error
             stringField: 1,
-            
             // @ts-expect-error
             numberField: () => 'foobar'
         });
+    });
+    
+    
+    describe('Service params', () => {
+        it('will infer non-standard params types', () => {
+            const customService = {
+                create(data: { foo: 'bar' }, params: { custom: 'param' }) {}
+            }
+            const factory = new Factory(customService, { foo: 'bar', });
+            
+            // @ts-expect-error
+            factory.create({}, { custom: 'invalid' })
+            factory.create({}, { custom: 'param' });
+        })
+        
+        it('will infer standard params types', () => {
+            const factory = new Factory({} as Service<{ foo: 'bar' }>, { foo: 'bar', });
+            
+            // @ts-expect-error
+            factory.create({}, { paginate: 'invalid' })
+            factory.create({}, { custom: 'param' });
+        })
     })
+    
     
 })

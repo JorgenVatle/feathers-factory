@@ -1,0 +1,15 @@
+{
+  "mode": "exit",
+  "tag": "beta",
+  "initialVersions": {
+    "feathers-factory": "4.0.2"
+  },
+  "changesets": [
+    "chilly-ghosts-sort",
+    "gold-yaks-add",
+    "icy-parents-doubt",
+    "nice-eagles-think",
+    "ripe-taxes-trade",
+    "yummy-phones-bow"
+  ]
+}
