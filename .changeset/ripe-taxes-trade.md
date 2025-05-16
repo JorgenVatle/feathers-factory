@@ -17,7 +17,7 @@ service schema and will only mock out structured data consistent within its
 own context.
 
 ```ts
-import { FactoryTemplate } from './FactoryTemplate';
+import { FactoryTemplate } from 'feathers-factory';
 
 const shopTemplate = new FactoryTemplate({
     products: () => [productTemplate.resolve()],
@@ -46,6 +46,7 @@ const orderTemplate = new FactoryTemplate({
 Factory templates can optionally be passed directly to the factories you define.
 ```ts
 // import orderTemplate from 'example above ⇡'
+import { Factory } from 'feathers-factory'
 
 const orderFactory = new Factory(app.service('/orders'), orderTemplate);
 ```
