@@ -1,5 +1,11 @@
 # feathers-factory
 
+## 5.0.0-beta.2
+
+### Minor Changes
+
+- c2ef1e9: Add types for accessing deeply nested template properties using object dot notation
+
 ## 5.0.0-beta.1
 
 ### Minor Changes
