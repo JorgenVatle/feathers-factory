@@ -207,6 +207,29 @@ export default async (FeathersApp) => {
 };
 ```
 
+### Typing global factories
+If you want types for your global factory definitions, you augment the 
+`GlobalFactories` interface with your factories.
+
+```ts
+const userFactory = GlobalFactories.define('user', app.service('/users'), {
+    username: () => faker.internet.username(),
+});
+
+declare module 'feathers-factory' {
+    interface GlobalFactories {
+        'user': typeof userFactory
+    }
+}
+```
+
+Now you should get type hints when retrieving factories by name:
+
+```ts
+await GlobalFactories.create('user')
+//  -> { username: 'johnny.doe' }
+```
+
 
 ## How does it work?
 Pretty simple - any property, function, method or promise you define in the factory specification is resolved
