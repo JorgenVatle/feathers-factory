@@ -181,6 +181,7 @@ describe('TemplateContext', () => {
             const newName = await context.call('firstName');
             
             expect(initialName).not.toEqual(newName);
+            expect(newName).toEqual(expect.any(String));
         });
         
         it('can access deeply nested properties using dot notation', async () => {
