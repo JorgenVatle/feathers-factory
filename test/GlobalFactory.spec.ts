@@ -83,7 +83,8 @@ const ServiceTemplate = new FactoryTemplate({
     async: async () => 'ok',
     async selfReference() {
         const checkSelf = async <T>(key: T): Promise<[T, [T]]> => {
-            return [key, await this.get(key as any)] as const
+            // @ts-expect-error path type mismatch
+            return [key, await this.get(key)] as const
         }
         
         const entries = [
