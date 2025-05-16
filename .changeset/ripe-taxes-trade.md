@@ -45,8 +45,26 @@ const orderTemplate = new FactoryTemplate({
 ### Use with factories
 Factory templates can optionally be passed directly to the factories you define.
 ```ts
-// import orderTemplate from example above
+// import orderTemplate from 'example above ⇡'
 
 const orderFactory = new Factory(app.service('/orders'), orderTemplate);
 ```
 
+### Optional typings for GlobalFactories
+You can now optionally add strict factory types for globally defined factories.
+
+```ts
+// import orderFactory from 'example above ⇡'
+import { GlobalFactories } from 'feathers-factory';
+
+GlobalFactories.define('order', orderFactory);
+
+declare module 'feathers-factory' {
+    interface GlobalFactories {
+        'orders': typeof orderFactory
+    }
+}
+
+GlobalFactories.create('order')
+  // -> { shop: {...}, createdAt: Date, .... }
+```
