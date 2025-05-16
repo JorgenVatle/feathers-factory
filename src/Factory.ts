@@ -6,6 +6,7 @@ import type { FactoryCompatibleService } from './ServiceTypes';
 export default class Factory<
     TSchema,
     TResult = TSchema,
+    TParams = Params,
 > {
     protected readonly data: FactoryTemplate<TSchema>;
     protected readonly params: FactoryTemplate<Params>;
@@ -14,9 +15,9 @@ export default class Factory<
      * Factory constructor.
      */
     public constructor(
-        private readonly service: FactoryCompatibleService<TSchema, TResult>,
+        private readonly service: FactoryCompatibleService<TSchema, TResult, TParams>,
         data: TemplateSchema<TSchema> | FactoryTemplate<TSchema>,
-        defaultParams: TemplateSchema<Params> = {},
+        defaultParams: TemplateSchema<TParams> = {} as any,
     ) {
         if (!service) {
             throw new FeathersServiceNotDefined('The provided service doesn\'t appear to exist!');
@@ -36,12 +37,12 @@ export default class Factory<
      */
     public async create(
         data?: TemplateOverrides<TSchema>,
-        params?: Params,
+        params?: TemplateOverrides<TParams>,
     ): Promise<TResult> {
         const resolvedData: any = await this.get(data);
         const resolvedParams = await this.params.resolve(params);
         
-        return this.service.create(resolvedData, resolvedParams) as Promise<TResult>;
+        return this.service.create(resolvedData, resolvedParams as TParams) as Promise<TResult>;
     }
     
     /**
@@ -50,7 +51,7 @@ export default class Factory<
     public createMany(
         quantity: number,
         overrides?: TemplateOverrides<TSchema>,
-        params?: Params,
+        params?: TemplateOverrides<TParams>,
     ): Promise<TResult[]> {
         const promises: Promise<TResult>[] = [];
         
