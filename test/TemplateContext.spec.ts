@@ -122,6 +122,15 @@ describe('TemplateContext', () => {
             createdAt: vi.fn(() => performance.now()),
         }
         
+        const addressTemplate = new FactoryTemplate({
+            street: () => faker.location.streetAddress(),
+            city: () => faker.location.city(),
+            zip: () => parseInt(faker.location.zipCode()),
+            async fullAddress() {
+                return `${await this.get('street')} ${await this.get('city')} ${await this.get('zip')}`
+            }
+        })
+        
         const context = new TemplateContext(
             new FactoryTemplate({
                 fullName: async (ctx) => {
@@ -130,6 +139,7 @@ describe('TemplateContext', () => {
                 firstName: mocks.firstName,
                 lastName: mocks.lastName,
                 createdAt: mocks.createdAt,
+                address: () => addressTemplate.resolve(),
             })
         );
         
@@ -171,6 +181,22 @@ describe('TemplateContext', () => {
             const newName = await context.call('firstName');
             
             expect(initialName).not.toEqual(newName);
+        });
+        
+        it('can access deeply nested properties using dot notation', async () => {
+            const street = await context.get('address.street');
+            const city = await context.get('address.city');
+            const zip = await context.get('address.zip');
+            const fullAddress = await context.get('address.fullAddress');
+            
+            expect(street).toEqual(expect.any(String));
+            expect(city).toEqual(expect.any(String));
+            expect(zip).toEqual(expect.any(Number));
+            expect(fullAddress).toEqual(expect.any(String));
+            
+            expect(await context.get('address.fullAddress')).toContain(street);
+            expect(await context.get('address.fullAddress')).toContain(city);
+            expect(await context.get('address.fullAddress')).toContain(zip);
         })
         
     })
