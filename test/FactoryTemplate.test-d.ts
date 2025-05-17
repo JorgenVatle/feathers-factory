@@ -145,6 +145,39 @@ describe('FactoryTemplate', () => {
                     return summary;
                 },
             });
+            
+            it('infers types from other arrow function context parameters', () => {
+                new FactoryTemplate({
+                    // Synchronous function
+                    firstName: () => 'John' as const,
+                    // method without context
+                    lastName() {
+                        return 'Doe' as const
+                    },
+                    // Method with context
+                    async age() {
+                        return (await this.get('firstName')).length
+                    },
+                    // Static value
+                    createdAt: new Date(),
+                    
+                    summary: async (ctx) => {
+                        const summary = {
+                            firstName: await ctx.get('firstName'),
+                            lastName: await ctx.get('lastName'),
+                            age: await ctx.get('age'),
+                            createdAt: await ctx.get('createdAt'),
+                        }
+                        
+                        expectTypeOf(summary.firstName).toEqualTypeOf<'John'>();
+                        expectTypeOf(summary.lastName).toEqualTypeOf<'Doe'>();
+                        expectTypeOf(summary.age).toEqualTypeOf<number>();
+                        expectTypeOf(summary.createdAt).toEqualTypeOf<Date>();
+                        
+                        return summary;
+                    },
+                });
+            })
         })
         
         it.todo('fields using the context parameter can reference other fields using the context parameter', () => {
