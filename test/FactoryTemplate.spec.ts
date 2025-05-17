@@ -24,6 +24,8 @@ describe('Real-world examples', () => {
         
         it('calculates the correct subtotal', async () => {
             await expect(template.resolve()).resolves.toHaveProperty('subtotal', 10);
-        })
+        });
+        
+        it.todo('can use nested functions to generate any number of line items');
     })
 })
