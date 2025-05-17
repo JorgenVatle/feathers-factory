@@ -118,6 +118,18 @@ describe('FactoryTemplate', () => {
             lastName: 'test',
             age: (): number => 50,
             summary: () => 'sum of all the fields above',
+            async shortDescription() {
+                return `${await this.get('firstName')} ${await this.get('lastName')} (${this.get('age')})`
+            },
+            descriptionLines: async (ctx) => {
+                return [
+                    `${ctx.get('shortDescription')}`,
+                    `${ctx.get('summary')}`,
+                ]
+            },
+            fullDescription: async (ctx) => {
+                return (await ctx.get('descriptionLines')).join('\n');
+            }
         });
         
         it('is accessible as an arrow function parameter', async () => {
@@ -126,6 +138,11 @@ describe('FactoryTemplate', () => {
                     expectTypeOf(await ctx.get('firstName')).toEqualTypeOf<string>();
                     expectTypeOf(await ctx.get('lastName')).toEqualTypeOf<string>();
                     expectTypeOf(await ctx.get('age')).toEqualTypeOf<number>();
+                    expectTypeOf(await ctx.get('summary')).toEqualTypeOf<string>();
+                    expectTypeOf(await ctx.get('shortDescription')).toEqualTypeOf<string>();
+                    expectTypeOf(await ctx.get('descriptionLines')).toEqualTypeOf<string[]>();
+                    expectTypeOf(await ctx.get('fullDescription')).toEqualTypeOf<string>();
+                    
                     return 'test';
                 },
             })
@@ -137,6 +154,9 @@ describe('FactoryTemplate', () => {
                     expectTypeOf(await this.get('firstName')).toEqualTypeOf<string>();
                     expectTypeOf(await this.get('lastName')).toEqualTypeOf<string>();
                     expectTypeOf(await this.get('age')).toEqualTypeOf<number>();
+                    expectTypeOf(await this.get('shortDescription')).toEqualTypeOf<string>();
+                    expectTypeOf(await this.get('descriptionLines')).toEqualTypeOf<string[]>();
+                    expectTypeOf(await this.get('fullDescription')).toEqualTypeOf<string>();
                     return 'test';
                 },
             })
