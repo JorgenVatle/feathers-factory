@@ -4,14 +4,14 @@ import { TemplateContext } from './TemplateContext';
  * Factory boilerplate template.
  * Defines the fields that will be generated when factories are called.
  */
-export class FactoryTemplate<TTemplate, TContext extends TemplateContext<TTemplate> = TemplateContext<TTemplate>> {
-    constructor(public readonly _schema: TemplateSchema<TTemplate, TContext>) {}
+export class FactoryTemplate<TTemplate> {
+    constructor(public readonly _schema: TemplateSchema<TTemplate>) {}
     
     /**
      * Run all factory functions in the template and return final result to be
      * stored in the database.
      */
-    public resolve(overrides?: TemplateOverrides<TTemplate, TContext>): Promise<InferOutput<TTemplate>> {
+    public resolve(overrides?: TemplateOverrides<TTemplate>): Promise<InferOutput<TTemplate>> {
         const template = this.extend(overrides || {});
         const context = new TemplateContext(template);
         
@@ -31,9 +31,9 @@ export class FactoryTemplate<TTemplate, TContext extends TemplateContext<TTempla
  * Factory Template definition.
  * Defines the fields that will be generated when the factory is called.
  */
-export type TemplateSchema<TTemplate, TContext = TemplateContext<TTemplate>> = {
-    [key in keyof TTemplate]: TemplateField<TTemplate[key], TContext>;
-} & ThisType<TContext>;
+export type TemplateSchema<TTemplate> = {
+    [key in keyof TTemplate]: TemplateField<TTemplate[key]>;
+} & ThisType<TemplateContext<TTemplate>>;
 
 
 /**
@@ -43,10 +43,10 @@ export type TemplateSchema<TTemplate, TContext = TemplateContext<TTemplate>> = {
  */
 type TemplateField<
     TValue = unknown,
-    TContext = unknown,
-> = TValue | Promise<TValue> | TemplateFn<TValue, TContext>;
+> = TemplateValue<TValue> | TemplateFn<TValue>;
 
-type TemplateFn<TValue, TContext> = (this: TContext, context: TContext) => TValue | Promise<TValue>;
+type TemplateFn<TValue> = <TSelf>(this: TSelf, context: TSelf) => TemplateValue<TValue>;
+type TemplateValue<TValue> = TValue | Promise<TValue>;
 
 /**
  * Unwraps {@link TemplateSchema} fields to their resulting output type.
@@ -78,9 +78,9 @@ export type InferOutput<TTemplate> =
  * Defines the fields that can be overridden before resolving the final
  * template.
  */
-export type TemplateOverrides<TTemplate, TContext = {}> = {
-    [key in keyof TTemplate]?: TemplateField<InferFieldType<TTemplate[key]>, TContext>;
-} & ThisType<TContext>;
+export type TemplateOverrides<TTemplate> = {
+    [key in keyof TTemplate]?: TemplateField<InferFieldType<TTemplate[key]>>;
+} & ThisType<TemplateContext<TTemplate>>;
 
 /**
  * Infer the resolved output type of a given template field.

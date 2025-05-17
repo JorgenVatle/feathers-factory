@@ -8,7 +8,7 @@ import type { FactoryTemplate } from './FactoryTemplate';
  *
  * The `this` type within your template's generator functions.
  */
-export class TemplateContext<TTemplate, TContext extends TemplateContext<TTemplate> = any> {
+export class TemplateContext<TTemplate> {
     /**
      * Internal state for the getter machine.
      * The structure of this field can be unexpected unless explicitly accessed
@@ -17,7 +17,7 @@ export class TemplateContext<TTemplate, TContext extends TemplateContext<TTempla
      */
     public readonly _state: ContextState<TTemplate>;
     
-    constructor(protected readonly template: FactoryTemplate<TTemplate, TContext>) {
+    constructor(protected readonly template: FactoryTemplate<TTemplate>) {
         this._state = Object.create(this);
         
         const entries = Object.entries(this.template._schema).map(([key, value]) => {
