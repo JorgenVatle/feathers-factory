@@ -141,6 +141,20 @@ describe('FactoryTemplate', () => {
                 },
             })
         })
+        
+        it('can reference other fields using the context parameter', async () => {
+            await template.resolve({
+                age: async (ctx) => {
+                    return (await ctx.get('firstName')).length + (await ctx.get('lastName')).length
+                },
+                summary: async (ctx) => {
+                    expectTypeOf(await ctx.get('firstName')).toEqualTypeOf<string>();
+                    expectTypeOf(await ctx.get('lastName')).toEqualTypeOf<string>();
+                    expectTypeOf(await ctx.get('age')).toEqualTypeOf<number>();
+                    return 'test';
+                }
+            })
+        })
     })
     
     describe('Template extensions', async () => {
