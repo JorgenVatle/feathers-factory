@@ -74,7 +74,7 @@ describe('FactoryTemplate', () => {
     describe('Template context', () => {
         describe('Within "this" type', () => {
             it('can reference sibling fields in the same template', async () => {
-                const template = new FactoryTemplate({
+                new FactoryTemplate({
                     firstName: 'test',
                     lastName: 'test',
                     age: (): number => 50,
@@ -107,7 +107,7 @@ describe('FactoryTemplate', () => {
         
         describe('Function parameter', () => {
             it('is available as a parameter for use in arrow functions', () => {
-                const template = new FactoryTemplate({
+                new FactoryTemplate({
                     firstName: 'test',
                     lastName: 'test',
                     age: (): number => 50,
@@ -138,7 +138,7 @@ describe('FactoryTemplate', () => {
             })
             
             it.todo('function parameters can reference another function parameter', () => {
-                const template = new FactoryTemplate({
+                new FactoryTemplate({
                     firstName: 'test',
                     lastName: 'test',
                     age: (ctx): number => 50,
@@ -183,7 +183,7 @@ describe('FactoryTemplate', () => {
         
         describe(`"this" context`, () => {
             it('can access original template fields through "this"', async () => {
-                const newTemplate = template.extend({
+                template.extend({
                     async fullName() {
                         expectTypeOf(await this.get('firstName')).toEqualTypeOf<string>();
                         expectTypeOf(await this.get('lastName')).toEqualTypeOf<string>();
@@ -195,7 +195,7 @@ describe('FactoryTemplate', () => {
             });
             
             it('can access new template fields through "this"', async () => {
-                const newTemplate = template.extend({
+                  template.extend({
                     streetAddress: () => faker.location.streetAddress(),
                     city: () => faker.location.city(),
                     zip: () => parseInt(faker.location.zipCode()), // don't do this :)
@@ -222,8 +222,7 @@ describe('FactoryTemplate', () => {
                     }
                 },
             });
-            
-            const newTemplate = original.extend({
+            original.extend({
                 address: () => ({
                     street: '',
                     city: '',
@@ -236,9 +235,9 @@ describe('FactoryTemplate', () => {
                     expectTypeOf(address.zip).toEqualTypeOf<string>();
                     return '';
                 }
-            })
+            });
         })
-       
+        
     })
     
     describe('Template output', () => {
