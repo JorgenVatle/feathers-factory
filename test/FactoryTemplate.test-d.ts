@@ -130,15 +130,19 @@ describe('FactoryTemplate', () => {
                 createdAt: new Date(),
                 
                 async summary() {
-                    const firstName = await this.get('firstName');
-                    const lastName = await this.get('lastName');
-                    const age = await this.get('age');
-                    const createdAt = await this.get('createdAt');
+                    const summary = {
+                        firstName: await this.get('firstName'),
+                        lastName: await this.get('lastName'),
+                        age: await this.get('age'),
+                        createdAt: await this.get('createdAt'),
+                    }
                     
-                    expectTypeOf(firstName).toEqualTypeOf<'John'>();
-                    expectTypeOf(lastName).toEqualTypeOf<'Doe'>();
-                    expectTypeOf(age).toEqualTypeOf<number>();
-                    expectTypeOf(createdAt).toEqualTypeOf<Date>();
+                    expectTypeOf(summary.firstName).toEqualTypeOf<'John'>();
+                    expectTypeOf(summary.lastName).toEqualTypeOf<'Doe'>();
+                    expectTypeOf(summary.age).toEqualTypeOf<number>();
+                    expectTypeOf(summary.createdAt).toEqualTypeOf<Date>();
+                    
+                    return summary;
                 },
             });
         })
