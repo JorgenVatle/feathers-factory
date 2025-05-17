@@ -97,6 +97,21 @@ describe('FactoryTemplate', () => {
             });
         })
         
+        it(`template methods can reference other methods`, async () => {
+            new FactoryTemplate({
+                firstName: 'test',
+                lastName: 'test',
+                async age() {
+                    return (await this.get('firstName')).length;
+                },
+                async summary() {
+                    expectTypeOf(await this.get('firstName')).toEqualTypeOf<string>();
+                    expectTypeOf(await this.get('lastName')).toEqualTypeOf<string>();
+                    expectTypeOf(await this.get('age')).toEqualTypeOf<number>();
+                },
+            });
+        })
+        
         it.todo('fields using the context parameter can reference other fields using the context parameter', () => {
             new FactoryTemplate({
                 firstName: 'test',
