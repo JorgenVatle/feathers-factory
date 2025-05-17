@@ -4,7 +4,6 @@ import { FactoryTemplate } from '../src/FactoryTemplate';
 
 describe('FactoryTemplate', () => {
     
-    
     const template = new FactoryTemplate({
         _id: () => 1,
         createdAt: () => new Date(),
@@ -47,9 +46,9 @@ describe('FactoryTemplate', () => {
         
         it('has to adhere to the original schema', () => {
             expectTypeOf(template.resolve).toBeCallableWith({
+                lastName: 'test',
                 // @ts-expect-error
                 _id: () => 'INVALID_ID',
-                
                 // @ts-expect-error
                 firstName: 1,
             })
@@ -71,88 +70,78 @@ describe('FactoryTemplate', () => {
         
     })
     
-    describe('Template context', () => {
-        describe('Within "this" type', () => {
-            it('can reference sibling fields in the same template', async () => {
-                new FactoryTemplate({
-                    firstName: 'test',
-                    lastName: 'test',
-                    age: (): number => 50,
-                    async fullName() {
-                        expectTypeOf(await this.get('firstName')).toEqualTypeOf<string>();
-                        expectTypeOf(await this.get('lastName')).toEqualTypeOf<string>();
-                        expectTypeOf(await this.get('age')).toEqualTypeOf<number>();
-                    },
-                });
-            })
-            
-            it('is accessible within resolver overrides', async () => {
-                const template = new FactoryTemplate({
-                    firstName: 'test',
-                    lastName: 'test',
-                    age: (): number => 50,
-                    fullName: () => 'test',
-                });
-                
-                await template.resolve({
-                    async fullName() {
-                        expectTypeOf(await this.get('firstName')).toEqualTypeOf<string>();
-                        expectTypeOf(await this.get('lastName')).toEqualTypeOf<string>();
-                        expectTypeOf(await this.get('age')).toEqualTypeOf<number>();
-                        return 'test';
-                    },
-                })
+    describe('Template constructor context', () => {
+        it('is available as a parameter for use in arrow functions', () => {
+            new FactoryTemplate({
+                firstName: 'test',
+                lastName: 'test',
+                age: (): number => 50,
+                fullName: async (ctx) => {
+                    expectTypeOf(await ctx.get('firstName')).toEqualTypeOf<string>();
+                    expectTypeOf(await ctx.get('lastName')).toEqualTypeOf<string>();
+                    expectTypeOf(await ctx.get('age')).toEqualTypeOf<number>();
+                },
+            });
+        })
+        
+        it(`is available through fields' "this" context`, async () => {
+            new FactoryTemplate({
+                firstName: 'test',
+                lastName: 'test',
+                age: (): number => 50,
+                async summary() {
+                    expectTypeOf(await this.get('firstName')).toEqualTypeOf<string>();
+                    expectTypeOf(await this.get('lastName')).toEqualTypeOf<string>();
+                    expectTypeOf(await this.get('age')).toEqualTypeOf<number>();
+                },
+            });
+        })
+        
+        it.todo('the function parameter can reference another field that is defined using a function parameter', () => {
+            new FactoryTemplate({
+                firstName: 'test',
+                lastName: 'test',
+                age: (ctx): number => 50,
+                fullName: async (ctx) => {
+                    expectTypeOf(await ctx.get('firstName')).toEqualTypeOf<string>();
+                    expectTypeOf(await ctx.get('lastName')).toEqualTypeOf<string>();
+                    // @ts-expect-error Todo: Multiple context params seem to break type inference.
+                    expectTypeOf(await ctx.get('age')).toEqualTypeOf<number>();
+                },
+            });
+        })
+    })
+    
+    describe('Template resolver context', () => {
+        const template = new FactoryTemplate({
+            firstName: 'test',
+            lastName: 'test',
+            age: (): number => 50,
+            summary: () => 'sum of all the fields above',
+        });
+        
+        it('is accessible as an arrow function parameter', async () => {
+            await template.resolve({
+                summary: async (ctx) => {
+                    expectTypeOf(await ctx.get('firstName')).toEqualTypeOf<string>();
+                    expectTypeOf(await ctx.get('lastName')).toEqualTypeOf<string>();
+                    expectTypeOf(await ctx.get('age')).toEqualTypeOf<number>();
+                    return 'test';
+                },
             })
         })
         
-        describe('Function parameter', () => {
-            it('is available as a parameter for use in arrow functions', () => {
-                new FactoryTemplate({
-                    firstName: 'test',
-                    lastName: 'test',
-                    age: (): number => 50,
-                    fullName: async (ctx) => {
-                        expectTypeOf(await ctx.get('firstName')).toEqualTypeOf<string>();
-                        expectTypeOf(await ctx.get('lastName')).toEqualTypeOf<string>();
-                        expectTypeOf(await ctx.get('age')).toEqualTypeOf<number>();
-                    },
-                });
-            })
-            
-            it('is available as a parameter in resolver overrides', async () => {
-                const template = new FactoryTemplate({
-                    firstName: 'test',
-                    lastName: 'test',
-                    age: (): number => 50,
-                    fullName: () => 'test',
-                });
-                
-                await template.resolve({
-                    fullName: async (ctx) => {
-                        expectTypeOf(await ctx.get('firstName')).toEqualTypeOf<string>();
-                        expectTypeOf(await ctx.get('lastName')).toEqualTypeOf<string>();
-                        expectTypeOf(await ctx.get('age')).toEqualTypeOf<number>();
-                        return 'test';
-                    },
-                })
-            })
-            
-            it.todo('function parameters can reference another function parameter', () => {
-                new FactoryTemplate({
-                    firstName: 'test',
-                    lastName: 'test',
-                    age: (ctx): number => 50,
-                    fullName: async (ctx) => {
-                        expectTypeOf(await ctx.get('firstName')).toEqualTypeOf<string>();
-                        expectTypeOf(await ctx.get('lastName')).toEqualTypeOf<string>();
-                        // @ts-expect-error Todo: Multiple context params seem to break type inference.
-                        expectTypeOf(await ctx.get('age')).toEqualTypeOf<number>();
-                    },
-                });
+        it(`is accessible through fields' "this" context`, async () => {
+            await template.resolve({
+                async summary() {
+                    expectTypeOf(await this.get('firstName')).toEqualTypeOf<string>();
+                    expectTypeOf(await this.get('lastName')).toEqualTypeOf<string>();
+                    expectTypeOf(await this.get('age')).toEqualTypeOf<number>();
+                    return 'test';
+                },
             })
         })
-    });
-    
+    })
     
     describe('Template extensions', async () => {
         const newTemplate = template.extend({
