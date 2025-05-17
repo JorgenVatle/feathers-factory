@@ -81,7 +81,7 @@ export type TemplateOverrides<TTemplate, TContext = {}> = {
 /**
  * Infer the resolved output type of a given template field.
  */
-export type InferFieldType<T> = T extends TemplateField<infer T> ? T : never;
+export type InferFieldType<T> = T extends TemplateField<infer R> ? R : never;
 
 /**
  * Merge two template definitions to create a new template using one as a base.
