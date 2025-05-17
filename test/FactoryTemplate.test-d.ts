@@ -99,15 +99,18 @@ describe('FactoryTemplate', () => {
         
         it(`template methods can reference other methods`, async () => {
             new FactoryTemplate({
-                firstName: 'test',
-                lastName: 'test',
-                async age() {
+                firstName: () => 'test',    // sync function
+                lastName() {                // without context
+                    return 'test';
+                },
+                async age() {     // with context
                     return (await this.get('firstName')).length;
                 },
                 async summary() {
                     expectTypeOf(await this.get('firstName')).toEqualTypeOf<string>();
                     expectTypeOf(await this.get('lastName')).toEqualTypeOf<string>();
                     expectTypeOf(await this.get('age')).toEqualTypeOf<number>();
+                    return 'test';
                 },
             });
         })
