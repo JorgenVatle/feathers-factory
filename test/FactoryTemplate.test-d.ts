@@ -104,7 +104,7 @@ describe('FactoryTemplate', () => {
                 // method without context
                 lastName(): string { return 'test' },
                 // Method with context
-                async age() { return (await this.get('firstName')).length },
+                async age(): Promise<number> { return (await this.get('firstName')).length },
                 // Static value
                 createdAt: new Date(),
                 
