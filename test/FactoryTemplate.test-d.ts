@@ -97,7 +97,7 @@ describe('FactoryTemplate', () => {
             });
         })
         
-        it(`template methods can reference other methods`, async () => {
+        it(`template methods can reference other methods with explicit return types`, async () => {
             new FactoryTemplate({
                 // Synchronous function
                 firstName: (): string => 'test',
@@ -105,6 +105,27 @@ describe('FactoryTemplate', () => {
                 lastName(): string { return 'test' },
                 // Method with context
                 async age(): Promise<number> { return (await this.get('firstName')).length },
+                // Static value
+                createdAt: new Date(),
+                
+                async summary() {
+                    expectTypeOf(await this.get('firstName')).toEqualTypeOf<string>();
+                    expectTypeOf(await this.get('lastName')).toEqualTypeOf<string>();
+                    expectTypeOf(await this.get('age')).toEqualTypeOf<number>();
+                    expectTypeOf(await this.get('createdAt')).toEqualTypeOf<Date>();
+                    return 'test';
+                },
+            });
+        })
+        
+        it(`template methods can reference other methods with implicit return types`, async () => {
+            new FactoryTemplate({
+                // Synchronous function
+                firstName: () => 'test',
+                // method without context
+                lastName() { return 'test' },
+                // Method with context
+                async age() { return (await this.get('firstName')).length },
                 // Static value
                 createdAt: new Date(),
                 
