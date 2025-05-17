@@ -11,7 +11,7 @@ export class FactoryTemplate<TTemplate, TContext extends TemplateContext<TTempla
      * Run all factory functions in the template and return final result to be
      * stored in the database.
      */
-    public resolve(overrides?: TemplateOverrides<TTemplate, TContext>): Promise<TemplateResult<TTemplate>> {
+    public resolve(overrides?: TemplateOverrides<TTemplate, TContext>): Promise<InferOutput<TTemplate>> {
         const template = this.extend(overrides || {});
         const context = new TemplateContext(template);
         
@@ -49,10 +49,9 @@ type TemplateField<
 type TemplateFn<TValue, TContext> = (this: TContext, context: TContext) => TValue | Promise<TValue>;
 
 /**
- * Factory Template result.
- * The raw output of type of the template after resolving all fields.
+ * Unwraps {@link TemplateSchema} fields to their resulting output type.
  */
-export type TemplateResult<TTemplate> = {
+type UnwrapTemplateSchema<TTemplate> = {
     [key in keyof TTemplate]: InferFieldType<TTemplate[key]>;
 }
 
@@ -67,7 +66,12 @@ export type TemplateResult<TTemplate> = {
  * const data: InferOutput<typeof userTemplate>
  *     // -> { userId: number, createdAt: Date }
  */
-export type InferOutput<TTemplate> = TTemplate extends FactoryTemplate<infer T> ? T : never;
+export type InferOutput<TTemplate> =
+    UnwrapTemplateSchema<
+        TTemplate extends FactoryTemplate<infer T>
+        ? T
+        : TTemplate
+    >;
 
 /**
  * Template overrides.
