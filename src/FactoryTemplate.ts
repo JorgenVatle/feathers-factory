@@ -45,7 +45,7 @@ type TemplateField<
     TValue = unknown,
 > = TemplateValue<TValue> | TemplateFn<TValue>;
 
-type TemplateFn<TValue> = <TSelf>(this: TSelf, context: TSelf) => TemplateValue<TValue>;
+type TemplateFn<TValue> = () => TemplateValue<TValue>;
 type TemplateValue<TValue> = TValue | Promise<TValue>;
 
 /**
