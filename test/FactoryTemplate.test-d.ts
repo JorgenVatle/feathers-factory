@@ -97,7 +97,7 @@ describe('FactoryTemplate', () => {
             });
         })
         
-        it.todo('the function parameter can reference another field that is defined using a function parameter', () => {
+        it.todo('fields using the context parameter can reference other fields using the context parameter', () => {
             new FactoryTemplate({
                 firstName: 'test',
                 lastName: 'test',
