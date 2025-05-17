@@ -121,9 +121,9 @@ describe('FactoryTemplate', () => {
         it(`template methods can reference other methods with implicit return types`, async () => {
             new FactoryTemplate({
                 // Synchronous function
-                firstName: () => 'test',
+                firstName: () => 'John' as const,
                 // method without context
-                lastName() { return 'test' },
+                lastName() { return 'Doe' as const },
                 // Method with context
                 async age() { return (await this.get('firstName')).length },
                 // Static value
@@ -135,8 +135,8 @@ describe('FactoryTemplate', () => {
                     const age = await this.get('age');
                     const createdAt = await this.get('createdAt');
                     
-                    expectTypeOf(firstName).toEqualTypeOf<string>();
-                    expectTypeOf(lastName).toEqualTypeOf<string>();
+                    expectTypeOf(firstName).toEqualTypeOf<'John'>();
+                    expectTypeOf(lastName).toEqualTypeOf<'Doe'>();
                     expectTypeOf(age).toEqualTypeOf<number>();
                     expectTypeOf(createdAt).toEqualTypeOf<Date>();
                 },
