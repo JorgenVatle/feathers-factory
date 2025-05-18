@@ -71,19 +71,6 @@ describe('FactoryTemplate', () => {
     })
     
     describe('Template constructor context', () => {
-        it('is available as a parameter for use in arrow functions', () => {
-            new FactoryTemplate({
-                firstName: 'test',
-                lastName: 'test',
-                age: (): number => 50,
-                fullName: async (ctx) => {
-                    expectTypeOf(await ctx.get('firstName')).toEqualTypeOf<string>();
-                    expectTypeOf(await ctx.get('lastName')).toEqualTypeOf<string>();
-                    expectTypeOf(await ctx.get('age')).toEqualTypeOf<number>();
-                },
-            });
-        })
-        
         it(`is available through fields' "this" context`, async () => {
             new FactoryTemplate({
                 firstName: 'test',
@@ -146,52 +133,6 @@ describe('FactoryTemplate', () => {
                 },
             });
             
-            it('infers types from other arrow function context parameters', () => {
-                new FactoryTemplate({
-                    // Synchronous function
-                    firstName: () => 'John' as const,
-                    // method without context
-                    lastName() {
-                        return 'Doe' as const
-                    },
-                    // Method with context
-                    async age() {
-                        return (await this.get('firstName')).length
-                    },
-                    // Static value
-                    createdAt: new Date(),
-                    
-                    summary: async (ctx) => {
-                        const summary = {
-                            firstName: await ctx.get('firstName'),
-                            lastName: await ctx.get('lastName'),
-                            age: await ctx.get('age'),
-                            createdAt: await ctx.get('createdAt'),
-                        }
-                        
-                        expectTypeOf(summary.firstName).toEqualTypeOf<'John'>();
-                        expectTypeOf(summary.lastName).toEqualTypeOf<'Doe'>();
-                        expectTypeOf(summary.age).toEqualTypeOf<number>();
-                        expectTypeOf(summary.createdAt).toEqualTypeOf<Date>();
-                        
-                        return summary;
-                    },
-                });
-            })
-        })
-        
-        it.todo('fields using the context parameter can reference other fields using the context parameter', () => {
-            new FactoryTemplate({
-                firstName: 'test',
-                lastName: 'test',
-                age: (ctx): number => 50,
-                fullName: async (ctx) => {
-                    expectTypeOf(await ctx.get('firstName')).toEqualTypeOf<string>();
-                    expectTypeOf(await ctx.get('lastName')).toEqualTypeOf<string>();
-                    // @ts-expect-error Todo: Multiple context params seem to break type inference.
-                    expectTypeOf(await ctx.get('age')).toEqualTypeOf<number>();
-                },
-            });
         })
     })
     
@@ -202,34 +143,20 @@ describe('FactoryTemplate', () => {
             age: (): number => 50,
             summary: () => 'sum of all the fields above',
             async shortDescription() {
-                return `${await this.get('firstName')} ${await this.get('lastName')} (${this.get('age')})`
+                return `${await this.get('firstName')} ${await this.get('lastName')} (${await this.get('age')})`
             },
-            descriptionLines: async (ctx) => {
+            async descriptionLines() {
                 return [
-                    `${ctx.get('shortDescription')}`,
-                    `${ctx.get('summary')}`,
+                    await this.get('shortDescription'),
+                    'more text',
+                    'even more text',
                 ]
             },
-            fullDescription: async (ctx) => {
-                return (await ctx.get('descriptionLines')).join('\n');
+            async fullDescription() {
+              return (await this.get('descriptionLines')).join('\n');
             }
         });
         
-        it('is accessible as an arrow function parameter', async () => {
-            await template.resolve({
-                summary: async (ctx) => {
-                    expectTypeOf(await ctx.get('firstName')).toEqualTypeOf<string>();
-                    expectTypeOf(await ctx.get('lastName')).toEqualTypeOf<string>();
-                    expectTypeOf(await ctx.get('age')).toEqualTypeOf<number>();
-                    expectTypeOf(await ctx.get('summary')).toEqualTypeOf<string>();
-                    expectTypeOf(await ctx.get('shortDescription')).toEqualTypeOf<string>();
-                    expectTypeOf(await ctx.get('descriptionLines')).toEqualTypeOf<string[]>();
-                    expectTypeOf(await ctx.get('fullDescription')).toEqualTypeOf<string>();
-                    
-                    return 'test';
-                },
-            })
-        })
         
         it(`is accessible through fields' "this" context`, async () => {
             await template.resolve({
@@ -245,33 +172,6 @@ describe('FactoryTemplate', () => {
             })
         })
         
-        it('can reference other fields using the context parameter', async () => {
-            await template.resolve({
-                age: async (ctx) => {
-                    return (await ctx.get('firstName')).length + (await ctx.get('lastName')).length
-                },
-                summary: async (ctx) => {
-                    expectTypeOf(await ctx.get('firstName')).toEqualTypeOf<string>();
-                    expectTypeOf(await ctx.get('lastName')).toEqualTypeOf<string>();
-                    expectTypeOf(await ctx.get('age')).toEqualTypeOf<number>();
-                    return 'test';
-                }
-            })
-        })
-        
-        it('function parameters can reference fields using the method "this" context', async () => {
-            await template.resolve({
-                async age() {
-                    return (await this.get('firstName')).length + (await this.get('lastName')).length
-                },
-                summary: async (ctx) => {
-                    expectTypeOf(await ctx.get('firstName')).toEqualTypeOf<string>();
-                    expectTypeOf(await ctx.get('lastName')).toEqualTypeOf<string>();
-                    expectTypeOf(await ctx.get('age')).toEqualTypeOf<number>();
-                    return 'test';
-                },
-            })
-        })
     })
     
     describe('Template extensions', async () => {

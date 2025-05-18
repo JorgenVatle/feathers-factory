@@ -6,9 +6,8 @@ import { TemplateContext } from './TemplateContext';
  */
 export class FactoryTemplate<
     TTemplate extends Record<string, TemplateField>,
-    TOthers extends NoInfer<Record<string, (context: { get: (key: string) => unknown }) => unknown>>,
 > {
-    constructor(public readonly _schema: TemplateSchema<TTemplate> | NoInfer<TOthers>) {}
+    constructor(public readonly _schema: TemplateSchema<TTemplate>) {}
     
     /**
      * Run all factory functions in the template and return final result to be
