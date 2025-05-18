@@ -10,7 +10,7 @@ describe('TemplateContext', () => {
         const context = new TemplateContext(
             new FactoryTemplate({
                 staticField: 'ok',
-                arrowFunction: () => 'ok',
+                arrowFunction: () => 'ok' as const,
                 staticPromise: Promise.resolve('ok'),
                 asyncPromise: async () => 'ok',
                 asyncDate: () => new Date(),
@@ -27,7 +27,7 @@ describe('TemplateContext', () => {
             const arrowFunction = await context.get('arrowFunction');
             
             expect(arrowFunction).toEqual('ok');
-            expectTypeOf(arrowFunction).toEqualTypeOf<string>();
+            expectTypeOf(arrowFunction).toEqualTypeOf<'ok'>();
         });
         
         it('can resolve static promises', async () => {
