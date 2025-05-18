@@ -7,7 +7,7 @@ import { TemplateContext } from './TemplateContext';
 export class FactoryTemplate<
     TTemplate,
 > {
-    constructor(public readonly _schema: TTemplate & ThisType<TemplateContext<TTemplate>>) {}
+    constructor(public readonly _schema: TemplateSchema<TTemplate>) {}
     
     /**
      * Run all factory functions in the template and return final result to be
