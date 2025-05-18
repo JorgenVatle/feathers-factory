@@ -4,8 +4,11 @@ import { TemplateContext } from './TemplateContext';
  * Factory boilerplate template.
  * Defines the fields that will be generated when factories are called.
  */
-export class FactoryTemplate<TTemplate extends Record<string, TemplateField>> {
-    constructor(public readonly _schema: TemplateSchema<TTemplate>) {}
+export class FactoryTemplate<
+    TTemplate extends Record<string, TemplateField>,
+    TOthers extends NoInfer<Record<string, (context: { get: (key: string) => unknown }) => unknown>>,
+> {
+    constructor(public readonly _schema: TemplateSchema<TTemplate> | NoInfer<TOthers>) {}
     
     /**
      * Run all factory functions in the template and return final result to be
