@@ -34,7 +34,7 @@ export class FactoryTemplate<
  * Defines the fields that will be generated when the factory is called.
  */
 export type TemplateSchema<TTemplate = Record<string, TemplateField>> = {
-    [key in keyof TTemplate]: TemplateField<TTemplate[key]>;
+    [key in keyof TTemplate]: TTemplate[key];
 } & ThisType<TemplateContext<TTemplate>>;
 
 
