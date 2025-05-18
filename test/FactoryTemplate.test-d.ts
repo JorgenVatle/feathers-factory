@@ -5,7 +5,7 @@ import { FactoryTemplate } from '../src/FactoryTemplate';
 describe('FactoryTemplate', () => {
     
     const template = new FactoryTemplate({
-        _id: () => 1,
+        _id: (): number => 1,
         createdAt: () => new Date(),
         firstName: 'test',
         lastName: 'test',
@@ -167,7 +167,7 @@ describe('FactoryTemplate', () => {
                     expectTypeOf(await this.get('shortDescription')).toEqualTypeOf<string>();
                     expectTypeOf(await this.get('descriptionLines')).toEqualTypeOf<string[]>();
                     expectTypeOf(await this.get('fullDescription')).toEqualTypeOf<string>();
-                    return 'test';
+                    return 'test' as any;
                 },
             })
         })
