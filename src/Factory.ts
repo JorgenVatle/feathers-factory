@@ -26,6 +26,7 @@ export default class Factory<
         if (data instanceof FactoryTemplate) {
             this.data = data;
         } else {
+            // @ts-expect-error Incompatible types
             this.data = new FactoryTemplate(data);
         }
         
