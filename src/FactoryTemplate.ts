@@ -7,7 +7,7 @@ import { TemplateContext } from './TemplateContext';
 export class FactoryTemplate<
     TTemplate,
 > {
-    constructor(public readonly _schema: TemplateSchema<TTemplate>) {}
+    constructor(public readonly _schema: TTemplate & ThisType<TemplateContext<TTemplate>>) {}
     
     /**
      * Run all factory functions in the template and return final result to be
@@ -33,8 +33,8 @@ export class FactoryTemplate<
  * Factory Template definition.
  * Defines the fields that will be generated when the factory is called.
  */
-export type TemplateSchema<TTemplate> = {
-    [key in keyof TTemplate]: TTemplate[key];
+export type TemplateSchema<TTemplate = Record<string, TemplateField>> = {
+    [key in keyof TTemplate]: TemplateField<TTemplate[key]>;
 } & ThisType<TemplateContext<TTemplate>>;
 
 
