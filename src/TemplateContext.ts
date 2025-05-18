@@ -49,7 +49,13 @@ export class TemplateContext<TTemplate> {
      * })
      *
      */
-    public get<TKey extends Paths<TTemplate> & string>(key: TKey): ContextFieldOutcome<Get<TTemplate, TKey>> {
+    public get<
+        TKey extends Paths<TTemplate> & string,
+    >(key: TKey): Get<TTemplate, TKey> extends (...args: any) => infer T
+                  ? T
+                  : TKey extends keyof TTemplate
+                    ? TTemplate[TKey]
+                    : never {
         return Clues(this._state, key as string, { CONTEXT: this });
     }
     
