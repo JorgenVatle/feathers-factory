@@ -99,20 +99,6 @@ describe('TemplateContext', () => {
             expect(await context.get('fullName')).toEqual('John Doe');
         })
         
-        it('can resolve sibling fields using context parameter', async () => {
-            const context = new TemplateContext(
-                new FactoryTemplate({
-                    firstName: 'John',
-                    lastName: 'Doe',
-                    fullName: async (ctx) => {
-                        return `${await ctx.get('firstName')} ${await ctx.get('lastName')}`
-                    }
-                })
-            );
-            
-            expect(await context.get('fullName')).toEqual('John Doe');
-        })
-        
     });
     
     describe('Peer dependencies', () => {
@@ -133,8 +119,8 @@ describe('TemplateContext', () => {
         
         const context = new TemplateContext(
             new FactoryTemplate({
-                fullName: async (ctx) => {
-                    return `${await ctx.get('firstName')} ${await ctx.get('lastName')}`
+                async fullName(){
+                    return `${await this.get('firstName')} ${await this.get('lastName')}`
                 },
                 firstName: mocks.firstName,
                 lastName: mocks.lastName,
