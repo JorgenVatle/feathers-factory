@@ -162,8 +162,8 @@ type ContextFieldOutcome<TType> =
     : never;
 
 type GetTemplateField<
-    TKey,
-    TTemplate
+    TTemplate,
+    TKey extends string,
 > = Get<TTemplate, TKey> extends (...args: any) => infer T
     ? Promise<T>
     : TKey extends keyof TTemplate
