@@ -51,11 +51,7 @@ export class TemplateContext<TTemplate> {
      */
     public get<
         TKey extends Paths<TTemplate> & string,
-    >(key: TKey): Get<TTemplate, TKey> extends (...args: any) => infer T
-                  ? T
-                  : TKey extends keyof TTemplate
-                    ? TTemplate[TKey]
-                    : never {
+    >(key: TKey): GetTemplateField<TTemplate, TKey> {
         return Clues(this._state, key as string, { CONTEXT: this });
     }
     
@@ -84,7 +80,9 @@ export class TemplateContext<TTemplate> {
      *         this.get('fullName'), // -> John Doe
      *     ]
      */
-    public call<TKey extends Paths<TTemplate> & string>(key: TKey): ContextFieldOutcome<Get<TTemplate, TKey>> {
+    public call<
+        TKey extends Paths<TTemplate> & string
+    >(key: TKey): GetTemplateField<TTemplate, TKey> {
         const freshContext = new TemplateContext(this.template);
         
         return freshContext.get(key);
@@ -162,3 +160,12 @@ type ContextFieldOutcome<TType> =
     TType extends ContextField<infer T>
     ? Promise<T> | T
     : never;
+
+type GetTemplateField<
+    TKey,
+    TTemplate
+> = Get<TTemplate, TKey> extends (...args: any) => infer T
+    ? Promise<T>
+    : TKey extends keyof TTemplate
+      ? Promise<TTemplate[TKey]>
+      : never
