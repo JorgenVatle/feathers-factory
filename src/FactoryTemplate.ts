@@ -4,7 +4,7 @@ import { TemplateContext } from './TemplateContext';
  * Factory boilerplate template.
  * Defines the fields that will be generated when factories are called.
  */
-export class FactoryTemplate<TTemplate> {
+export class FactoryTemplate<TTemplate extends Record<string, TemplateField>> {
     constructor(public readonly _schema: TemplateSchema<TTemplate>) {}
     
     /**
@@ -31,8 +31,8 @@ export class FactoryTemplate<TTemplate> {
  * Factory Template definition.
  * Defines the fields that will be generated when the factory is called.
  */
-export type TemplateSchema<TTemplate> = {
-    [key in keyof TTemplate]: TemplateField<TTemplate[key]>;
+export type TemplateSchema<TTemplate extends Record<string, TemplateField>> = {
+    [key in keyof TTemplate]: TTemplate[key];
 } & ThisType<TemplateContext<TTemplate>>;
 
 
