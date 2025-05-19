@@ -64,3 +64,5 @@ typings/
 
 # TypeScript output
 dist
+
+*.vitest-temp.*
