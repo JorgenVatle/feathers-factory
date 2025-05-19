@@ -20,7 +20,7 @@ export function defineTemplateSchema<
 >(template: {
     [key in TSchemaKeys]: (context: TFieldContext[key]) => TReturnType[key];
 }) {
-    return {};
+    return template;
 }
 
 export type TemplateSchema<
