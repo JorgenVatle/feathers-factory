@@ -15,6 +15,22 @@ describe('defineTemplateSchema', () => {
                 expectTypeOf(ctx.asyncDate).toEqualTypeOf<Date>();
             }
         });
+    });
+    
+    it('is able to handle fields referencing other fields', () => {
+        const schema = defineTemplateSchema({
+            firstName: () => 'John' as const,
+            lastName: () => 'Doe' as const,
+            fullName(ctx) {
+                return `${ctx.firstName} ${ctx.lastName}` as 'John Doe';
+            },
+            
+            test(ctx) {
+                expectTypeOf(ctx.firstName).toEqualTypeOf<'John'>();
+                expectTypeOf(ctx.lastName).toEqualTypeOf<'Doe'>();
+                expectTypeOf(ctx.fullName).toEqualTypeOf<'John Doe'>();
+            }
+        })
     })
 });
 
@@ -30,6 +46,7 @@ describe('FactoryTemplateV2', () => {
                 expectTypeOf(ctx.arrowFunction).toEqualTypeOf<'ok'>();
                 expectTypeOf(ctx.asyncPromise).toEqualTypeOf<Promise<'ok'>>();
                 expectTypeOf(ctx.asyncDate).toEqualTypeOf<Date>();
+                return 'ok';
             }
         })
     })
