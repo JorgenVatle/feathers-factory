@@ -1,3 +1,5 @@
+/// <reference types="vitest/importMeta" />
+
 declare module 'clues' {
     type Solver = string | ((...params: any) => void);
     
