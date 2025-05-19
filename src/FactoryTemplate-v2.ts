@@ -22,3 +22,21 @@ export function defineTemplateSchema<
 }) {
     return {};
 }
+
+export type TemplateSchema<
+    /**
+     * Expected output type for the template.
+     */
+    TSchema extends Record<string, unknown>,
+    
+    /**
+     * Mapped type of the context to expose to each field respectively.
+     * We need to omit the return type of the current field to prevent
+     * the compiler from squawking and deferring to 'unknown' for everything
+     */
+    TFieldContext extends Record<keyof TSchema, unknown> = {
+        [key in keyof TSchema]: Simplify<Omit<TSchema, key>>
+    },
+> = {
+    [key in keyof TSchema]: (context: TFieldContext[key]) => TSchema[key];
+}
