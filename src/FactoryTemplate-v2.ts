@@ -40,3 +40,12 @@ export type TemplateSchema<
 > = {
     [key in keyof TSchema]: (context: TFieldContext[key]) => TSchema[key];
 }
+
+
+export class FactoryTemplateV2<
+    TTemplate extends Record<string, unknown>,
+    TSchema extends Record<string, unknown>,
+> {
+        constructor(public readonly _schema: TemplateSchema<TSchema>) {
+        }
+}
