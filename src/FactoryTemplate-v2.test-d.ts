@@ -19,25 +19,29 @@ describe('defineTemplateSchema', () => {
 })
 
 describe('TemplateSchema type alias', () => {
-    function createTemplateSchema<
-        TSchema extends Record<string, unknown>
-    >(schema: TemplateSchema<TSchema>) {}
     
     it(`Exposes types of sibling fields through each field's context parameter`, () => {
-        createTemplateSchema({
-            arrowFunction: () => 'ok' as const,
-            asyncPromise: async () => 'ok' as const,
-            asyncDate: async () => new Date(),
+        const schema = {} as TemplateSchema<{
+            arrowFunction: 'ok'
+            asyncPromise: Promise<'ok'>
+            asyncDate: Promise<Date>,
             
-            test: (ctx) => {
-                expectTypeOf(ctx.arrowFunction).toEqualTypeOf<'ok'>();
-                expectTypeOf(ctx.arrowFunction).toEqualTypeOf<'ok'>();
-                expectTypeOf(ctx.asyncPromise).toEqualTypeOf<Promise<'ok'>>();
-                expectTypeOf(ctx.asyncDate).toEqualTypeOf<Promise<Date>>();
-                
-                return 'ok';
-            }
-        })
+            test: 'ok', // Used as base for context check
+        }>;
         
+        expectTypeOf(schema.test)
+            .parameter(0)
+            .toHaveProperty('arrowFunction')
+            .toEqualTypeOf<'ok'>();
+        
+        expectTypeOf(schema.test)
+            .parameter(0)
+            .toHaveProperty('asyncPromise')
+            .toEqualTypeOf<Promise<'ok'>>();
+        
+        expectTypeOf(schema.test)
+            .parameter(0)
+            .toHaveProperty('asyncDate')
+            .toEqualTypeOf<Promise<Date>>();
     })
 })
