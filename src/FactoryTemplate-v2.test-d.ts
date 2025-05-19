@@ -1,5 +1,5 @@
 import { describe, expectTypeOf, it } from 'vitest';
-import { defineTemplateSchema, type TemplateSchema } from './FactoryTemplate-v2';
+import { defineTemplateSchema, FactoryTemplateV2, type TemplateSchema } from './FactoryTemplate-v2';
 
 describe('defineTemplateSchema', () => {
     
@@ -15,6 +15,23 @@ describe('defineTemplateSchema', () => {
                 expectTypeOf(ctx.asyncDate).toEqualTypeOf<Date>();
             }
         });
+    })
+});
+
+describe('FactoryTemplateV2', () => {
+    
+    it('exposes return types of sibling functions through a context parameter', () => {
+        const template = new FactoryTemplateV2({
+            arrowFunction: () => 'ok' as const,
+            asyncPromise: async () => 'ok' as const,
+            asyncDate: () => new Date(),
+            
+            test(ctx) {
+                expectTypeOf(ctx.arrowFunction).toEqualTypeOf<'ok'>();
+                expectTypeOf(ctx.asyncPromise).toEqualTypeOf<Promise<'ok'>>();
+                expectTypeOf(ctx.asyncDate).toEqualTypeOf<Date>();
+            }
+        })
     })
 })
 
