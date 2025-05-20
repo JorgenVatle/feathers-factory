@@ -3,12 +3,10 @@ import type { Simplify } from 'type-fest';
 
 export function defineTemplateSchema<
     const TSchemaKeys extends keyof TReturnType | keyof TFieldContext,
-    
     /**
      * The return type for each template function within the template.
      */
     const TReturnType extends Record<TSchemaKeys, unknown>,
-    
     /**
      * Mapped type of the context to expose to each field respectively.
      * We need to omit the return type of the current field to prevent
@@ -28,7 +26,6 @@ export type TemplateSchema<
      * Expected output type for the template.
      */
     TSchema extends Record<string, unknown>,
-    
     /**
      * Mapped type of the context to expose to each field respectively.
      * We need to omit the return type of the current field to prevent
@@ -46,6 +43,6 @@ export class FactoryTemplateV2<
     TTemplate extends Record<string, unknown>,
     TSchema extends Record<string, unknown>,
 > {
-        constructor(public readonly _schema: TemplateSchema<TSchema>) {
-        }
+    constructor(public readonly _schema: TemplateSchema<TSchema>) {
+    }
 }
