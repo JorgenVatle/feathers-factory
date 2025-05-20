@@ -50,6 +50,21 @@ describe('FactoryTemplateV2', () => {
             }
         })
     })
+    
+    it('exposes return types of sibling functions through method "this" context', () => {
+        const template = new FactoryTemplateV2({
+            arrowFunction: () => 'ok' as const,
+            asyncPromise: async () => 'ok' as const,
+            asyncDate: () => new Date(),
+            
+            test() {
+                expectTypeOf(this.get('arrowFunction')).toEqualTypeOf<'ok'>();
+                expectTypeOf(this.get('asyncPromise')).toEqualTypeOf<Promise<'ok'>>();
+                expectTypeOf(this.get('asyncDate')).toEqualTypeOf<Date>();
+                return 'ok';
+            }
+        })
+    })
 })
 
 describe('TemplateSchema type alias', () => {
