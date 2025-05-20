@@ -43,9 +43,9 @@ describe('FactoryTemplateV2', () => {
             asyncDate: () => new Date(),
             
             test(ctx) {
-                expectTypeOf(ctx.arrowFunction).toEqualTypeOf<'ok'>();
-                expectTypeOf(ctx.asyncPromise).toEqualTypeOf<Promise<'ok'>>();
-                expectTypeOf(ctx.asyncDate).toEqualTypeOf<Date>();
+                expectTypeOf(ctx.get('arrowFunction')).toEqualTypeOf<'ok'>();
+                expectTypeOf(ctx.get('asyncPromise')).toEqualTypeOf<Promise<'ok'>>();
+                expectTypeOf(ctx.get('asyncDate')).toEqualTypeOf<Date>();
                 return 'ok';
             }
         })

@@ -35,9 +35,12 @@ export type TemplateSchema<
         [key in keyof TSchema]: Simplify<Omit<TSchema, key>>
     },
 > = {
-    [key in keyof TSchema]: (context: TFieldContext[key]) => TSchema[key];
+    [key in keyof TSchema]: (context: SchemaContext<TFieldContext[key]>) => TSchema[key];
 }
 
+type SchemaContext<TFields> = {
+    get<TKey extends keyof TFields>(key: TKey): TFields[TKey];
+}
 
 export class FactoryTemplateV2<
     TTemplate extends Record<string, unknown>,
