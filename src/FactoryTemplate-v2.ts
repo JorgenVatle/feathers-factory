@@ -47,4 +47,8 @@ export class FactoryTemplateV2<
 > {
     constructor(public readonly _schema: TemplateSchema<TSchema>) {
     }
+    
+    public get<TKey extends keyof TSchema>(key: TKey): TSchema[TKey] {
+        return {} as any; // todo
+    }
 }
