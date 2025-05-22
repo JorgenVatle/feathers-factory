@@ -32,9 +32,9 @@ describe('defineTemplateSchema', () => {
             }
         });
         
-        expectTypeOf(schema.firstName).toEqualTypeOf<'John'>();
-        expectTypeOf(schema.lastName).toEqualTypeOf<'Doe'>();
-        expectTypeOf(schema.fullName).toEqualTypeOf<'John Doe'>();
+        expectTypeOf(schema.firstName).returns.toEqualTypeOf<'John'>();
+        expectTypeOf(schema.lastName).returns.toEqualTypeOf<'Doe'>();
+        expectTypeOf(schema.fullName).returns.toEqualTypeOf<'John Doe'>();
         
     })
 });
