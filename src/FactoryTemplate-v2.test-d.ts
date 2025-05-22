@@ -30,7 +30,12 @@ describe('defineTemplateSchema', () => {
                 expectTypeOf(ctx.lastName).toEqualTypeOf<'Doe'>();
                 expectTypeOf(ctx.fullName).toEqualTypeOf<'John Doe'>();
             }
-        })
+        });
+        
+        expectTypeOf(schema.firstName).toEqualTypeOf<'John'>();
+        expectTypeOf(schema.lastName).toEqualTypeOf<'Doe'>();
+        expectTypeOf(schema.fullName).toEqualTypeOf<'John Doe'>();
+        
     })
 });
 
