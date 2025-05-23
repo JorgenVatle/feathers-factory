@@ -138,12 +138,12 @@ describe('FactoryTemplate', () => {
     
     describe('Template resolver context', () => {
         const template = new FactoryTemplate({
-            firstName: 'test',
-            lastName: 'test',
+            firstName: 'test' as const,
+            lastName: 'test' as const,
             age: (): number => 50,
-            summary: () => 'sum of all the fields above',
+            summary: (): string => 'sum of all the fields above',
             async shortDescription() {
-                return `${await this.get('firstName')} ${await this.get('lastName')} (${await this.get('age')})`
+                return `${await this.get('firstName')} ${await this.get('lastName')} (${await this.get('age')})` as const
             },
             async descriptionLines() {
                 return [
@@ -161,10 +161,10 @@ describe('FactoryTemplate', () => {
         it(`is accessible through fields' "this" context`, async () => {
             await template.resolve({
                 async summary() {
-                    expectTypeOf(await this.get('firstName')).toEqualTypeOf<string>();
-                    expectTypeOf(await this.get('lastName')).toEqualTypeOf<string>();
+                    expectTypeOf(await this.get('firstName')).toEqualTypeOf<'test'>();
+                    expectTypeOf(await this.get('lastName')).toEqualTypeOf<'test'>();
                     expectTypeOf(await this.get('age')).toEqualTypeOf<number>();
-                    expectTypeOf(await this.get('shortDescription')).toEqualTypeOf<string>();
+                    expectTypeOf(await this.get('shortDescription')).toEqualTypeOf<`test test ${number}`>();
                     expectTypeOf(await this.get('descriptionLines')).toEqualTypeOf<string[]>();
                     expectTypeOf(await this.get('fullDescription')).toEqualTypeOf<string>();
                     return 'test' as any;
