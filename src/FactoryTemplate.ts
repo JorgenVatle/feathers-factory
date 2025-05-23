@@ -53,9 +53,9 @@ type TemplateValue<TValue> = TValue | Promise<TValue>;
 /**
  * Unwraps {@link TemplateSchema} fields to their resulting output type.
  */
-type UnwrapTemplateSchema<TTemplate> = {
+type UnwrapTemplateSchema<TTemplate> = Simplify<{
     [key in keyof TTemplate]: InferFieldType<TTemplate[key]>;
-}
+}>
 
 /**
  * Infer the resulting data type of the provided factory template.
