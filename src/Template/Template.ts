@@ -27,7 +27,7 @@ export function defineTemplateSchema<
 }
 
 export class FactoryTemplateV2<
-    TSchema extends Record<string, SchemaField<any, any>>,
+    TSchema extends Record<string, SchemaField<any>>,
     TSelf = SchemaContext<TSchema>
 > {
     constructor(
