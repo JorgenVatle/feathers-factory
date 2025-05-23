@@ -55,9 +55,9 @@ export type TemplateFunction<
  */
 export type SchemaField<
     TValue,
-    TContext = BaseSchema,
+    TContext = unknown,
     TResult = TValue | Promise<TValue>
-> = TResult | TemplateFunction<TResult, TContext>;
+> = TemplateFunction<TResult, TContext>;
 
 /**
  * Unwrap any promises within the provided schema to enable dot notation
