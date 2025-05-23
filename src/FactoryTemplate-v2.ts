@@ -44,7 +44,7 @@ export type TemplateSchema<
     },
 > = {
     [key in keyof TSchema]: TemplateFunction<TSchema[key], TFieldContext[key]> | TSchema[key];
-}
+} & ThisType<FactoryTemplateV2<TSchema>>
 
 type SchemaContext<TFields> = {
     get<TKey extends keyof TFields>(key: TKey): TFields[TKey];
@@ -55,7 +55,7 @@ export class FactoryTemplateV2<
 > {
     constructor(public readonly _schema: TemplateSchema<TSchema, {
         [key in keyof TSchema]: FactoryTemplateV2<Simplify<Omit<TSchema, key>>>
-    }> & ThisType<FactoryTemplateV2<TSchema>>) {}
+    }>) {}
     
     public get<TKey extends keyof TSchema>(key: TKey): TSchema[TKey] {
         return {} as any; // todo
