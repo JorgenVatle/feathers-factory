@@ -26,9 +26,13 @@ describe('defineTemplateSchema', () => {
             },
             
             test(ctx) {
-                expectTypeOf(ctx.firstName).toEqualTypeOf<'John'>();
-                expectTypeOf(ctx.lastName).toEqualTypeOf<'Doe'>();
-                expectTypeOf(ctx.fullName).toEqualTypeOf<'John Doe'>();
+                let lastName: 'Doe' = ctx.lastName;
+                let firstName: 'John' = ctx.firstName;
+                let fullName: 'John Doe' = ctx.fullName;
+                
+                expectTypeOf(firstName).toEqualTypeOf<'John'>();
+                expectTypeOf(lastName).toEqualTypeOf<'Doe'>();
+                expectTypeOf(fullName).toEqualTypeOf<'John Doe'>();
             }
         });
         
