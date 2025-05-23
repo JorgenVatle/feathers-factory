@@ -27,9 +27,9 @@ export function defineTemplateSchema<
 }
 
 export class FactoryTemplateV2<
-    const TKeys extends keyof TSchema,
-    const TSchema extends Record<TKeys, unknown>,
-    const TContext extends SchemaContext<TSchema> = SchemaContext<TSchema>,
+    TKeys extends keyof TSchema,
+    TSchema extends Record<TKeys, unknown>,
+    TContext extends SchemaContext<TSchema> = SchemaContext<TSchema>,
 > {
     constructor(
         public readonly _schema:TemplateSchema<TSchema, TContext>,
