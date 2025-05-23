@@ -55,10 +55,10 @@ describe('FactoryTemplateV2', () => {
             asyncPromise: async () => 'ok' as const,
             asyncDate: () => new Date(),
             
-            async test(ctx) {
-                expectTypeOf(await ctx.get('arrowFunction')).toEqualTypeOf<'ok'>();
-                expectTypeOf(await ctx.get('asyncPromise')).toEqualTypeOf<'ok'>();
-                expectTypeOf(await ctx.get('asyncDate')).toEqualTypeOf<Date>();
+            async test() {
+                expectTypeOf(await this.get('arrowFunction')).toEqualTypeOf<'ok'>();
+                expectTypeOf(await this.get('asyncPromise')).toEqualTypeOf<'ok'>();
+                expectTypeOf(await this.get('asyncDate')).toEqualTypeOf<Date>();
                 return 'ok';
             }
         })
@@ -107,9 +107,9 @@ describe('FactoryTemplateV2', () => {
         const template = new FactoryTemplateV2({
             staticField: 'ok' as const,
             staticPromise: Promise.resolve('ok' as const),
-            async test(ctx) {
-                expectTypeOf(await ctx.get('staticField')).toEqualTypeOf<'ok'>();
-                expectTypeOf(await ctx.get('staticPromise')).toEqualTypeOf<'ok'>();
+            async test() {
+                expectTypeOf(await this.get('staticField')).toEqualTypeOf<'ok'>();
+                expectTypeOf(await this.get('staticPromise')).toEqualTypeOf<'ok'>();
             }
         });
         
@@ -130,12 +130,12 @@ describe('FactoryTemplateV2', () => {
                   }
                 },
                 
-                async test(ctx) {
-                    expectTypeOf(await ctx.get('firstName')).toEqualTypeOf<'John'>();
-                    expectTypeOf(await ctx.get('lastName')).toEqualTypeOf<'Doe'>();
-                    expectTypeOf(await ctx.get('address.street')).toEqualTypeOf<string>();
-                    expectTypeOf(await ctx.get('address.city')).toEqualTypeOf<string>();
-                    expectTypeOf(await ctx.get('address.zip')).toEqualTypeOf<number>();
+                async test() {
+                    expectTypeOf(await this.get('firstName')).toEqualTypeOf<'John'>();
+                    expectTypeOf(await this.get('lastName')).toEqualTypeOf<'Doe'>();
+                    expectTypeOf(await this.get('address.street')).toEqualTypeOf<string>();
+                    expectTypeOf(await this.get('address.city')).toEqualTypeOf<string>();
+                    expectTypeOf(await this.get('address.zip')).toEqualTypeOf<number>();
                 }
             })
             
@@ -156,10 +156,10 @@ describe('FactoryTemplateV2', () => {
                     zip: parseInt(faker.location.zipCode()),
                 }),
                 
-                async test(ctx) {
-                    expectTypeOf(await ctx.get('address.street')).toEqualTypeOf<string>();
-                    expectTypeOf(await ctx.get('address.city')).toEqualTypeOf<string>();
-                    expectTypeOf(await ctx.get('address.zip')).toEqualTypeOf<number>();
+                async test() {
+                    expectTypeOf(await this.get('address.street')).toEqualTypeOf<string>();
+                    expectTypeOf(await this.get('address.city')).toEqualTypeOf<string>();
+                    expectTypeOf(await this.get('address.zip')).toEqualTypeOf<number>();
                 }
             })
             
