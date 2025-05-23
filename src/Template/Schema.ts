@@ -50,16 +50,19 @@ export type SchemaField<
     TValue,
     TSelf = any,
 > = /*Promise<TValue> | TValue | */
-    | ((this: any, ...params: [context: TSelf]) => TValue | Promise<TValue>)
-    | ((this: TSelf) => TValue | Promise<TValue>)
-    | (TValue | Promise<TValue>);
+    | ((...params: [context: TSelf]) => FieldValue<TValue>)
+    | ((this: TSelf) => FieldValue<TValue>)
+    | (() => FieldValue<TValue>)
+    | (FieldValue<TValue>);
 
 export type SchemaFieldValue<T> = T extends SchemaField<infer T> ? T : T;
+
+type FieldValue<T> = Promise<T> | T;
 
 /**
  * Unwrap any promises within the provided schema to enable dot notation
  * accessors for nested promisified fields.
  */
 export type ResolveSchemaOutput<TSchema> = {
-    [key in keyof TSchema]: TSchema[key] extends SchemaField<infer T> ? T : TSchema[key];
+    [key in keyof TSchema]: SchemaFieldValue<TSchema[key]>;
 }
