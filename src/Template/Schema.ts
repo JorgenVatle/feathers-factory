@@ -44,3 +44,11 @@ export type TemplateFunction<
  * associated template or factory is run.
  */
 export type SchemaField<TValue, TResult = TValue | Promise<TValue>> = TResult | TemplateFunction<TResult>;
+
+/**
+ * Unwrap any promises within the provided schema to enable dot notation
+ * accessors for nested promisified fields.
+ */
+export type ResolveSchemaOutput<TSchema> = {
+    [key in keyof TSchema]: TSchema[key] extends SchemaField<infer T> ? T : TSchema[key];
+}
