@@ -44,20 +44,18 @@ export type TemplateSchema<
     },
 > = {
     [key in keyof TSchema]: TemplateFunction<TSchema[key], TFieldContext[key]> | TSchema[key];
-} & ThisType<FactoryTemplateV2<TSchema>>
+} & ThisType<SchemaContext<TSchema>>
 
-type SchemaContext<TFields> = {
-    get<TKey extends keyof TFields>(key: TKey): TFields[TKey];
+type SchemaContext<TSchema> = {
+    get<TKey extends Paths<TSchema> & string>(key: TKey): Get<TSchema, TKey>
 }
 
 export class FactoryTemplateV2<
     TSchema extends Record<string, unknown>,
-> {
+> implements SchemaContext<TSchema> {
     constructor(public readonly _schema: TemplateSchema<TSchema, {
-        [key in keyof TSchema]: FactoryTemplateV2<Simplify<Omit<TSchema, key>>>
+        [key in keyof TSchema]: SchemaContext<Simplify<Omit<TSchema, key>>>
     }>) {}
     
-    public get<TKey extends Paths<TSchema> & string>(key: TKey): Get<TSchema, TKey> {
-        return {} as any; // todo
-    }
+    declare get: SchemaContext<TSchema>['get'];
 }
