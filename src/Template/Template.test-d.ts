@@ -86,13 +86,13 @@ describe('FactoryTemplateV2', () => {
             fullName() {
                 return `${this.get('firstName')} ${this.get('lastName')}` as 'John Doe';
             },
-            age: () => 50,
+            age: (): 50 => 50,
             async description() {
-                return `${await this.get('fullName')} (${await this.get('age')})`
+                return `${await this.get('fullName')} (${await this.get('age')})` as 'John Doe (50)';
             },
             async test() {
                 expectTypeOf(await this.get('fullName')).toEqualTypeOf<'John Doe'>();
-                expectTypeOf(await this.get('age')).toEqualTypeOf<number>();
+                expectTypeOf(await this.get('age')).toEqualTypeOf<50>();
                 expectTypeOf(await this.get('description')).toEqualTypeOf<'John Doe (50)'>();
                 return 'ok';
             }
