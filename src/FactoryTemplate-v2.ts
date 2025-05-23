@@ -40,7 +40,7 @@ export type TemplateSchema<
         [key in keyof TSchema]: Simplify<Omit<TSchema, key>>
     },
 > = {
-    [key in keyof TSchema]: (context: SchemaContext<TFieldContext[key]>) => TSchema[key];
+    [key in keyof TSchema]: TemplateFunction<TSchema[key], TFieldContext[key]>;
 }
 
 type SchemaContext<TFields> = {
