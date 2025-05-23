@@ -18,7 +18,7 @@ export type TemplateSchema<
     }
 > = {
     [key in keyof TSchema]: SchemaField<TSchema[key], TFields[key]>;
-};
+} & ThisType<SchemaContext<TSchema>>;
 
 /**
  * Accepts a partial schema template to override base schema values.
