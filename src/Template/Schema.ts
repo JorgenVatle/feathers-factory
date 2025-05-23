@@ -13,7 +13,7 @@ export type TemplateSchema<
     
     TThis = SchemaContext<TSchema>,
 > = {
-    [key in keyof TSchema]: (TemplateFunction<TSchema[key], TThis>) | (() => SchemaFieldValue<TSchema[key]>) | TSchema[key]
+    [key in keyof TSchema]: SchemaField<TSchema[key], TThis>;
 } & ThisType<TThis>;
 
 /**
