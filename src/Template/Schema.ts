@@ -34,7 +34,7 @@ export type TemplateSchemaOverrides<
 /**
  * Base type for template schemas.
  */
-export type BaseSchema = Record<string, unknown>;
+export type BaseSchema<TFields extends Record<string, unknown> = Record<string, unknown>> = TFields;
 
 /**
  * Template factory function.
