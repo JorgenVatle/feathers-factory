@@ -28,6 +28,7 @@ export type TemplateFunction<
     TValue,
     TContext = unknown
 > = <TPeerContext extends TContext,>(context: TPeerContext) => TValue;
+export type BaseSchema = Record<string, unknown>;
 
 export type TemplateSchema<
     /**
