@@ -2,7 +2,6 @@ import type { Simplify } from 'type-fest';
 
 
 export function defineTemplateSchema<
-    const TSchemaKeys extends keyof TReturnType | keyof TFieldContext,
     /**
      * The return type for each template function within the template.
      */
@@ -15,11 +14,17 @@ export function defineTemplateSchema<
     const TFieldContext extends {
         [key in TSchemaKeys]: Simplify<Omit<TReturnType, key>>;
     },
+    const TSchemaKeys extends keyof TReturnType | keyof TFieldContext,
 >(template: {
-    [key in TSchemaKeys]: (context: TFieldContext[key]) => TReturnType[key];
+    [key in TSchemaKeys]: TemplateFunction<TReturnType[key], TFieldContext[key]>;
 }) {
     return template;
 }
+
+type TemplateFunction<
+    TValue,
+    TContext = unknown
+> = <TPeerContext extends TContext,>(context: TPeerContext) => TValue;
 
 export type TemplateSchema<
     /**
