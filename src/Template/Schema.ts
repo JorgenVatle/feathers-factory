@@ -1,12 +1,11 @@
 import type { Simplify } from 'type-fest';
 import type { SchemaContext } from './Context';
 
-export type TemplateFunction<
-    TValue,
-    TContext = unknown
-> = <TPeerContext extends NoInfer<TContext>,>(context: TPeerContext) => TValue;
-export type BaseSchema = Record<string, unknown>;
-
+/**
+* Schema template.
+* A map of all templating functions and fields that will run every time the
+ * associated template or factory is executed.
+ */
 export type TemplateSchema<
     /**
      * Expected output type for the template.
@@ -23,3 +22,19 @@ export type TemplateSchema<
 > = {
     [key in keyof TSchema]: TemplateFunction<TSchema[key], TFieldContext[key]> | TSchema[key];
 } & ThisType<SchemaContext<TSchema>>;
+
+
+/**
+ * Base type for template schemas.
+ */
+export type BaseSchema = Record<string, unknown>;
+
+/**
+ * Template factory function.
+ * The function that runs every time the associated template or factory is
+ * called
+ */
+export type TemplateFunction<
+    TValue,
+    TContext = unknown
+> = <TPeerContext extends NoInfer<TContext>,>(context: TPeerContext) => TValue;
