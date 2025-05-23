@@ -42,6 +42,17 @@ describe('defineTemplateSchema', () => {
         expectTypeOf(schema.fullName).returns.toEqualTypeOf<'John Doe'>();
         
     })
+    
+    it('handles static fields', () => {
+        const schema = defineTemplateSchema({
+            staticField: 'ok' as const,
+            test(ctx) {
+                expectTypeOf(ctx.staticField).toEqualTypeOf<'ok'>();
+            }
+        });
+        
+        expectTypeOf(schema.staticField).returns.toEqualTypeOf<'ok'>();
+    })
 });
 
 describe('FactoryTemplateV2', () => {
