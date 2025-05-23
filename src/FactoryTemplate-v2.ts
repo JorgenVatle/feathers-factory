@@ -27,9 +27,7 @@ export function defineTemplateSchema<
 export type TemplateFunction<
     TValue,
     TContext = unknown
-> = <TPeerContext extends TContext,>(context: Simplify<NoInfer<{
-    [key in keyof TPeerContext]: TPeerContext[key]
-}>>) => TValue;
+> = <TPeerContext extends TContext,>(context: TPeerContext) => TValue;
 
 export type TemplateSchema<
     /**
