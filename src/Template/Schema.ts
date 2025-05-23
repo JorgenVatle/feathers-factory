@@ -48,9 +48,8 @@ export type TemplateFunction<
  */
 export type SchemaField<
     TValue,
-    TSelf = any,
-> = /*Promise<TValue> | TValue | */
-    | ((...params: [context: TSelf]) => FieldValue<TValue>)
+    TSelf = unknown,
+> = | ((...params: [context: TSelf]) => FieldValue<TValue>)
     | ((this: TSelf) => FieldValue<TValue>)
     | (() => FieldValue<TValue>)
     | (FieldValue<TValue>);
