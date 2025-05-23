@@ -34,7 +34,7 @@ export type TemplateSchema<
     /**
      * Expected output type for the template.
      */
-    TSchema extends Record<string, unknown>,
+    TSchema extends BaseSchema,
     /**
      * Mapped type of the context to expose to each field respectively.
      * We need to omit the return type of the current field to prevent
@@ -64,7 +64,7 @@ export abstract class SchemaContext<TSchema, TOutput = ResolveSchemaOutput<TSche
 }
 
 export class FactoryTemplateV2<
-    TSchema extends Record<string, unknown>,
+    TSchema extends BaseSchema,
 > {
     constructor(public readonly _schema: TemplateSchema<TSchema, {
         [key in keyof TSchema]: SchemaContext<Simplify<Omit<TSchema, key>>>
