@@ -127,6 +127,28 @@ describe('FactoryTemplateV2', () => {
         expectTypeOf(await template.get('staticPromise')).toEqualTypeOf<'ok'>();
     })
     
+    it('handles method fields', async () => {
+        const template = new FactoryTemplateV2({
+            staticField() {
+                return 'ok' as const
+            },
+            async staticPromise() {
+                return 'ok' as const
+            },
+            async testThis() {
+                expectTypeOf(await this.get('staticField')).toEqualTypeOf<'ok'>();
+                expectTypeOf(await this.get('staticPromise')).toEqualTypeOf<'ok'>();
+            },
+            async testParam(ctx) {
+                expectTypeOf(await ctx.get('staticField')).toEqualTypeOf<'ok'>();
+                expectTypeOf(await ctx.get('staticPromise')).toEqualTypeOf<'ok'>();
+            }
+        });
+        
+        expectTypeOf(await template.get('staticField')).toEqualTypeOf<'ok'>();
+        expectTypeOf(await template.get('staticPromise')).toEqualTypeOf<'ok'>();
+    })
+    
     describe('dot notation', () => {
         it('works 1 level deep for simple schema fields', async () => {
             const template = new FactoryTemplateV2({
