@@ -47,7 +47,7 @@ export type BaseSchema = Record<string, unknown>;
 export type TemplateFunction<
     TValue,
     TContext = BaseSchema
-> = <TPeerContext extends NoInfer<TContext>,>(context: NoInfer<TPeerContext>) => TValue;
+> = (...params: [context: TContext]) => TValue;
 
 /**
  * Defines a value / template function that will execute every time the
