@@ -1,3 +1,4 @@
+import { faker } from '@faker-js/faker';
 import { describe, expectTypeOf, it } from 'vitest';
 import { defineTemplateSchema, FactoryTemplateV2, type TemplateSchema } from './FactoryTemplate-v2';
 
@@ -89,6 +90,34 @@ describe('FactoryTemplateV2', () => {
         
         expectTypeOf(template.get('staticField')).toEqualTypeOf<'ok'>();
         expectTypeOf(template.get('staticPromise')).toEqualTypeOf<Promise<'ok'>>();
+    })
+    
+    it('provides access to nested fields through dot notation', () => {
+        const template = new FactoryTemplateV2({
+            firstName: () => 'John' as const,
+            lastName: () => 'Doe' as const,
+            address: () => {
+              return {
+                  street: faker.location.streetAddress(),
+                  city: faker.location.city(),
+                  zip: parseInt(faker.location.zipCode()),
+              }
+            },
+            
+            test(ctx) {
+                expectTypeOf(ctx.get('firstName')).toEqualTypeOf<'John'>();
+                expectTypeOf(ctx.get('lastName')).toEqualTypeOf<'Doe'>();
+                expectTypeOf(ctx.get('address.street')).toEqualTypeOf<string>();
+                expectTypeOf(ctx.get('address.city')).toEqualTypeOf<string>();
+                expectTypeOf(ctx.get('address.zip')).toEqualTypeOf<number>();
+            }
+        })
+        
+        expectTypeOf(template.get('firstName')).toEqualTypeOf<'John'>();
+        expectTypeOf(template.get('lastName')).toEqualTypeOf<'Doe'>();
+        expectTypeOf(template.get('address.street')).toEqualTypeOf<string>();
+        expectTypeOf(template.get('address.city')).toEqualTypeOf<string>();
+        expectTypeOf(template.get('address.zip')).toEqualTypeOf<number>();
     })
 })
 
