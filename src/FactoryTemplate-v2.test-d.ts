@@ -54,10 +54,10 @@ describe('FactoryTemplateV2', () => {
             asyncPromise: async () => 'ok' as const,
             asyncDate: () => new Date(),
             
-            test(ctx) {
-                expectTypeOf(ctx.get('arrowFunction')).toEqualTypeOf<'ok'>();
-                expectTypeOf(ctx.get('asyncPromise')).toEqualTypeOf<'ok'>();
-                expectTypeOf(ctx.get('asyncDate')).toEqualTypeOf<Date>();
+            async test(ctx) {
+                expectTypeOf(await ctx.get('arrowFunction')).toEqualTypeOf<'ok'>();
+                expectTypeOf(await ctx.get('asyncPromise')).toEqualTypeOf<'ok'>();
+                expectTypeOf(await ctx.get('asyncDate')).toEqualTypeOf<Date>();
                 return 'ok';
             }
         })
@@ -69,31 +69,31 @@ describe('FactoryTemplateV2', () => {
             asyncPromise: async () => 'ok' as const,
             asyncDate: () => new Date(),
             
-            test() {
-                expectTypeOf(this.get('arrowFunction')).toEqualTypeOf<'ok'>();
-                expectTypeOf(this.get('asyncPromise')).toEqualTypeOf<'ok'>();
-                expectTypeOf(this.get('asyncDate')).toEqualTypeOf<Date>();
+            async test() {
+                expectTypeOf(await this.get('arrowFunction')).toEqualTypeOf<'ok'>();
+                expectTypeOf(await this.get('asyncPromise')).toEqualTypeOf<'ok'>();
+                expectTypeOf(await this.get('asyncDate')).toEqualTypeOf<Date>();
                 return 'ok';
             }
         })
     })
     
-    it('handles static fields', () => {
+    it('handles static fields', async () => {
         const template = new FactoryTemplateV2({
             staticField: 'ok' as const,
             staticPromise: Promise.resolve('ok' as const),
-            test(ctx) {
-                expectTypeOf(ctx.get('staticField')).toEqualTypeOf<'ok'>();
-                expectTypeOf(ctx.get('staticPromise')).toEqualTypeOf<'ok'>();
+            async test(ctx) {
+                expectTypeOf(await ctx.get('staticField')).toEqualTypeOf<'ok'>();
+                expectTypeOf(await ctx.get('staticPromise')).toEqualTypeOf<'ok'>();
             }
         });
         
-        expectTypeOf(template.get('staticField')).toEqualTypeOf<'ok'>();
-        expectTypeOf(template.get('staticPromise')).toEqualTypeOf<'ok'>();
+        expectTypeOf(await template.get('staticField')).toEqualTypeOf<'ok'>();
+        expectTypeOf(await template.get('staticPromise')).toEqualTypeOf<'ok'>();
     })
     
     describe('dot notation', () => {
-        it('works 1 level deep for simple schema fields', () => {
+        it('works 1 level deep for simple schema fields', async () => {
             const template = new FactoryTemplateV2({
                 firstName: () => 'John' as const,
                 lastName: () => 'Doe' as const,
@@ -105,20 +105,20 @@ describe('FactoryTemplateV2', () => {
                   }
                 },
                 
-                test(ctx) {
-                    expectTypeOf(ctx.get('firstName')).toEqualTypeOf<'John'>();
-                    expectTypeOf(ctx.get('lastName')).toEqualTypeOf<'Doe'>();
-                    expectTypeOf(ctx.get('address.street')).toEqualTypeOf<string>();
-                    expectTypeOf(ctx.get('address.city')).toEqualTypeOf<string>();
-                    expectTypeOf(ctx.get('address.zip')).toEqualTypeOf<number>();
+                async test(ctx) {
+                    expectTypeOf(await ctx.get('firstName')).toEqualTypeOf<'John'>();
+                    expectTypeOf(await ctx.get('lastName')).toEqualTypeOf<'Doe'>();
+                    expectTypeOf(await ctx.get('address.street')).toEqualTypeOf<string>();
+                    expectTypeOf(await ctx.get('address.city')).toEqualTypeOf<string>();
+                    expectTypeOf(await ctx.get('address.zip')).toEqualTypeOf<number>();
                 }
             })
             
-            expectTypeOf(template.get('firstName')).toEqualTypeOf<'John'>();
-            expectTypeOf(template.get('lastName')).toEqualTypeOf<'Doe'>();
-            expectTypeOf(template.get('address.street')).toEqualTypeOf<string>();
-            expectTypeOf(template.get('address.city')).toEqualTypeOf<string>();
-            expectTypeOf(template.get('address.zip')).toEqualTypeOf<number>();
+            expectTypeOf(await template.get('firstName')).toEqualTypeOf<'John'>();
+            expectTypeOf(await template.get('lastName')).toEqualTypeOf<'Doe'>();
+            expectTypeOf(await template.get('address.street')).toEqualTypeOf<string>();
+            expectTypeOf(await template.get('address.city')).toEqualTypeOf<string>();
+            expectTypeOf(await template.get('address.zip')).toEqualTypeOf<number>();
         });
         
         it('works 1 level deep for promised schema fields', async () => {

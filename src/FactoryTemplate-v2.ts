@@ -55,7 +55,7 @@ type ResolveSchemaOutput<TSchema> = {
 }
 
 type SchemaContext<TSchema, TOutput = ResolveSchemaOutput<TSchema>> = {
-    get<TKey extends Paths<TOutput> & string>(key: TKey): Get<TOutput, TKey>
+    get<TKey extends Paths<TOutput> & string>(key: TKey): Promise<Get<TOutput, TKey>>
 }
 
 export class FactoryTemplateV2<
