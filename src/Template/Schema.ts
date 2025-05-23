@@ -20,7 +20,7 @@ export type TemplateSchema<
         [key in keyof TSchema]: Simplify<Omit<TSchema, key>>
     },
 > = {
-    [key in keyof TSchema]: TemplateFunction<TSchema[key], TFieldContext[key]> | TSchema[key];
+    [key in keyof TSchema]: SchemaField<TSchema[key], TFieldContext[key]>
 } & ThisType<SchemaContext<TSchema>>;
 
 /**
@@ -53,7 +53,11 @@ export type TemplateFunction<
  * Defines a value / template function that will execute every time the
  * associated template or factory is run.
  */
-export type SchemaField<TValue, TResult = TValue | Promise<TValue>> = TResult | TemplateFunction<TResult>;
+export type SchemaField<
+    TValue,
+    TContext = BaseSchema,
+    TResult = TValue | Promise<TValue>
+> = TResult | TemplateFunction<TResult, TContext>;
 
 /**
  * Unwrap any promises within the provided schema to enable dot notation
