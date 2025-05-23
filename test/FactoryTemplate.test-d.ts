@@ -72,13 +72,13 @@ describe('FactoryTemplate', () => {
     
     describe('Template constructor context', () => {
         it(`is available through fields' "this" context`, async () => {
-            new FactoryTemplate({
-                firstName: 'test',
-                lastName: 'test',
+            const template = new FactoryTemplate({
+                firstName: 'test' as const,
+                lastName: 'test' as const,
                 age: (): number => 50,
                 async summary() {
-                    expectTypeOf(await this.get('firstName')).toEqualTypeOf<string>();
-                    expectTypeOf(await this.get('lastName')).toEqualTypeOf<string>();
+                    expectTypeOf(await this.get('firstName')).toEqualTypeOf<'test'>();
+                    expectTypeOf(await this.get('lastName')).toEqualTypeOf<'test'>();
                     expectTypeOf(await this.get('age')).toEqualTypeOf<number>();
                 },
             });
