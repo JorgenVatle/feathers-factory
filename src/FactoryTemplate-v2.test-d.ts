@@ -80,12 +80,15 @@ describe('FactoryTemplateV2', () => {
     it('handles static fields', () => {
         const template = new FactoryTemplateV2({
             staticField: 'ok' as const,
+            staticPromise: Promise.resolve('ok' as const),
             test(ctx) {
-                expectTypeOf(template.get('staticField')).toEqualTypeOf<'ok'>();
+                expectTypeOf(ctx.get('staticField')).toEqualTypeOf<'ok'>();
+                expectTypeOf(ctx.get('staticPromise')).toEqualTypeOf<Promise<'ok'>>();
             }
         });
         
         expectTypeOf(template.get('staticField')).toEqualTypeOf<'ok'>();
+        expectTypeOf(template.get('staticPromise')).toEqualTypeOf<Promise<'ok'>>();
     })
 })
 
