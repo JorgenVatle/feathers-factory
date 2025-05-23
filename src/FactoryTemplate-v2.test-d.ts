@@ -56,7 +56,7 @@ describe('FactoryTemplateV2', () => {
             
             test(ctx) {
                 expectTypeOf(ctx.get('arrowFunction')).toEqualTypeOf<'ok'>();
-                expectTypeOf(ctx.get('asyncPromise')).toEqualTypeOf<Promise<'ok'>>();
+                expectTypeOf(ctx.get('asyncPromise')).toEqualTypeOf<'ok'>();
                 expectTypeOf(ctx.get('asyncDate')).toEqualTypeOf<Date>();
                 return 'ok';
             }
@@ -71,7 +71,7 @@ describe('FactoryTemplateV2', () => {
             
             test() {
                 expectTypeOf(this.get('arrowFunction')).toEqualTypeOf<'ok'>();
-                expectTypeOf(this.get('asyncPromise')).toEqualTypeOf<Promise<'ok'>>();
+                expectTypeOf(this.get('asyncPromise')).toEqualTypeOf<'ok'>();
                 expectTypeOf(this.get('asyncDate')).toEqualTypeOf<Date>();
                 return 'ok';
             }
@@ -84,12 +84,12 @@ describe('FactoryTemplateV2', () => {
             staticPromise: Promise.resolve('ok' as const),
             test(ctx) {
                 expectTypeOf(ctx.get('staticField')).toEqualTypeOf<'ok'>();
-                expectTypeOf(ctx.get('staticPromise')).toEqualTypeOf<Promise<'ok'>>();
+                expectTypeOf(ctx.get('staticPromise')).toEqualTypeOf<'ok'>();
             }
         });
         
         expectTypeOf(template.get('staticField')).toEqualTypeOf<'ok'>();
-        expectTypeOf(template.get('staticPromise')).toEqualTypeOf<Promise<'ok'>>();
+        expectTypeOf(template.get('staticPromise')).toEqualTypeOf<'ok'>();
     })
     
     describe('dot notation', () => {
