@@ -14,14 +14,17 @@ export function defineTemplateSchema<
     const TFieldContext extends {
         [key in TSchemaKeys]: Simplify<Omit<TReturnType, key>>;
     },
+    const TTemplate extends {
+        [key in TSchemaKeys]: TemplateFunction<TReturnType[key], TFieldContext[key]>;
+    },
     const TSchemaKeys extends keyof TReturnType | keyof TFieldContext,
 >(template: {
     [key in TSchemaKeys]: TemplateFunction<TReturnType[key], TFieldContext[key]>;
-}) {
-    return template;
+}): TTemplate {
+    return template as any;
 }
 
-type TemplateFunction<
+export type TemplateFunction<
     TValue,
     TContext = unknown
 > = <TPeerContext extends TContext,>(context: TPeerContext) => TValue;
