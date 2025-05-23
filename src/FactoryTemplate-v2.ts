@@ -55,13 +55,17 @@ type ResolveSchemaOutput<TSchema> = {
     [key in keyof TSchema]: TSchema[key] extends Promise<infer T> ? T : TSchema[key];
 }
 
-type SchemaContext<TSchema, TOutput = ResolveSchemaOutput<TSchema>> = {
-    get<TKey extends Paths<TOutput> & string>(key: TKey): Promise<Get<TOutput, TKey>>
+export abstract class SchemaContext<TSchema, TOutput = ResolveSchemaOutput<TSchema>> {
+    public get<TKey extends Paths<TOutput> & string>(key: TKey): Promise<Get<TOutput, TKey>> {
+        return this._get(key);
+    }
+    
+    protected abstract _get(path: string): Promise<any>;
 }
 
 export class FactoryTemplateV2<
     TSchema extends Record<string, unknown>,
-> implements SchemaContext<TSchema> {
+> {
     constructor(public readonly _schema: TemplateSchema<TSchema, {
         [key in keyof TSchema]: SchemaContext<Simplify<Omit<TSchema, key>>>
     }>) {}
