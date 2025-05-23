@@ -1,3 +1,4 @@
+import type { Simplify } from 'type-fest';
 import type { SchemaContext } from './Context';
 
 /**
@@ -11,9 +12,9 @@ export type TemplateSchema<
      */
     TSchema extends BaseSchema,
     TFields extends {
-        [key in keyof TSchema]: SchemaContext<Omit<TSchema, key>>
+        [key in keyof TSchema]: SchemaContext<Simplify<Omit<TSchema, key>>>
     } = {
-        [key in keyof TSchema]: SchemaContext<Omit<TSchema, key>>
+        [key in keyof TSchema]: SchemaContext<Simplify<Omit<TSchema, key>>>
     }
 > = {
     [key in keyof TSchema]: SchemaField<TSchema[key], TFields[key]>;
