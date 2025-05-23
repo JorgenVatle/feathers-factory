@@ -1,6 +1,5 @@
 import type { Simplify } from 'type-fest';
-import { TemplateContext } from '../TemplateContext';
-import type { SchemaContext } from './Context';
+import { type SchemaContext, TemplateContext } from './Context';
 import type {
     BaseSchema,
     ResolveSchemaOutput,
