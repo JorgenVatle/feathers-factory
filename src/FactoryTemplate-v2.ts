@@ -44,10 +44,18 @@ export type TemplateSchema<
     },
 > = {
     [key in keyof TSchema]: TemplateFunction<TSchema[key], TFieldContext[key]> | TSchema[key];
-} & ThisType<SchemaContext<TSchema>>
+} & ThisType<SchemaContext<TSchema>>;
 
-type SchemaContext<TSchema> = {
-    get<TKey extends Paths<TSchema> & string>(key: TKey): Get<TSchema, TKey>
+/**
+ * Unwrap any promises within the provided schema to enable dot notation
+ * accessors for nested promisified fields.
+ */
+type ResolveSchemaOutput<TSchema> = {
+    [key in keyof TSchema]: TSchema[key] extends Promise<infer T> ? T : TSchema[key];
+}
+
+type SchemaContext<TSchema, TOutput = ResolveSchemaOutput<TSchema>> = {
+    get<TKey extends Paths<TOutput> & string>(key: TKey): Get<TOutput, TKey>
 }
 
 export class FactoryTemplateV2<
