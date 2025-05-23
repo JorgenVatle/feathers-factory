@@ -9,7 +9,7 @@ export type TemplateSchema<
     /**
      * Expected output type for the template.
      */
-    TSchema extends Record<string, SchemaField<any>>,
+    TSchema extends BaseSchema,
     
     TThis = SchemaContext<TSchema>,
 > = {
@@ -30,7 +30,7 @@ export type TemplateSchemaOverrides<
 /**
  * Base type for template schemas.
  */
-export type BaseSchema = Record<string, unknown>;
+export type BaseSchema = Record<string, SchemaField<any>>;
 
 /**
  * Template factory function.
