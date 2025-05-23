@@ -50,8 +50,9 @@ type SchemaContext<TFields> = {
 export class FactoryTemplateV2<
     TSchema extends Record<string, unknown>,
 > {
-    constructor(public readonly _schema: TemplateSchema<TSchema>) {
-    }
+    constructor(public readonly _schema: TemplateSchema<TSchema, {
+        [key in keyof TSchema]: FactoryTemplateV2<Simplify<Omit<TSchema, key>>>
+    }> & ThisType<FactoryTemplateV2<TSchema>>) {}
     
     public get<TKey extends keyof TSchema>(key: TKey): TSchema[TKey] {
         return {} as any; // todo
