@@ -1,6 +1,6 @@
 import type { Simplify } from 'type-fest';
-import type { SchemaContext } from './Template/Context';
-import type { BaseSchema, TemplateFunction, TemplateSchema } from './Template/Schema';
+import type { SchemaContext } from './Context';
+import type { BaseSchema, TemplateFunction, TemplateSchema } from './Schema';
 
 
 export function defineTemplateSchema<
