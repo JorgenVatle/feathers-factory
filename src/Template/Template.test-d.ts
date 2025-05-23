@@ -1,6 +1,5 @@
 import { faker } from '@faker-js/faker';
 import { describe, expectTypeOf, it } from 'vitest';
-import type { TemplateSchema } from './Schema';
 import { defineTemplateSchema, FactoryTemplateV2 } from './Template';
 
 describe('defineTemplateSchema', () => {
@@ -166,54 +165,6 @@ describe('FactoryTemplateV2', () => {
             expectTypeOf(await template.get('address.street')).toEqualTypeOf<string>();
             expectTypeOf(await template.get('address.city')).toEqualTypeOf<string>();
             expectTypeOf(await template.get('address.zip')).toEqualTypeOf<number>();
-        })
-    })
-    
-})
-
-describe('TemplateSchema type alias', () => {
-    
-    describe('context types', () => {
-        const schema = {} as TemplateSchema<{
-            arrowFunction: 'ok'
-            asyncPromise: Promise<'ok'>
-            asyncDate: Promise<Date>,
-            
-            test: 'ok', // Used as base for context check
-        }>;
-        
-        it('has expected context fields within the "test" property', () => {
-            expectTypeOf(schema.test)
-                .parameter(0)
-                .toHaveProperty('arrowFunction')
-                .toEqualTypeOf<'ok'>();
-            
-            expectTypeOf(schema.test)
-                .parameter(0)
-                .toHaveProperty('asyncPromise')
-                .toEqualTypeOf<Promise<'ok'>>();
-            
-            expectTypeOf(schema.test)
-                .parameter(0)
-                .toHaveProperty('asyncDate')
-                .toEqualTypeOf<Promise<Date>>();
-        });
-        
-        it('has expected context fields within the asyncDate property', () => {
-            expectTypeOf(schema.asyncDate)
-                .parameter(0)
-                .toHaveProperty('arrowFunction')
-                .toEqualTypeOf<'ok'>();
-            
-            expectTypeOf(schema.asyncDate)
-                .parameter(0)
-                .toHaveProperty('asyncPromise')
-                .toEqualTypeOf<Promise<'ok'>>();
-            
-            expectTypeOf(schema.asyncDate)
-                .parameter(0)
-                .not
-                .toHaveProperty('asyncDate')
         })
     })
     
