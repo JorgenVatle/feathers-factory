@@ -32,7 +32,7 @@ export class FactoryTemplateV2<
     const TContext extends SchemaContext<TSchema> = SchemaContext<TSchema>,
 > {
     constructor(
-        public readonly _schema:TemplateSchema<TSchema, TContext> & ThisType<TContext>,
+        public readonly _schema:TemplateSchema<TSchema, TContext>,
         public readonly scheme?: TSchema,
     ) {}
     
