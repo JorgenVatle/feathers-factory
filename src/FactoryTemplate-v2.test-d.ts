@@ -43,16 +43,6 @@ describe('defineTemplateSchema', () => {
         
     })
     
-    it('handles static fields', () => {
-        const schema = defineTemplateSchema({
-            staticField: 'ok' as const,
-            test(ctx) {
-                expectTypeOf(ctx.staticField).toEqualTypeOf<'ok'>();
-            }
-        });
-        
-        expectTypeOf(schema.staticField).returns.toEqualTypeOf<'ok'>();
-    })
 });
 
 describe('FactoryTemplateV2', () => {
@@ -85,6 +75,17 @@ describe('FactoryTemplateV2', () => {
                 return 'ok';
             }
         })
+    })
+    
+    it('handles static fields', () => {
+        const template = new FactoryTemplateV2({
+            staticField: 'ok' as const,
+            test(ctx) {
+                expectTypeOf(template.get('staticField')).toEqualTypeOf<'ok'>();
+            }
+        });
+        
+        expectTypeOf(template.get('staticField')).toEqualTypeOf<'ok'>();
     })
 })
 
