@@ -99,7 +99,7 @@ describe('FactoryTemplateV2', () => {
         });
         
         expectTypeOf(await template.get('fullName')).toEqualTypeOf<'John Doe'>();
-        expectTypeOf(await template.get('age')).toEqualTypeOf<number>();
+        expectTypeOf(await template.get('age')).toEqualTypeOf<50>();
         expectTypeOf(await template.get('description')).toEqualTypeOf<'John Doe (50)'>();
     })
     
