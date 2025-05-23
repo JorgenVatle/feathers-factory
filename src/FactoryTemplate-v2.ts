@@ -1,4 +1,5 @@
-import type { Get, Paths, Simplify } from 'type-fest';
+import type { Simplify } from 'type-fest';
+import type { SchemaContext } from './Template/Context';
 
 
 export function defineTemplateSchema<
@@ -46,27 +47,6 @@ export type TemplateSchema<
 > = {
     [key in keyof TSchema]: TemplateFunction<TSchema[key], TFieldContext[key]> | TSchema[key];
 } & ThisType<SchemaContext<TSchema>>;
-
-/**
- * Unwrap any promises within the provided schema to enable dot notation
- * accessors for nested promisified fields.
- */
-type ResolveSchemaOutput<TSchema> = {
-    [key in keyof TSchema]: TSchema[key] extends Promise<infer T> ? T : TSchema[key];
-}
-
-export abstract class SchemaContext<TSchema, TOutput = ResolveSchemaOutput<TSchema>> {
-    public get<TKey extends Paths<TOutput> & string>(key: TKey): Promise<Get<TOutput, TKey>> {
-        return this._get(key);
-    }
-    
-    public call<TKey extends Paths<TOutput> & string>(key: TKey): Promise<Get<TOutput, TKey>> {
-        return this._call(key);
-    }
-    
-    protected abstract _get(path: string): Promise<any>;
-    protected abstract _call(path: string): Promise<any>;
-}
 
 export class FactoryTemplateV2<
     TSchema extends BaseSchema,
