@@ -13,6 +13,7 @@ export abstract class SchemaContext<
     TPaths extends string = Extract<Paths<TOutput>, string>,
 > {
     public readonly _output!: TOutput;
+    public readonly _paths!: TPaths;
     
     public get<TKey extends keyof TOutput>(key: TKey): Promise<TOutput[TKey]>
     public get<TKey extends TPaths>(key: TKey): Promise<Get<TOutput, TKey>>
