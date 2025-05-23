@@ -1,7 +1,8 @@
 import { Params } from '@feathersjs/feathers';
 import { FeathersServiceNotDefined } from './Errors/FeathersFactoryError';
-import { FactoryTemplate, type TemplateOverrides, type TemplateSchema } from './FactoryTemplate';
+import { type TemplateOverrides, type TemplateSchema } from './FactoryTemplate';
 import type { FactoryCompatibleService } from './ServiceTypes';
+import { FactoryTemplate } from './Template/Template';
 
 export default class Factory<
     TSchema,

@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
 import { describe, expectTypeOf, it } from 'vitest';
-import { FactoryTemplate } from '../src/FactoryTemplate';
+import { FactoryTemplate } from '../src';
 
 describe('FactoryTemplate', () => {
     
