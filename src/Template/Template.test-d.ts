@@ -79,6 +79,30 @@ describe('FactoryTemplateV2', () => {
         })
     })
     
+    it('will infer types when referencing sibling functions from "this" context', async () => {
+        const template = new FactoryTemplateV2({
+            firstName: () => 'John' as const,
+            lastName: () => 'Doe' as const,
+            fullName() {
+                return `${this.get('firstName')} ${this.get('lastName')}` as 'John Doe';
+            },
+            age: () => 50,
+            async description() {
+                return `${await this.get('fullName')} (${await this.get('age')})`
+            },
+            async test() {
+                expectTypeOf(await this.get('fullName')).toEqualTypeOf<'John Doe'>();
+                expectTypeOf(await this.get('age')).toEqualTypeOf<number>();
+                expectTypeOf(await this.get('description')).toEqualTypeOf<'John Doe (50)'>();
+                return 'ok';
+            }
+        });
+        
+        expectTypeOf(await template.get('fullName')).toEqualTypeOf<'John Doe'>();
+        expectTypeOf(await template.get('age')).toEqualTypeOf<number>();
+        expectTypeOf(await template.get('description')).toEqualTypeOf<'John Doe (50)'>();
+    })
+    
     it('handles static fields', async () => {
         const template = new FactoryTemplateV2({
             staticField: 'ok' as const,
