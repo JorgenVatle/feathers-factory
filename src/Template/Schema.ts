@@ -55,9 +55,9 @@ export type TemplateFunction<
  */
 export type SchemaField<
     TValue,
-    TContext = unknown,
-    TResult = TValue | Promise<TValue>
-> = TemplateFunction<TResult, TContext>;
+> = Promise<TValue> | TValue | ((...params: any) => TValue | Promise<TValue>);
+
+export type SchemaFieldValue<T> = T extends SchemaField<infer T> ? T : T;
 
 /**
  * Unwrap any promises within the provided schema to enable dot notation
