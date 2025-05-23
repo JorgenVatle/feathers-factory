@@ -48,7 +48,11 @@ export type TemplateFunction<
  */
 export type SchemaField<
     TValue,
-> = Promise<TValue> | TValue | ((...params: any) => TValue | Promise<TValue>);
+    TSelf = any,
+> = /*Promise<TValue> | TValue | */
+    | ((this: any, ...params: [context: TSelf]) => TValue | Promise<TValue>)
+    | ((this: TSelf) => TValue | Promise<TValue>)
+    | (TValue | Promise<TValue>);
 
 export type SchemaFieldValue<T> = T extends SchemaField<infer T> ? T : T;
 
