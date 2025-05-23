@@ -1,4 +1,3 @@
-import type { Simplify } from 'type-fest';
 import type { SchemaContext } from './Context';
 
 /**
@@ -10,18 +9,12 @@ export type TemplateSchema<
     /**
      * Expected output type for the template.
      */
-    TSchema extends BaseSchema,
-    /**
-     * Mapped type of the context to expose to each field respectively.
-     * We need to omit the return type of the current field to prevent
-     * the compiler from squawking and deferring to 'unknown' for everything
-     */
-    TFieldContext extends Record<keyof TSchema, unknown> = {
-        [key in keyof TSchema]: Simplify<Omit<TSchema, key>>
-    },
+    TSchema extends Record<string, SchemaField<any>>,
+    
+    TThis = SchemaContext<TSchema>,
 > = {
-    [key in keyof TSchema]: TemplateFunction<TSchema[key], TFieldContext[key]> | SchemaField<TSchema[key]>
-} & ThisType<SchemaContext<TSchema>>;
+    [key in keyof TSchema]: (TemplateFunction<TSchema[key], TThis>) | (() => SchemaFieldValue<TSchema[key]>) | TSchema[key]
+} & ThisType<TThis>;
 
 /**
  * Accepts a partial schema template to override base schema values.

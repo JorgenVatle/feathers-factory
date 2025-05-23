@@ -1,6 +1,6 @@
 import type { Simplify } from 'type-fest';
 import type { SchemaContext } from './Context';
-import type { SchemaField, SchemaFieldValue, TemplateFunction } from './Schema';
+import type { SchemaField, TemplateFunction, TemplateSchema } from './Schema';
 
 
 export function defineTemplateSchema<
@@ -28,12 +28,9 @@ export function defineTemplateSchema<
 
 export class FactoryTemplateV2<
     TSchema extends Record<string, SchemaField<any>>,
-    TSelf = SchemaContext<TSchema>
 > {
     constructor(
-        public readonly _schema: {
-            [key in keyof TSchema]: (TemplateFunction<TSchema[key], TSelf>) | (() => SchemaFieldValue<TSchema[key]>) | TSchema[key];
-        } & ThisType<TSelf>) {}
+        public readonly _schema: TemplateSchema<TSchema>) {}
     
     declare get: SchemaContext<TSchema>['get'];
 }
