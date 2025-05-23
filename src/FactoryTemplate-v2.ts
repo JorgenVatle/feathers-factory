@@ -1,4 +1,4 @@
-import type { Simplify } from 'type-fest';
+import type { Get, Paths, Simplify } from 'type-fest';
 
 
 export function defineTemplateSchema<
@@ -57,7 +57,7 @@ export class FactoryTemplateV2<
         [key in keyof TSchema]: FactoryTemplateV2<Simplify<Omit<TSchema, key>>>
     }>) {}
     
-    public get<TKey extends keyof TSchema>(key: TKey): TSchema[TKey] {
+    public get<TKey extends Paths<TSchema> & string>(key: TKey): Get<TSchema, TKey> {
         return {} as any; // todo
     }
 }
