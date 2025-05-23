@@ -36,5 +36,11 @@ export type BaseSchema = Record<string, unknown>;
  */
 export type TemplateFunction<
     TValue,
-    TContext = unknown
+    TContext = BaseSchema
 > = <TPeerContext extends NoInfer<TContext>,>(context: TPeerContext) => TValue;
+
+/**
+ * Defines a value / template function that will execute every time the
+ * associated template or factory is run.
+ */
+export type SchemaField<TValue, TResult = TValue | Promise<TValue>> = TResult | TemplateFunction<TResult>;

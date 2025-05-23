@@ -1,4 +1,5 @@
 import type { Get, Paths } from 'type-fest';
+import type { BaseSchema, SchemaField } from './Schema';
 
 /**
  * Factory Template context.
@@ -24,5 +25,5 @@ export abstract class SchemaContext<TSchema, TOutput = ResolveSchemaOutput<TSche
  * accessors for nested promisified fields.
  */
 type ResolveSchemaOutput<TSchema> = {
-    [key in keyof TSchema]: TSchema[key] extends Promise<infer T> ? T : TSchema[key];
+    [key in keyof TSchema]: TSchema[key] extends SchemaField<infer T> ? T : TSchema[key];
 }
