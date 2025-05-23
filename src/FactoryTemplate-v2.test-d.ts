@@ -1,6 +1,7 @@
 import { faker } from '@faker-js/faker';
 import { describe, expectTypeOf, it } from 'vitest';
-import { defineTemplateSchema, FactoryTemplateV2, type TemplateSchema } from './FactoryTemplate-v2';
+import { defineTemplateSchema, FactoryTemplateV2 } from './FactoryTemplate-v2';
+import type { TemplateSchema } from './Template/Schema';
 
 describe('defineTemplateSchema', () => {
     
