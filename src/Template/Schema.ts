@@ -10,11 +10,14 @@ export type TemplateSchema<
      * Expected output type for the template.
      */
     TSchema extends BaseSchema,
-    
-    TThis = SchemaContext<TSchema>,
+    TFields extends {
+        [key in keyof TSchema]: SchemaContext<Omit<TSchema, key>>
+    } = {
+        [key in keyof TSchema]: SchemaContext<Omit<TSchema, key>>
+    }
 > = {
-    [key in keyof TSchema]: SchemaField<TSchema[key], TThis>;
-} & ThisType<TThis>;
+    [key in keyof TSchema]: SchemaField<TSchema[key], TFields[key]>;
+};
 
 /**
  * Accepts a partial schema template to override base schema values.
@@ -30,7 +33,7 @@ export type TemplateSchemaOverrides<
 /**
  * Base type for template schemas.
  */
-export type BaseSchema = Record<string, SchemaField<any>>;
+export type BaseSchema = Record<string, unknown>;
 
 /**
  * Template factory function.
