@@ -92,33 +92,58 @@ describe('FactoryTemplateV2', () => {
         expectTypeOf(template.get('staticPromise')).toEqualTypeOf<Promise<'ok'>>();
     })
     
-    it('provides access to nested fields through dot notation', () => {
-        const template = new FactoryTemplateV2({
-            firstName: () => 'John' as const,
-            lastName: () => 'Doe' as const,
-            address: () => {
-              return {
-                  street: faker.location.streetAddress(),
-                  city: faker.location.city(),
-                  zip: parseInt(faker.location.zipCode()),
-              }
-            },
+    describe('dot notation', () => {
+        it('works 1 level deep for simple schema fields', () => {
+            const template = new FactoryTemplateV2({
+                firstName: () => 'John' as const,
+                lastName: () => 'Doe' as const,
+                address: () => {
+                  return {
+                      street: faker.location.streetAddress(),
+                      city: faker.location.city(),
+                      zip: parseInt(faker.location.zipCode()),
+                  }
+                },
+                
+                test(ctx) {
+                    expectTypeOf(ctx.get('firstName')).toEqualTypeOf<'John'>();
+                    expectTypeOf(ctx.get('lastName')).toEqualTypeOf<'Doe'>();
+                    expectTypeOf(ctx.get('address.street')).toEqualTypeOf<string>();
+                    expectTypeOf(ctx.get('address.city')).toEqualTypeOf<string>();
+                    expectTypeOf(ctx.get('address.zip')).toEqualTypeOf<number>();
+                }
+            })
             
-            test(ctx) {
-                expectTypeOf(ctx.get('firstName')).toEqualTypeOf<'John'>();
-                expectTypeOf(ctx.get('lastName')).toEqualTypeOf<'Doe'>();
-                expectTypeOf(ctx.get('address.street')).toEqualTypeOf<string>();
-                expectTypeOf(ctx.get('address.city')).toEqualTypeOf<string>();
-                expectTypeOf(ctx.get('address.zip')).toEqualTypeOf<number>();
-            }
-        })
+            expectTypeOf(template.get('firstName')).toEqualTypeOf<'John'>();
+            expectTypeOf(template.get('lastName')).toEqualTypeOf<'Doe'>();
+            expectTypeOf(template.get('address.street')).toEqualTypeOf<string>();
+            expectTypeOf(template.get('address.city')).toEqualTypeOf<string>();
+            expectTypeOf(template.get('address.zip')).toEqualTypeOf<number>();
+        });
         
-        expectTypeOf(template.get('firstName')).toEqualTypeOf<'John'>();
-        expectTypeOf(template.get('lastName')).toEqualTypeOf<'Doe'>();
-        expectTypeOf(template.get('address.street')).toEqualTypeOf<string>();
-        expectTypeOf(template.get('address.city')).toEqualTypeOf<string>();
-        expectTypeOf(template.get('address.zip')).toEqualTypeOf<number>();
+        it('works 1 level deep for promised schema fields', async () => {
+            const template = new FactoryTemplateV2({
+                firstName: () => 'John' as const,
+                lastName: () => 'Doe' as const,
+                address: () => Promise.resolve({
+                    street: faker.location.streetAddress(),
+                    city: faker.location.city(),
+                    zip: parseInt(faker.location.zipCode()),
+                }),
+                
+                async test(ctx) {
+                    expectTypeOf(await ctx.get('address.street')).toEqualTypeOf<string>();
+                    expectTypeOf(await ctx.get('address.city')).toEqualTypeOf<string>();
+                    expectTypeOf(await ctx.get('address.zip')).toEqualTypeOf<number>();
+                }
+            })
+            
+            expectTypeOf(await template.get('address.street')).toEqualTypeOf<string>();
+            expectTypeOf(await template.get('address.city')).toEqualTypeOf<string>();
+            expectTypeOf(await template.get('address.zip')).toEqualTypeOf<number>();
+        })
     })
+    
 })
 
 describe('TemplateSchema type alias', () => {
