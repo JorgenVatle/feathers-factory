@@ -60,7 +60,12 @@ export abstract class SchemaContext<TSchema, TOutput = ResolveSchemaOutput<TSche
         return this._get(key);
     }
     
+    public call<TKey extends Paths<TOutput> & string>(key: TKey): Promise<Get<TOutput, TKey>> {
+        return this._call(key);
+    }
+    
     protected abstract _get(path: string): Promise<any>;
+    protected abstract _call(path: string): Promise<any>;
 }
 
 export class FactoryTemplateV2<
