@@ -51,4 +51,7 @@ export class FactoryTemplate<
 /**
  * Unwrap a factory template to resolve the final output type.
  */
-export type InferOutput<T> = T extends FactoryTemplate<infer TOutput> ? ResolveSchemaOutput<TOutput> : never;
+export type InferOutput<T> =
+    T extends FactoryTemplate<infer TOutput>
+    ? ResolveSchemaOutput<TOutput>
+    : ResolveSchemaOutput<T>;
