@@ -1,6 +1,6 @@
 import Clues from 'clues';
 import type { Get, Paths } from 'type-fest';
-import type { BaseSchema, ResolveSchemaOutput, SchemaFieldValue } from './Schema';
+import type { ResolveSchemaOutput, SchemaFieldValue } from './Schema';
 import { FactoryTemplate } from './Template';
 
 /**
@@ -36,7 +36,7 @@ export abstract class SchemaContext<
  *
  * The `this` type within your template's generator functions.
  */
-export class TemplateContext<TSchema extends BaseSchema> extends SchemaContext<TSchema> {
+export class TemplateContext<TSchema> extends SchemaContext<TSchema> {
     /**
      * Internal state for the getter machine.
      * The structure of this field can be unexpected unless explicitly accessed
