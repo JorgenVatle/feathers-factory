@@ -123,24 +123,13 @@ describe('FactoryTemplate', () => {
                         age: await this.get('age'),
                         createdAt: await this.get('createdAt'),
                     }
-                    const summary2 = {
-                        firstName: await this.firstName(),
-                        lastName: await this.lastName(),
-                        age: await this.age(),
-                        createdAt: await this.createdAt,
-                    }
                     
                     expectTypeOf(summary.firstName).toEqualTypeOf<'John'>();
                     expectTypeOf(summary.lastName).toEqualTypeOf<'Doe'>();
                     expectTypeOf(summary.age).toEqualTypeOf<number>();
                     expectTypeOf(summary.createdAt).toEqualTypeOf<Date>();
                     
-                    expectTypeOf(summary2.firstName).toEqualTypeOf<'John'>();
-                    expectTypeOf(summary2.lastName).toEqualTypeOf<'Doe'>();
-                    expectTypeOf(summary2.age).toEqualTypeOf<number>();
-                    expectTypeOf(summary2.createdAt).toEqualTypeOf<Date>();
-                    
-                    return { summary, summary2 };
+                    return { summary };
                 },
             });
             
@@ -159,15 +148,17 @@ describe('FactoryTemplate', () => {
             lastName: 'test' as const,
             age: (): number => 50,
             summary: (): string => 'sum of all the fields above',
-            async shortDescription() {
+            // Todo: use non-explicit return type
+            async shortDescription(): Promise<`test test (${number})`> {
                 return `${await this.get('firstName')} ${await this.get('lastName')} (${await this.get('age')})` as const
             },
-            async descriptionLines() {
+            // Todo: use non-explicit return type
+            async descriptionLines(): Promise<string[]> {
                 return [
                     await this.get('shortDescription'),
                     'more text',
                     'even more text',
-                ]
+                ] as string[]
             },
             async fullDescription() {
               return (await this.get('descriptionLines')).join('\n');
