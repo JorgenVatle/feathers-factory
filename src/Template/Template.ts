@@ -32,18 +32,6 @@ export function defineTemplateSchema<
     return template as any;
 }
 
-export class FactoryTemplateV2<
-    TSchema extends BaseSchema,
-    TContext extends SchemaContext<TSchema> = SchemaContext<TSchema>,
-> {
-    constructor(
-        public readonly _schema: TemplateSchema<TSchema>,
-        public readonly scheme?: TSchema,
-    ) {}
-    
-    declare get: NoInfer<TContext>['get'];
-}
-
 /**
  * Factory boilerplate template.
  * Defines the fields that will be generated when factories are called.

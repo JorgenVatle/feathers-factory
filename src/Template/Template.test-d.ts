@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
 import { describe, expectTypeOf, it } from 'vitest';
-import { defineTemplateSchema, FactoryTemplateV2 } from './Template';
+import { defineTemplateSchema, FactoryTemplate } from './Template';
 
 describe('defineTemplateSchema', () => {
     
@@ -46,10 +46,10 @@ describe('defineTemplateSchema', () => {
     
 });
 
-describe('FactoryTemplateV2', () => {
+describe('FactoryTemplate', () => {
     
     it('exposes return types of sibling functions through a context parameter', () => {
-        const template = new FactoryTemplateV2({
+        const template = new FactoryTemplate({
             arrowFunction: () => 'ok' as const,
             // Todo: use non-explicit type
             asyncPromise: async (): Promise<'ok'> => 'ok' as const,
@@ -65,7 +65,7 @@ describe('FactoryTemplateV2', () => {
     })
     
     it('exposes return types of sibling functions through method "this" context', () => {
-        const template = new FactoryTemplateV2({
+        const template = new FactoryTemplate({
             arrowFunction: () => 'ok' as const,
             asyncPromise: async () => 'ok' as const,
             asyncDate: () => { return new Date() },
@@ -87,7 +87,7 @@ describe('FactoryTemplateV2', () => {
     })
     
     it('will infer types when referencing sibling functions from "this" context', async () => {
-        const template = new FactoryTemplateV2({
+        const template = new FactoryTemplate({
             firstName: () => 'John' as const,
             // @ts-expect-error Todo: fix type error
             lastName: () => 'Doe' as const,
@@ -112,7 +112,7 @@ describe('FactoryTemplateV2', () => {
     })
     
     it('handles static fields', async () => {
-        const template = new FactoryTemplateV2({
+        const template = new FactoryTemplate({
             staticField: 'ok' as const,
             staticPromise: Promise.resolve('ok' as const),
             async testThis() {
@@ -130,7 +130,7 @@ describe('FactoryTemplateV2', () => {
     })
     
     it('handles method fields', async () => {
-        const template = new FactoryTemplateV2({
+        const template = new FactoryTemplate({
             staticField() {
                 return 'ok' as const
             },
@@ -154,7 +154,7 @@ describe('FactoryTemplateV2', () => {
     
     describe('dot notation', () => {
         it('works 1 level deep for simple schema fields', async () => {
-            const template = new FactoryTemplateV2({
+            const template = new FactoryTemplate({
                 firstName: () => 'John' as const,
                 lastName: () => 'Doe' as const,
                 address: () => {
@@ -190,7 +190,7 @@ describe('FactoryTemplateV2', () => {
         });
         
         it('works 1 level deep for promised schema fields', async () => {
-            const template = new FactoryTemplateV2({
+            const template = new FactoryTemplate({
                 firstName: () => 'John' as const,
                 lastName: () => 'Doe' as const,
                 address: () => Promise.resolve({
