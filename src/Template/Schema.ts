@@ -7,7 +7,12 @@ import type { SchemaContext } from './Context';
  */
 export type TemplateSchema<
     TSchema,
-> = TSchema & ThisType<SchemaContext<TSchema>>
+    TSchema2 = TSchema
+> = ExtendTemplateSchema<TSchema> & ThisType<SchemaContext<TSchema>> & { [key in keyof TSchema2]: SchemaField<TSchema2[key], SchemaContext<TSchema>> };
+
+type ExtendTemplateSchema<T> = {
+    [K in keyof T]: T[K];
+};
 
 
 /**
