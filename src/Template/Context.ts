@@ -12,13 +12,13 @@ import { FactoryTemplate } from './Template';
 export abstract class SchemaContext<
     TSchema,
     TOutput = ResolveSchemaOutput<TSchema>,
-    TPaths extends string = Extract<Paths<TOutput>, string>,
+    TPaths = Extract<Paths<TOutput>, string>,
 > {
     public readonly _output!: TOutput;
     public readonly _paths!: TPaths;
     
     public get<TKey extends keyof TOutput>(key: TKey): Promise<TOutput[TKey]>
-    public get<TKey extends TPaths>(key: TKey): Promise<Get<TOutput, TKey>>
+    public get<TKey extends TPaths & string>(key: TKey): Promise<Get<TOutput, TKey>>
     public get(key: TPaths | keyof TOutput): Promise<unknown> {
         // @ts-expect-error Todo: resolve type error
         return this._get(key);
