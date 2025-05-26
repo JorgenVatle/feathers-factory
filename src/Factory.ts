@@ -1,7 +1,7 @@
 import { Params } from '@feathersjs/feathers';
 import { FeathersServiceNotDefined } from './Errors/FeathersFactoryError';
 import type { FactoryCompatibleService } from './ServiceTypes';
-import { FactoryTemplate, type TemplateSchema, type TemplateSchemaOverrides } from './Template';
+import { FactoryTemplate, type SchemaField, type TemplateSchema, type TemplateSchemaOverrides } from './Template';
 
 export default class Factory<
     TSchema,
@@ -16,7 +16,11 @@ export default class Factory<
      */
     public constructor(
         private readonly service: FactoryCompatibleService<TSchema, TResult, TParams>,
-        data: TemplateSchema<TSchema> | FactoryTemplate<TSchema>,
+        data: TemplateSchema<{
+            [key in keyof TSchema]: SchemaField<TSchema[key]>
+        }> | FactoryTemplate<{
+            [key in keyof TSchema]: SchemaField<TSchema[key]>
+        }>,
         defaultParams: TemplateSchema<TParams> = {} as any,
     ) {
         if (!service) {
@@ -24,8 +28,10 @@ export default class Factory<
         }
         
         if (data instanceof FactoryTemplate) {
+            // @ts-expect-error mismatched types
             this.data = data;
         } else {
+            // @ts-expect-error mismatched types
             this.data = new FactoryTemplate(data);
         }
         
