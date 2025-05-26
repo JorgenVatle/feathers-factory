@@ -1,7 +1,7 @@
 import { Params } from '@feathersjs/feathers';
 import Factory from './Factory';
-import type { TemplateOverrides } from './FactoryTemplate';
 import type { HasBeenAugmented } from './lib/Utilities';
+import type { TemplateSchemaOverrides } from './Template';
 
 
 /**
@@ -83,7 +83,7 @@ export default new class GlobalFactories {
      */
     public createMany<
         TName extends FactoryName
-    >(quantity: number, factoryName: TName, overrides?: TemplateOverrides<any>, params?: Params) {
+    >(quantity: number, factoryName: TName, overrides?: GlobalFactoryOverrides<TName>, params?: Params) {
         const factory = this.getFactory(factoryName);
         return factory.createMany(quantity, overrides, params);
     }
@@ -97,7 +97,7 @@ export default new class GlobalFactories {
      */
     public get<
         TName extends FactoryName
-    >(factoryName: TName, overrides?: TemplateOverrides<TName>) {
+    >(factoryName: TName, overrides?: GlobalFactoryOverrides<TName>) {
         const factory = this.factories[factoryName];
 
         if (!factory) {
@@ -115,7 +115,7 @@ type GlobalFactory<TName extends FactoryName> = FactoryRegistry[TName];
 type GlobalFactoryOverrides<
     TName extends FactoryName
 > = GlobalFactory<TName> extends Factory<infer TSchema, infer TResult>
-    ? TemplateOverrides<TSchema>
+    ? TemplateSchemaOverrides<TSchema>
     : never;
 
 type FactoryRegistry = HasBeenAugmented<GlobalFactories> extends true
