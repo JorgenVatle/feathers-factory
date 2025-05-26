@@ -1,7 +1,8 @@
 import { faker } from '@faker-js/faker';
 import { describe, expect, expectTypeOf, it, vi } from 'vitest';
-import { FactoryTemplate, TemplateContext } from '../src';
+import { FactoryTemplate } from '../src';
 import { sleep } from '../src/lib/Utilities';
+import { TemplateContext } from '../src/Template/Context';
 
 describe('TemplateContext', () => {
     
