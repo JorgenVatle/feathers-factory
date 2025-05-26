@@ -50,6 +50,7 @@ export class FactoryTemplateV2<
  */
 export class FactoryTemplate<
     TSchema,
+    TContext extends SchemaContext<TSchema> = SchemaContext<TSchema>
 > {
     constructor(public readonly _schema: TemplateSchema<TSchema>) {
     }
@@ -74,4 +75,6 @@ export class FactoryTemplate<
             ...overrides,
         });
     }
+    
+    declare get: NoInfer<TContext>['get'];
 }
