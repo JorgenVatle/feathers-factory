@@ -4,5 +4,7 @@
   "initialVersions": {
     "feathers-factory": "5.0.1"
   },
-  "changesets": []
+  "changesets": [
+    "ripe-boxes-dig"
+  ]
 }
