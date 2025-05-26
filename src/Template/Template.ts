@@ -8,9 +8,10 @@ import type { BaseSchema, ResolveSchemaOutput, TemplateSchema, TemplateSchemaOve
  */
 export class FactoryTemplate<
     TSchema,
-    TContext extends SchemaContext<TSchema> = SchemaContext<TSchema>
+    TContext extends SchemaContext<TSchema> = SchemaContext<TSchema>,
+    TSchema2 = TSchema,
 > {
-    constructor(public readonly _schema: TemplateSchema<TSchema>) {
+    constructor(public readonly _schema: TemplateSchema<TSchema, TSchema2, TContext>) {
     }
     
     /**
