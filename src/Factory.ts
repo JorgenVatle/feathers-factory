@@ -74,7 +74,8 @@ export default class Factory<
      *
      * @param overrides
      */
-    public get(overrides: TemplateSchemaOverrides<TSchema> = {}) {
+    public get(overrides: TemplateSchemaOverrides<TSchema> = {}): Promise<TResult> {
+        // @ts-expect-error type mismatch
         return this.data.resolve(overrides);
     }
     
