@@ -67,7 +67,7 @@ export class FactoryTemplate<
     
     public extend<
         TOverrides extends BaseSchema,
-    >(overrides: TemplateSchemaOverrides<TSchema & TOverrides>): FactoryTemplate<TSchema & TOverrides> {
+    >(overrides: TemplateSchemaOverrides<Omit<TSchema, keyof TOverrides> & TOverrides>): FactoryTemplate<Omit<TSchema, keyof TOverrides> & TOverrides> {
         // @ts-expect-error Incompatible types
         return new FactoryTemplate({
             ...this._schema,
