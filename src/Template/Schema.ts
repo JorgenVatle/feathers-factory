@@ -6,16 +6,12 @@ import type { SchemaContext } from './Context';
  * associated template or factory is executed.
  */
 export type TemplateSchema<
-    /**
-     * Expected output type for the template.
-     */
     TSchema,
 > = {
-    [key in keyof TSchema]: TSchema[key];
-} & ThisType<TSchema & {
-    // get<TKey extends keyof TSchema>(key: TKey): Promise<SchemaFieldValue<TSchema[TKey]>>
-    get: <TKey extends keyof TSchema>(key: TKey) => Promise<SchemaFieldValue<TSchema[TKey]>>
-}>;
+    [K in keyof TSchema]: (TSchema[K] extends (...args: any[]) => any
+                          ? TSchema[K] | NoInfer<(ctx: SchemaContext<TSchema>) => ReturnType<TSchema[K]>>
+                          : (() => TSchema[K]) | NoInfer<(ctx: SchemaContext<TSchema>) => TSchema[K]>) | TSchema[K]
+} & ThisType<SchemaContext<TSchema>>
 
 
 /**
