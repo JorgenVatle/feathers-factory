@@ -2,7 +2,7 @@ import { Service } from '@feathersjs/feathers';
 import { beforeAll, describe, expect, it } from 'vitest';
 
 import { Factory, FactoryTemplate, GlobalFactories } from '../src';
-import type { InferOutput } from '../src/Template/Template';
+import type { InferOutput } from '../src/Template';
 import Feathers from './feathers/App';
 
 let _service: Service<any>;
@@ -77,11 +77,9 @@ describe('Global Feathers Factory', () => {
 const ServiceTemplate = new FactoryTemplate({
     id: () => process.hrtime().join('-'),
     property: 'ok',
-    // @ts-expect-error Todo: fix circular reference
     function: () => 'ok',
     method() { return 'ok' },
     get getter() { return 'ok' },
-    // @ts-expect-error Todo: fix circular reference
     async: async () => 'ok',
     async selfReference() {
         const checkSelf = async <T>(key: T): Promise<[T, [T]]> => {

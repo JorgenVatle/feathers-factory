@@ -45,7 +45,6 @@ describe('FactoryTemplate', () => {
     it('will infer types when referencing sibling functions from "this" context', async () => {
         const template = new FactoryTemplate({
             firstName: () => 'John' as const,
-            // @ts-expect-error Todo: fix circular reference
             lastName: () => 'Doe' as const,
             fullName() {
                 return `${this.get('firstName')} ${this.get('lastName')}` as 'John Doe';
