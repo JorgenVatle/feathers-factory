@@ -59,6 +59,14 @@ type FieldValue<T> = Promise<T> | T;
 /**
  * Unwrap any promises within the provided schema to enable dot notation
  * accessors for nested promisified fields.
+ * @example
+ * type schema = {
+ *     userId: () => 123,
+ *     createdAt: () => new Date()
+ * }
+ *
+ * const data: ResolveSchemaOutput<schema>
+ *     // -> { userId: number, createdAt: Date }
  */
 export type ResolveSchemaOutput<TSchema> = {
     [key in keyof TSchema]: SchemaFieldValue<TSchema[key]>;
