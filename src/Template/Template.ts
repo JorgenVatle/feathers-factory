@@ -49,7 +49,7 @@ export class FactoryTemplateV2<
  * Defines the fields that will be generated when factories are called.
  */
 export class FactoryTemplate<
-    TSchema extends BaseSchema,
+    TSchema,
 > {
     constructor(public readonly _schema: TemplateSchema<TSchema>) {
     }

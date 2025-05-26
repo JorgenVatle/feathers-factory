@@ -10,7 +10,7 @@ import { FactoryTemplate } from './Template';
  * The `this` type within your template's generator functions.
  */
 export abstract class SchemaContext<
-    TSchema extends BaseSchema,
+    TSchema,
     TOutput extends ResolveSchemaOutput<TSchema> = ResolveSchemaOutput<TSchema>,
     TPaths extends string = Extract<Paths<TOutput>, string>,
 > {

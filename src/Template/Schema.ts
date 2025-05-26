@@ -10,14 +10,9 @@ export type TemplateSchema<
     /**
      * Expected output type for the template.
      */
-    TSchema extends BaseSchema,
-    TFields extends {
-        [key in keyof TSchema]: SchemaContext<Simplify<Omit<TSchema, key>>>
-    } = {
-        [key in keyof TSchema]: SchemaContext<Simplify<Omit<TSchema, key>>>
-    }
+    TSchema,
 > = {
-    [key in keyof TSchema]: SchemaField<TSchema[key], TFields[key]>;
+    [key in keyof TSchema]: SchemaField<TSchema[key], SchemaContext<Simplify<Omit<TSchema, key>>>>;
 } & ThisType<SchemaContext<TSchema>>;
 
 /**
