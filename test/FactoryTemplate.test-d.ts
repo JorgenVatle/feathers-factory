@@ -123,13 +123,24 @@ describe('FactoryTemplate', () => {
                         age: await this.get('age'),
                         createdAt: await this.get('createdAt'),
                     }
+                    const summary2 = {
+                        firstName: await this.firstName(),
+                        lastName: await this.lastName(),
+                        age: await this.age(),
+                        createdAt: await this.createdAt,
+                    }
                     
                     expectTypeOf(summary.firstName).toEqualTypeOf<'John'>();
                     expectTypeOf(summary.lastName).toEqualTypeOf<'Doe'>();
                     expectTypeOf(summary.age).toEqualTypeOf<number>();
                     expectTypeOf(summary.createdAt).toEqualTypeOf<Date>();
                     
-                    return summary;
+                    expectTypeOf(summary2.firstName).toEqualTypeOf<'John'>();
+                    expectTypeOf(summary2.lastName).toEqualTypeOf<'Doe'>();
+                    expectTypeOf(summary2.age).toEqualTypeOf<number>();
+                    expectTypeOf(summary2.createdAt).toEqualTypeOf<Date>();
+                    
+                    return { summary, summary2 };
                 },
             });
             

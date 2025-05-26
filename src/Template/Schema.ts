@@ -12,8 +12,15 @@ export type TemplateSchema<
      */
     TSchema,
 > = {
-    [key in keyof TSchema]: SchemaField<TSchema[key], SchemaContext<Simplify<Omit<TSchema, key>>>>;
-} & ThisType<SchemaContext<TSchema>>;
+    [key in keyof TSchema]: TSchema[key];
+} & ThisType<TSchema & {
+    // get<TKey extends keyof TSchema>(key: TKey): Promise<SchemaFieldValue<TSchema[TKey]>>
+    get: <TKey extends keyof TSchema>(key: TKey) => Promise<SchemaFieldValue<TSchema[TKey]>>
+}>;
+
+type InferSchemaContext<TSchema, TKey> = [TSchema] extends [{
+    [key in keyof TSchema as key extends TKey ? never : key]: TSchema[key]
+}] ? SchemaContext<Simplify<TSchema>> : never;
 
 /**
  * Accepts a partial schema template to override base schema values.
