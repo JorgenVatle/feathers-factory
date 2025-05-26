@@ -11,7 +11,7 @@ import { FactoryTemplate } from './Template';
  */
 export abstract class SchemaContext<
     TSchema,
-    TOutput extends ResolveSchemaOutput<TSchema> = ResolveSchemaOutput<TSchema>,
+    TOutput = ResolveSchemaOutput<TSchema>,
     TPaths extends string = Extract<Paths<TOutput>, string>,
 > {
     public readonly _output!: TOutput;
