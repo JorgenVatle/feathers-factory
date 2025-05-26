@@ -1,8 +1,7 @@
 import { Service } from '@feathersjs/feathers';
 import { beforeAll, describe, expect, it } from 'vitest';
 
-import { Factory, FactoryTemplate, GlobalFactories } from '../src';
-import type { InferOutput } from '../src/Template/Template';
+import { Factory, FactoryTemplate, GlobalFactories, type ResolveSchemaOutput } from '../src';
 import Feathers from './feathers/App';
 
 let _service: Service<any>;
@@ -100,11 +99,11 @@ const ServiceTemplate = new FactoryTemplate({
 });
 
 const service = {
-    async create(data: InferOutput<typeof ServiceTemplate>) {
+    async create(data: ResolveSchemaOutput<typeof ServiceTemplate>) {
         await _service.create(data);
         return data;
     },
-    get(id: string): Promise<InferOutput<typeof ServiceTemplate>> {
+    get(id: string): Promise<ResolveSchemaOutput<typeof ServiceTemplate>> {
         return _service.get(id);
     }
 }
