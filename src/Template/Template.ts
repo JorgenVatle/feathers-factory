@@ -38,5 +38,12 @@ export class FactoryTemplate<
         });
     }
     
-    declare get: NoInfer<TContext>['get'];
+    /**
+     * Retrieve a value from the template within a new templating context.
+     */
+    public get get(): NoInfer<TContext>['get'] {
+        const context =  new TemplateContext(this.extend({}));
+        // @ts-expect-error Type mismatch.
+        return (key: any) => context.get(key);
+    };
 }
