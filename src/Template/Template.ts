@@ -48,3 +48,8 @@ export class FactoryTemplate<
         return (key: any) => context.get(key);
     };
 }
+
+/**
+ * Unwrap a factory template to resolve the final output type.
+ */
+export type InferOutput<T> = T extends FactoryTemplate<infer TOutput> ? ResolveSchemaOutput<TOutput> : never;
