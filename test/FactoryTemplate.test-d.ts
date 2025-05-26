@@ -106,7 +106,7 @@ describe('FactoryTemplate', () => {
         })
         
         it(`template methods can reference other methods with implicit return types`, async () => {
-            new FactoryTemplate({
+            const template = new FactoryTemplate({
                 // Synchronous function
                 firstName: () => 'John' as const,
                 // method without context
@@ -132,6 +132,12 @@ describe('FactoryTemplate', () => {
                     return summary;
                 },
             });
+            
+            const resolved = await template.resolve();
+            expectTypeOf(resolved.firstName).toEqualTypeOf<'John'>();
+            expectTypeOf(resolved.lastName).toEqualTypeOf<'Doe'>();
+            expectTypeOf(resolved.age).toEqualTypeOf<number>();
+            expectTypeOf(resolved.createdAt).toEqualTypeOf<Date>();
             
         })
     })
