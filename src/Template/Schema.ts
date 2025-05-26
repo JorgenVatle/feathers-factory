@@ -19,9 +19,7 @@ export type TemplateSchema<
  * Accepts a partial schema template to override base schema values.
 * Used for template resolve() and extend() methods.
  */
-export type TemplateSchemaOverrides<
-    TSchema extends BaseSchema,
-> = {
+export type TemplateSchemaOverrides<TSchema> = {
     [key in keyof TSchema]?: SchemaField<TSchema[key]>;
 } & ThisType<SchemaContext<TSchema>>;
 
