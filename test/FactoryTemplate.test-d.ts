@@ -181,7 +181,7 @@ describe('FactoryTemplate', () => {
                     expectTypeOf(await this.get('firstName')).toEqualTypeOf<'test'>();
                     expectTypeOf(await this.get('lastName')).toEqualTypeOf<'test'>();
                     expectTypeOf(await this.get('age')).toEqualTypeOf<number>();
-                    expectTypeOf(await this.get('shortDescription')).toEqualTypeOf<`test test ${number}`>();
+                    expectTypeOf(await this.get('shortDescription')).toEqualTypeOf<`test test (${number})`>();
                     expectTypeOf(await this.get('descriptionLines')).toEqualTypeOf<string[]>();
                     expectTypeOf(await this.get('fullDescription')).toEqualTypeOf<string>();
                     return 'test' as any;
