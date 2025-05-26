@@ -77,9 +77,11 @@ describe('Global Feathers Factory', () => {
 const ServiceTemplate = new FactoryTemplate({
     id: () => process.hrtime().join('-'),
     property: 'ok',
+    // @ts-expect-error Todo: fix circular reference
     function: () => 'ok',
     method() { return 'ok' },
     get getter() { return 'ok' },
+    // @ts-expect-error Todo: fix circular reference
     async: async () => 'ok',
     async selfReference() {
         const checkSelf = async <T>(key: T): Promise<[T, [T]]> => {
