@@ -58,7 +58,7 @@ export class FactoryTemplate<
      * Run all factory functions in the template and return final result to be
      * stored in the database.
      */
-    public resolve(overrides?: TemplateSchemaOverrides<TSchema>): Promise<ResolveSchemaOutput<TSchema>> {
+    public resolve(overrides?: TemplateSchemaOverrides<ResolveSchemaOutput<TSchema>>): Promise<ResolveSchemaOutput<TSchema>> {
         const template = this.extend(overrides || {});
         const context = new TemplateContext(template);
         
