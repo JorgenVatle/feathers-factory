@@ -24,6 +24,10 @@ export class FactoryTemplate<
         return context._resolveState();
     }
     
+    /**
+     * Create a new factory template using the current template's schema as
+     * defaults for the new template.
+     */
     public extend<
         TOverrides extends BaseSchema,
     >(overrides: TemplateSchemaOverrides<Omit<TSchema, keyof TOverrides> & TOverrides>): FactoryTemplate<Omit<TSchema, keyof TOverrides> & TOverrides> {
