@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, expectTypeOf, it } from 'vitest';
 import { FactoryTemplate } from '../src';
 
 
@@ -31,6 +31,15 @@ describe('Real-world examples', () => {
         it('calculates the correct subtotal', async () => {
             await expect(template.resolve()).resolves.toHaveProperty('subtotal', 10);
         });
+        
+        it('resolves the correct items type', async () => {
+            const resolved = await template.resolve();
+            expectTypeOf(resolved.items).toEqualTypeOf<{
+                description: string;
+                quantity: number;
+                price: number;
+            }[]>();
+        })
         
         it.todo('can use nested functions to generate any number of line items');
     });
