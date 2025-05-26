@@ -1,8 +1,8 @@
 import { faker } from '@faker-js/faker';
 import { describe, expect, expectTypeOf, it, vi } from 'vitest';
-import { FactoryTemplate } from '../src/FactoryTemplate';
+import { FactoryTemplate } from '../src';
 import { sleep } from '../src/lib/Utilities';
-import { TemplateContext } from '../src/TemplateContext';
+import { TemplateContext } from '../src/Template/Context';
 
 describe('TemplateContext', () => {
     
@@ -10,7 +10,7 @@ describe('TemplateContext', () => {
         const context = new TemplateContext(
             new FactoryTemplate({
                 staticField: 'ok',
-                arrowFunction: () => 'ok',
+                arrowFunction: () => 'ok' as const,
                 staticPromise: Promise.resolve('ok'),
                 asyncPromise: async () => 'ok',
                 asyncDate: () => new Date(),
@@ -27,7 +27,7 @@ describe('TemplateContext', () => {
             const arrowFunction = await context.get('arrowFunction');
             
             expect(arrowFunction).toEqual('ok');
-            expectTypeOf(arrowFunction).toEqualTypeOf<string>();
+            expectTypeOf(arrowFunction).toEqualTypeOf<'ok'>();
         });
         
         it('can resolve static promises', async () => {
@@ -99,20 +99,6 @@ describe('TemplateContext', () => {
             expect(await context.get('fullName')).toEqual('John Doe');
         })
         
-        it('can resolve sibling fields using context parameter', async () => {
-            const context = new TemplateContext(
-                new FactoryTemplate({
-                    firstName: 'John',
-                    lastName: 'Doe',
-                    fullName: async (ctx) => {
-                        return `${await ctx.get('firstName')} ${await ctx.get('lastName')}`
-                    }
-                })
-            );
-            
-            expect(await context.get('fullName')).toEqual('John Doe');
-        })
-        
     });
     
     describe('Peer dependencies', () => {
@@ -133,8 +119,8 @@ describe('TemplateContext', () => {
         
         const context = new TemplateContext(
             new FactoryTemplate({
-                fullName: async (ctx) => {
-                    return `${await ctx.get('firstName')} ${await ctx.get('lastName')}`
+                async fullName(){
+                    return `${await this.get('firstName')} ${await this.get('lastName')}`
                 },
                 firstName: mocks.firstName,
                 lastName: mocks.lastName,

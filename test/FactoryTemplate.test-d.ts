@@ -1,12 +1,11 @@
 import { faker } from '@faker-js/faker';
 import { describe, expectTypeOf, it } from 'vitest';
-import { FactoryTemplate } from '../src/FactoryTemplate';
+import { FactoryTemplate } from '../src';
 
 describe('FactoryTemplate', () => {
     
-    
     const template = new FactoryTemplate({
-        _id: () => 1,
+        _id: (): number => 1,
         createdAt: () => new Date(),
         firstName: 'test',
         lastName: 'test',
@@ -47,9 +46,9 @@ describe('FactoryTemplate', () => {
         
         it('has to adhere to the original schema', () => {
             expectTypeOf(template.resolve).toBeCallableWith({
+                lastName: 'test',
                 // @ts-expect-error
                 _id: () => 'INVALID_ID',
-                
                 // @ts-expect-error
                 firstName: 1,
             })
@@ -71,88 +70,117 @@ describe('FactoryTemplate', () => {
         
     })
     
-    describe('Template context', () => {
-        describe('Within "this" type', () => {
-            it('can reference sibling fields in the same template', async () => {
-                const template = new FactoryTemplate({
-                    firstName: 'test',
-                    lastName: 'test',
-                    age: (): number => 50,
-                    async fullName() {
-                        expectTypeOf(await this.get('firstName')).toEqualTypeOf<string>();
-                        expectTypeOf(await this.get('lastName')).toEqualTypeOf<string>();
-                        expectTypeOf(await this.get('age')).toEqualTypeOf<number>();
-                    },
-                });
-            })
-            
-            it('is accessible within resolver overrides', async () => {
-                const template = new FactoryTemplate({
-                    firstName: 'test',
-                    lastName: 'test',
-                    age: (): number => 50,
-                    fullName: () => 'test',
-                });
+    describe('Template constructor context', () => {
+        it(`is available through fields' "this" context`, async () => {
+            const template = new FactoryTemplate({
+                firstName: 'test' as const,
+                lastName: 'test' as const,
+                age: (): number => 50,
+                async summary() {
+                    expectTypeOf(await this.get('firstName')).toEqualTypeOf<'test'>();
+                    expectTypeOf(await this.get('lastName')).toEqualTypeOf<'test'>();
+                    expectTypeOf(await this.get('age')).toEqualTypeOf<number>();
+                },
+            });
+        })
+        
+        it(`template methods can reference other methods with explicit return types`, async () => {
+            new FactoryTemplate({
+                // Synchronous function
+                firstName: (): string => 'test',
+                // method without context
+                lastName(): string { return 'test' },
+                // Method with context
+                async age(): Promise<number> { return (await this.get('firstName')).length },
+                // Static value
+                createdAt: new Date(),
                 
-                await template.resolve({
-                    async fullName() {
-                        expectTypeOf(await this.get('firstName')).toEqualTypeOf<string>();
-                        expectTypeOf(await this.get('lastName')).toEqualTypeOf<string>();
-                        expectTypeOf(await this.get('age')).toEqualTypeOf<number>();
-                        return 'test';
-                    },
-                })
+                async summary() {
+                    expectTypeOf(await this.get('firstName')).toEqualTypeOf<string>();
+                    expectTypeOf(await this.get('lastName')).toEqualTypeOf<string>();
+                    expectTypeOf(await this.get('age')).toEqualTypeOf<number>();
+                    expectTypeOf(await this.get('createdAt')).toEqualTypeOf<Date>();
+                    return 'test';
+                },
+            });
+        })
+        
+        it(`template methods can reference other methods with implicit return types`, async () => {
+            const template = new FactoryTemplate({
+                // Synchronous function
+                firstName: () => 'John' as const,
+                // method without context
+                lastName() { return 'Doe' as const },
+                // Method with context
+                async age() { return (await this.get('firstName')).length },
+                // Static value
+                createdAt: new Date(),
+                
+                async summary() {
+                    const summary = {
+                        firstName: await this.get('firstName'),
+                        lastName: await this.get('lastName'),
+                        age: await this.get('age'),
+                        createdAt: await this.get('createdAt'),
+                    }
+                    
+                    expectTypeOf(summary.firstName).toEqualTypeOf<'John'>();
+                    expectTypeOf(summary.lastName).toEqualTypeOf<'Doe'>();
+                    expectTypeOf(summary.age).toEqualTypeOf<number>();
+                    expectTypeOf(summary.createdAt).toEqualTypeOf<Date>();
+                    
+                    return { summary };
+                },
+            });
+            
+            const resolved = await template.resolve();
+            expectTypeOf(resolved.firstName).toEqualTypeOf<'John'>();
+            expectTypeOf(resolved.lastName).toEqualTypeOf<'Doe'>();
+            expectTypeOf(resolved.age).toEqualTypeOf<number>();
+            expectTypeOf(resolved.createdAt).toEqualTypeOf<Date>();
+            
+        })
+    })
+    
+    describe('Template resolver context', () => {
+        const template = new FactoryTemplate({
+            firstName: 'test' as const,
+            lastName: 'test' as const,
+            age: (): number => 50,
+            summary: (): string => 'sum of all the fields above',
+            // Todo: use non-explicit return type
+            async shortDescription(): Promise<`test test (${number})`> {
+                return `${await this.get('firstName')} ${await this.get('lastName')} (${await this.get('age')})` as const
+            },
+            // Todo: use non-explicit return type
+            async descriptionLines(): Promise<string[]> {
+                return [
+                    await this.get('shortDescription'),
+                    'more text',
+                    'even more text',
+                ] as string[]
+            },
+            async fullDescription() {
+              return (await this.get('descriptionLines')).join('\n');
+            }
+        });
+        
+        
+        it(`is accessible through fields' "this" context`, async () => {
+            await template.resolve({
+                async summary() {
+                    expectTypeOf(await this.get('firstName')).toEqualTypeOf<'test'>();
+                    expectTypeOf(await this.get('lastName')).toEqualTypeOf<'test'>();
+                    expectTypeOf(await this.get('age')).toEqualTypeOf<number>();
+                    expectTypeOf(await this.get('shortDescription')).toEqualTypeOf<`test test (${number})`>();
+                    expectTypeOf(await this.get('descriptionLines')).toEqualTypeOf<string[]>();
+                    expectTypeOf(await this.get('fullDescription')).toEqualTypeOf<string>();
+                    return 'test' as any;
+                },
             })
         })
         
-        describe('Function parameter', () => {
-            it('is available as a parameter for use in arrow functions', () => {
-                const template = new FactoryTemplate({
-                    firstName: 'test',
-                    lastName: 'test',
-                    age: (): number => 50,
-                    fullName: async (ctx) => {
-                        expectTypeOf(await ctx.get('firstName')).toEqualTypeOf<string>();
-                        expectTypeOf(await ctx.get('lastName')).toEqualTypeOf<string>();
-                        expectTypeOf(await ctx.get('age')).toEqualTypeOf<number>();
-                    },
-                });
-            })
-            
-            it('is available as a parameter in resolver overrides', async () => {
-                const template = new FactoryTemplate({
-                    firstName: 'test',
-                    lastName: 'test',
-                    age: (): number => 50,
-                    fullName: () => 'test',
-                });
-                
-                await template.resolve({
-                    fullName: async (ctx) => {
-                        expectTypeOf(await ctx.get('firstName')).toEqualTypeOf<string>();
-                        expectTypeOf(await ctx.get('lastName')).toEqualTypeOf<string>();
-                        expectTypeOf(await ctx.get('age')).toEqualTypeOf<number>();
-                        return 'test';
-                    },
-                })
-            })
-            
-            it.todo('function parameters can reference another function parameter', () => {
-                const template = new FactoryTemplate({
-                    firstName: 'test',
-                    lastName: 'test',
-                    age: (ctx): number => 50,
-                    fullName: async (ctx) => {
-                        expectTypeOf(await ctx.get('firstName')).toEqualTypeOf<string>();
-                        expectTypeOf(await ctx.get('lastName')).toEqualTypeOf<string>();
-                        // @ts-expect-error Todo: Multiple context params seem to break type inference.
-                        expectTypeOf(await ctx.get('age')).toEqualTypeOf<number>();
-                    },
-                });
-            })
-        })
-    });
-    
+    })
     
     describe('Template extensions', async () => {
         const newTemplate = template.extend({
@@ -183,7 +211,7 @@ describe('FactoryTemplate', () => {
         
         describe(`"this" context`, () => {
             it('can access original template fields through "this"', async () => {
-                const newTemplate = template.extend({
+                template.extend({
                     async fullName() {
                         expectTypeOf(await this.get('firstName')).toEqualTypeOf<string>();
                         expectTypeOf(await this.get('lastName')).toEqualTypeOf<string>();
@@ -195,7 +223,7 @@ describe('FactoryTemplate', () => {
             });
             
             it('can access new template fields through "this"', async () => {
-                const newTemplate = template.extend({
+                  template.extend({
                     streetAddress: () => faker.location.streetAddress(),
                     city: () => faker.location.city(),
                     zip: () => parseInt(faker.location.zipCode()), // don't do this :)
@@ -222,8 +250,7 @@ describe('FactoryTemplate', () => {
                     }
                 },
             });
-            
-            const newTemplate = original.extend({
+            original.extend({
                 address: () => ({
                     street: '',
                     city: '',
@@ -236,9 +263,9 @@ describe('FactoryTemplate', () => {
                     expectTypeOf(address.zip).toEqualTypeOf<string>();
                     return '';
                 }
-            })
+            });
         })
-       
+        
     })
     
     describe('Template output', () => {

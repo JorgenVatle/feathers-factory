@@ -1,6 +1,7 @@
 import Clues from 'clues';
 import type { Get, Paths } from 'type-fest';
-import type { FactoryTemplate } from './FactoryTemplate';
+import type { ResolveSchemaOutput, SchemaFieldValue } from './Schema';
+import { FactoryTemplate } from './Template';
 
 /**
  * Factory Template context.
@@ -8,21 +9,49 @@ import type { FactoryTemplate } from './FactoryTemplate';
  *
  * The `this` type within your template's generator functions.
  */
-export class TemplateContext<TTemplate, TContext extends TemplateContext<TTemplate> = any> {
+export abstract class SchemaContext<
+    TSchema,
+    TOutput = ResolveSchemaOutput<TSchema>,
+> {
+    public readonly _output!: TOutput;
+    
+    public get<TKey extends keyof TOutput>(key: TKey): Promise<SchemaFieldValue<TOutput[TKey]>>
+    public get<TKey extends Paths<TOutput> & string>(key: TKey): Promise<Get<TOutput, TKey>>
+    public get<TKey extends any>(key: TKey): Promise<unknown> {
+        // @ts-expect-error Todo: resolve type error
+        return this._get(key);
+    }
+    
+    public call<TKey extends Paths<TOutput> & string>(key: TKey): Promise<Get<TOutput, TKey>> {
+        return this._call(key);
+    }
+    
+    protected abstract _get(path: string): Promise<any>;
+    protected abstract _call(path: string): Promise<any>;
+}
+
+/**
+ * Factory Template context.
+ * Provides access to the current generation context.
+ *
+ * The `this` type within your template's generator functions.
+ */
+export class TemplateContext<TSchema> extends SchemaContext<TSchema> {
     /**
      * Internal state for the getter machine.
      * The structure of this field can be unexpected unless explicitly accessed
-     * through the {@link this.get} method.
+     * through the {@link TemplateContext.get} method.
      * @private
      */
-    public readonly _state: ContextState<TTemplate>;
+    public readonly _state: ContextState<TSchema>;
     
-    constructor(protected readonly template: FactoryTemplate<TTemplate, TContext>) {
+    constructor(protected readonly template: FactoryTemplate<TSchema>) {
+        super();
         this._state = Object.create(this);
         
         const entries = Object.entries(this.template._schema).map(([key, value]) => {
-            return [key, this.wrapTemplateField(value)]
-        })
+            return [key, this.wrapTemplateField(value)];
+        });
         
         Object.assign(this._state, Object.fromEntries(entries));
     }
@@ -49,7 +78,7 @@ export class TemplateContext<TTemplate, TContext extends TemplateContext<TTempla
      * })
      *
      */
-    public get<TKey extends Paths<TTemplate> & string>(key: TKey): ContextFieldOutcome<Get<TTemplate, TKey>> {
+    protected _get(key: string) {
         return Clues(this._state, key as string, { CONTEXT: this });
     }
     
@@ -78,10 +107,10 @@ export class TemplateContext<TTemplate, TContext extends TemplateContext<TTempla
      *         this.get('fullName'), // -> John Doe
      *     ]
      */
-    public call<TKey extends Paths<TTemplate> & string>(key: TKey): ContextFieldOutcome<Get<TTemplate, TKey>> {
+    public _call(key: string) {
         const freshContext = new TemplateContext(this.template);
         
-        return freshContext.get(key);
+        return freshContext._get(key);
     }
     
     /**
@@ -94,9 +123,11 @@ export class TemplateContext<TTemplate, TContext extends TemplateContext<TTempla
         if (!this.shouldWrap(field)) {
             return field;
         }
-        return ['CONTEXT', function(this: unknown, CONTEXT: TemplateContext<TTemplate>) {
-            return field.apply(this, [CONTEXT])
-        }]
+        return [
+            'CONTEXT', function(this: unknown, CONTEXT: TemplateContext<TSchema>) {
+                return field.apply(this, [CONTEXT]);
+            },
+        ];
     }
     
     /**
@@ -121,7 +152,7 @@ export class TemplateContext<TTemplate, TContext extends TemplateContext<TTempla
      */
     public async _resolveState() {
         const result = Object.keys(this._state).map(async (key) => {
-            return [key, await this.get(key as any)]
+            return [key, await this.get(key as any)];
         });
         return Object.fromEntries(await Promise.all(result));
     };
@@ -133,7 +164,6 @@ export class TemplateContext<TTemplate, TContext extends TemplateContext<TTempla
 type ContextState<TTemplate> = {
     [key in keyof TTemplate]: ContextField<TTemplate[key]>;
 }
-
 /**
  * Contextualized FactoryTemplate fields.
  * When resolving some fields will get converted to promises,
@@ -146,13 +176,3 @@ type ContextField<TType> =
     | TType
     | Promise<TType>
     | (() => Promise<TType> | TType);
-
-/**
- * After resolving a field, it'll either be it's final type or a promise
- * in cases where there's peer dependencies or the field function actually
- * is async.
- */
-type ContextFieldOutcome<TType> =
-    TType extends ContextField<infer T>
-    ? Promise<T> | T
-    : never;

@@ -1,8 +1,8 @@
 import { Service } from '@feathersjs/feathers';
 import { beforeAll, describe, expect, it } from 'vitest';
 
-import { Factory, GlobalFactories } from '../src';
-import { FactoryTemplate, type InferOutput } from '../src/FactoryTemplate';
+import type { InferOutput } from '../src';
+import { Factory, FactoryTemplate, GlobalFactories } from '../src';
 import Feathers from './feathers/App';
 
 let _service: Service<any>;

@@ -1,17 +1,19 @@
 {
   "compilerOptions": {
-    "target": "es2015",
-    "module": "es2015",
+    "target": "es2022",
+    "module": "es2022",
     "moduleResolution": "bundler",
     "declaration": true,
     "noEmit": true,
     "outDir": "./dist",
+    "lib": ["es2022"],
 
     "strict": true,
     "noImplicitReturns": true,
+    "types": [],
     "noFallthroughCasesInSwitch": true,
     "esModuleInterop": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
 
   },
 }
