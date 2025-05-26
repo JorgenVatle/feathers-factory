@@ -1,8 +1,7 @@
 import { Params } from '@feathersjs/feathers';
 import { FeathersServiceNotDefined } from './Errors/FeathersFactoryError';
-import { type TemplateOverrides, type TemplateSchema } from './FactoryTemplate';
 import type { FactoryCompatibleService } from './ServiceTypes';
-import { FactoryTemplate } from './Template/Template';
+import { FactoryTemplate, type TemplateSchema, type TemplateSchemaOverrides } from './Template';
 
 export default class Factory<
     TSchema,
@@ -27,7 +26,6 @@ export default class Factory<
         if (data instanceof FactoryTemplate) {
             this.data = data;
         } else {
-            // @ts-expect-error Incompatible types
             this.data = new FactoryTemplate(data);
         }
         
@@ -38,8 +36,8 @@ export default class Factory<
      * Store generated data to the Feathers service.
      */
     public async create(
-        data?: TemplateOverrides<TSchema>,
-        params?: TemplateOverrides<TParams>,
+        data?: TemplateSchemaOverrides<TSchema>,
+        params?: TemplateSchemaOverrides<TParams>,
     ): Promise<TResult> {
         const resolvedData: any = await this.get(data);
         const resolvedParams = await this.params.resolve(params);
@@ -52,8 +50,8 @@ export default class Factory<
      */
     public createMany(
         quantity: number,
-        overrides?: TemplateOverrides<TSchema>,
-        params?: TemplateOverrides<TParams>,
+        overrides?: TemplateSchemaOverrides<TSchema>,
+        params?: TemplateSchemaOverrides<TParams>,
     ): Promise<TResult[]> {
         const promises: Promise<TResult>[] = [];
         
@@ -70,7 +68,7 @@ export default class Factory<
      *
      * @param overrides
      */
-    public get(overrides: TemplateOverrides<TSchema> = {}) {
+    public get(overrides: TemplateSchemaOverrides<TSchema> = {}) {
         return this.data.resolve(overrides);
     }
     
