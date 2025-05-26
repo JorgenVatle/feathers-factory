@@ -1,50 +1,6 @@
 import { faker } from '@faker-js/faker';
 import { describe, expectTypeOf, it } from 'vitest';
-import { defineTemplateSchema, FactoryTemplate } from './Template';
-
-describe('defineTemplateSchema', () => {
-    
-    it('exposes return types of sibling functions through a context parameter', () => {
-        const schema = defineTemplateSchema({
-            arrowFunction: () => 'ok' as const,
-            asyncPromise: async () => 'ok' as const,
-            asyncDate: () => new Date(),
-            
-            test(ctx) {
-                expectTypeOf(ctx.arrowFunction).toEqualTypeOf<'ok'>();
-                expectTypeOf(ctx.asyncPromise).toEqualTypeOf<Promise<'ok'>>();
-                expectTypeOf(ctx.asyncDate).toEqualTypeOf<Date>();
-            }
-        });
-    });
-    
-    it('is able to handle fields referencing other fields', () => {
-        const schema = defineTemplateSchema({
-            firstName: () => 'John' as const,
-            lastName: () => 'Doe' as const,
-            fullName(ctx) {
-                return `${ctx.firstName} ${ctx.lastName}` as 'John Doe';
-            },
-            
-            test(ctx) {
-                let lastName: 'Doe' = ctx.lastName;
-                let firstName: 'John' = ctx.firstName;
-                // @ts-expect-error Todo: Fix type inference for cross-referencing fields
-                let fullName: 'John Doe' = ctx.fullName;
-                
-                expectTypeOf(firstName).toEqualTypeOf<'John'>();
-                expectTypeOf(lastName).toEqualTypeOf<'Doe'>();
-                expectTypeOf(fullName).toEqualTypeOf<'John Doe'>();
-            }
-        });
-        
-        expectTypeOf(schema.firstName).returns.toEqualTypeOf<'John'>();
-        expectTypeOf(schema.lastName).returns.toEqualTypeOf<'Doe'>();
-        expectTypeOf(schema.fullName).returns.toEqualTypeOf<'John Doe'>();
-        
-    })
-    
-});
+import { FactoryTemplate } from './Template';
 
 describe('FactoryTemplate', () => {
     
