@@ -1,4 +1,3 @@
-import type { Simplify } from 'type-fest';
 import type { SchemaContext } from './Context';
 
 /**
@@ -18,9 +17,6 @@ export type TemplateSchema<
     get: <TKey extends keyof TSchema>(key: TKey) => Promise<SchemaFieldValue<TSchema[TKey]>>
 }>;
 
-type InferSchemaContext<TSchema, TKey> = [TSchema] extends [{
-    [key in keyof TSchema as key extends TKey ? never : key]: TSchema[key]
-}] ? SchemaContext<Simplify<TSchema>> : never;
 
 /**
  * Accepts a partial schema template to override base schema values.
