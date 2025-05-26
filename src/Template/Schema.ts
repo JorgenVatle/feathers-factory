@@ -7,13 +7,7 @@ import type { SchemaContext } from './Context';
  */
 export type TemplateSchema<
     TSchema,
-> = {
-    [K in keyof TSchema]: (
-        TSchema[K] extends (...args: any[]) => any
-        ? TSchema[K] | NoInfer<(ctx: SchemaContext<TSchema>) => ReturnType<TSchema[K]>>
-        : (() => TSchema[K]) | NoInfer<(ctx: SchemaContext<TSchema>) => TSchema[K]>
-    ) | TSchema[K]
-} & ThisType<SchemaContext<TSchema>>
+> = TSchema & ThisType<SchemaContext<TSchema>>
 
 
 /**
