@@ -142,7 +142,7 @@ export class Factory<
     public extend(
         data: SchemaOverrides<TSchema>,
         params?: SchemaOverrides<TParams>
-    ): Factory<TParams, TResult, TParams> {
+    ): Factory<TSchema, TResult, TParams> {
         // @ts-expect-error This overrides the expected type from the service.
         return new Factory(this.service, data, params);
     }
