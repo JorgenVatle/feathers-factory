@@ -1,6 +1,6 @@
 import Clues from 'clues';
 import type { Get, Paths } from 'type-fest';
-import type { ResolveSchemaOutput, SchemaFieldValue } from './Schema';
+import type { ResolveFieldOutput, ResolveSchemaOutput } from './Schema';
 import { FactoryTemplate } from './Template';
 
 /**
@@ -40,7 +40,7 @@ export abstract class SchemaContext<
      *     // -> John.Doe@example.com,
      * })
      */
-    public get<TKey extends keyof TOutput>(key: TKey): Promise<SchemaFieldValue<TOutput[TKey]>>
+    public get<TKey extends keyof TOutput>(key: TKey): Promise<ResolveFieldOutput<TOutput[TKey]>>
     public get<TKey extends Paths<TOutput> & string>(key: TKey): Promise<Get<TOutput, TKey>>
     public get<TKey extends any>(key: TKey): Promise<unknown> {
         // @ts-expect-error Todo: resolve type error
