@@ -2,9 +2,11 @@
   "mode": "pre",
   "tag": "beta",
   "initialVersions": {
-    "feathers-factory": "5.0.1"
+    "feathers-factory": "5.0.1",
+    "basic-feathers-example-app": "1.0.0"
   },
   "changesets": [
+    "modern-stars-fold",
     "ripe-boxes-dig"
   ]
 }
