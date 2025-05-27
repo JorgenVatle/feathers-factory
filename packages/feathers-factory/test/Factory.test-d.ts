@@ -94,6 +94,37 @@ describe('Factory', () => {
         expectTypeOf(result.createdAt).toEqualTypeOf<Date>();
         expectTypeOf(result.customer).toEqualTypeOf<ServiceType['customer']>();
     })
+    
+    describe('Extend method', () => {
+        it('can reference fields from the original template', () => {
+            factory.extend({
+                async test() {
+                    expectTypeOf(await this.get('_id')).toEqualTypeOf<string>();
+                    expectTypeOf(await this.get('createdAt')).toEqualTypeOf<Date>();
+                    expectTypeOf(await this.get('customer')).toEqualTypeOf<ServiceType['customer']>();
+                }
+            })
+        });
+        
+        it('can specify new fields with unsafeExtend method', async () => {
+            const newFactory = factory.unsafeExtend({
+                async test2() {
+                    return 'ok' as const;
+                }
+            });
+            
+            const result = await newFactory.create();
+            expectTypeOf(result.test2).toEqualTypeOf<'ok'>();
+        })
+        
+        it('can reference fields from the original template within new fields', () => {
+            factory.unsafeExtend({
+                async test2() {
+                    expectTypeOf(await this.get('_id')).toEqualTypeOf<string>();
+                }
+            })
+        })
+    })
 })
 
 describe('Service params', () => {
@@ -144,68 +175,3 @@ describe('Service params', () => {
     })
 });
 
-describe('Extend method', () => {
-    type ServiceType = {
-        _id: string;
-        createdAt: Date;
-        customer: {
-            firstName: string;
-            lastName: string;
-            address: {
-                street: string;
-                city: string;
-            }
-        },
-        test: any;
-    }
-    const service = {
-        async create(data: ServiceType) {
-            return data;
-        }
-    }
-    const factory = new Factory(service, {
-        _id: () => process.hrtime().join('-'),
-        createdAt: () => new Date(),
-        customer: () => {
-            return {
-                firstName: 'John',
-                lastName: 'Doe',
-                address: {
-                    street: '123 Main St',
-                    city: 'Anytown',
-                }
-            }
-        },
-        test: () => {}
-    });
-    
-    it('can reference fields from the original template', () => {
-        factory.extend({
-            async test() {
-                expectTypeOf(await this.get('_id')).toEqualTypeOf<string>();
-                expectTypeOf(await this.get('createdAt')).toEqualTypeOf<Date>();
-                expectTypeOf(await this.get('customer')).toEqualTypeOf<ServiceType['customer']>();
-            }
-        })
-    });
-    
-    it('can specify new fields with unsafeExtend method', async () => {
-        const newFactory = factory.unsafeExtend({
-            async test2() {
-                return 'ok' as const;
-            }
-        });
-        
-        const result = await newFactory.create();
-        expectTypeOf(result.test2).toEqualTypeOf<'ok'>();
-    })
-    
-    it('can reference fields from the original template within new fields', () => {
-        factory.unsafeExtend({
-            async test2() {
-                expectTypeOf(await this.get('_id')).toEqualTypeOf<string>();
-            }
-        })
-    })
-    
-})
