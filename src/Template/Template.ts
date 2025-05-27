@@ -1,6 +1,6 @@
 import type { Simplify } from 'type-fest';
 import { type SchemaContext, TemplateContext } from './Context';
-import type { BaseSchema, ResolveSchemaOutput, TemplateSchema, TemplateSchemaOverrides } from './Schema';
+import type { BaseSchema, ResolveSchemaOutput, SchemaOverrides, TemplateSchema } from './Schema';
 
 
 export class FactoryTemplate<
@@ -39,7 +39,7 @@ export class FactoryTemplate<
      * In other words, functions are guaranteed to run only once with each
      * call to {@link resolve}.
      */
-    public resolve(overrides?: TemplateSchemaOverrides<ResolveSchemaOutput<TSchema>>): Promise<ResolveSchemaOutput<TSchema>> {
+    public resolve(overrides?: SchemaOverrides<ResolveSchemaOutput<TSchema>>): Promise<ResolveSchemaOutput<TSchema>> {
         const template = this.extend(overrides || {});
         const context = new TemplateContext(template);
         
@@ -51,7 +51,7 @@ export class FactoryTemplate<
      * defaults for the new template.
      */
     public extend<TOverrides extends BaseSchema>(
-        overrides: TemplateSchemaOverrides<Simplify<Omit<TSchema, keyof TOverrides> & TOverrides>>
+        overrides: SchemaOverrides<Simplify<Omit<TSchema, keyof TOverrides> & TOverrides>>
     ): FactoryTemplate<Simplify<Omit<TSchema, keyof TOverrides> & TOverrides>> {
         // @ts-expect-error Incompatible types
         return new FactoryTemplate({

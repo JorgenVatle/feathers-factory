@@ -1,6 +1,6 @@
 import { Params } from '@feathersjs/feathers';
 import type { HasBeenAugmented } from '../lib/Utilities';
-import type { TemplateSchemaOverrides } from '../Template';
+import type { SchemaOverrides } from '../Template';
 import { Factory } from './index';
 
 
@@ -117,7 +117,7 @@ type GlobalFactory<TName extends FactoryName> = FactoryRegistry[TName];
 type GlobalFactoryOverrides<
     TName extends FactoryName
 > = GlobalFactory<TName> extends Factory<infer TSchema, infer TResult>
-    ? TemplateSchemaOverrides<TSchema>
+    ? SchemaOverrides<TSchema>
     : never;
 
 type FactoryRegistry = HasBeenAugmented<GlobalFactories> extends true

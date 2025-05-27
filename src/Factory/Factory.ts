@@ -5,8 +5,8 @@ import {
     FactoryTemplate,
     type InferOutput,
     type SchemaField,
+    type SchemaOverrides,
     type TemplateSchema,
-    type TemplateSchemaOverrides,
 } from '../Template';
 import type { FactoryCompatibleService } from './ServiceTypes';
 
@@ -66,8 +66,8 @@ export class Factory<
      * @see {@link https://feathersjs.com/guides/basics/services.html#service-methods Feathers Service.create()}
      */
     public async create(
-        data?: TemplateSchemaOverrides<TSchema>,
-        params?: TemplateSchemaOverrides<TParams>,
+        data?: SchemaOverrides<TSchema>,
+        params?: SchemaOverrides<TParams>,
     ): Promise<TResult> {
         const resolvedData: any = await this.resolve(data);
         const resolvedParams = await this.paramsTemplate.resolve(params);
@@ -90,8 +90,8 @@ export class Factory<
      */
     public createMany(
         quantity: number,
-        overrides?: TemplateSchemaOverrides<TSchema>,
-        params?: TemplateSchemaOverrides<TParams>,
+        overrides?: SchemaOverrides<TSchema>,
+        params?: SchemaOverrides<TParams>,
     ): Promise<TResult[]> {
         const promises: Promise<TResult>[] = [];
         
@@ -114,8 +114,8 @@ export class Factory<
      *      their return type.
      */
     public extend(
-        data: TemplateSchemaOverrides<TSchema>,
-        params: TemplateSchemaOverrides<TParams>
+        data: SchemaOverrides<TSchema>,
+        params: SchemaOverrides<TParams>
     ): Factory<TParams, TResult, TParams> {
         // @ts-expect-error This overrides the expected type from the service.
         return new Factory(this.service, data, params);
@@ -138,11 +138,11 @@ export class Factory<
         TDataOverrides extends BaseSchema,
         TParamsOverrides extends BaseSchema,
         
-        TTemplateOutput = InferOutput<TemplateSchemaOverrides<Omit<TSchema, keyof TDataOverrides> & TDataOverrides>>,
-        TParamsOutput = InferOutput<TemplateSchemaOverrides<Omit<TParams, keyof TParamsOverrides> & TParamsOverrides>>
+        TTemplateOutput = InferOutput<SchemaOverrides<Omit<TSchema, keyof TDataOverrides> & TDataOverrides>>,
+        TParamsOutput = InferOutput<SchemaOverrides<Omit<TParams, keyof TParamsOverrides> & TParamsOverrides>>
     >(
-        data: TemplateSchemaOverrides<Omit<TSchema, keyof TDataOverrides> & TDataOverrides>,
-        params: TemplateSchemaOverrides<Omit<TParams, keyof TParamsOverrides> & TParamsOverrides>
+        data: SchemaOverrides<Omit<TSchema, keyof TDataOverrides> & TDataOverrides>,
+        params: SchemaOverrides<Omit<TParams, keyof TParamsOverrides> & TParamsOverrides>
     ): Factory<TTemplateOutput, TTemplateOutput, TParamsOutput> {
         // @ts-expect-error This overrides the expected type from the service.
         return new Factory(this.service, data, params);
@@ -157,7 +157,7 @@ export class Factory<
      *      some side effects that you want to override or already have the
      *      output for.
      */
-    public resolve(overrides: TemplateSchemaOverrides<TSchema> = {}): Promise<TResult> {
+    public resolve(overrides: SchemaOverrides<TSchema> = {}): Promise<TResult> {
         // @ts-expect-error type mismatch
         return this.template.resolve(overrides);
     }
