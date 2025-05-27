@@ -49,7 +49,6 @@ export default class Factory<
      * Generates data using the provided template and sends it to the
      * configured service's create() method.
      *
-     * {@link https://feathersjs.com/guides/basics/services.html#service-methods Feathers Service.create()}
      * @param data Replaces fields in the default factory template. Can be
      *      functions or static values. Useful if you have a field that has
      *      some side effects that you want to override or already have the
@@ -57,6 +56,7 @@ export default class Factory<
      * @param params Optional params to send to the service. Can also be either
      *      functions or static values. Functions are called and replaced with
      *      their return type.
+     * @see {@link https://feathersjs.com/guides/basics/services.html#service-methods Feathers Service.create()}
      */
     public async create(
         data?: TemplateSchemaOverrides<TSchema>,
