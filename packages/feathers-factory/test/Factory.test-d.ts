@@ -53,6 +53,49 @@ it(`disallows generator types that don't match the underlying schema `, () => {
     });
 });
 
+describe('Factory', () => {
+    type ServiceType = {
+        _id: string;
+        createdAt: Date;
+        customer: {
+            firstName: string;
+            lastName: string;
+            address: {
+                street: string;
+                city: string;
+            }
+        },
+        test: any;
+    }
+    const service = {
+        async create(data: ServiceType) {
+            return data;
+        }
+    }
+    const factory = new Factory(service, {
+        _id: () => process.hrtime().join('-'),
+        createdAt: () => new Date(),
+        customer: () => {
+            return {
+                firstName: 'John',
+                lastName: 'Doe',
+                address: {
+                    street: '123 Main St',
+                    city: 'Anytown',
+                }
+            }
+        },
+        test: () => {}
+    });
+    
+    it('yields a fully resolved output type with the create() method', async () => {
+        const result = await factory.create();
+        expectTypeOf(result._id).toEqualTypeOf<string>();
+        expectTypeOf(result.createdAt).toEqualTypeOf<Date>();
+        expectTypeOf(result.customer).toEqualTypeOf<ServiceType['customer']>();
+    })
+})
+
 describe('Service params', () => {
     describe('Non-standard Service params', () => {
         const factory = new Factory({
