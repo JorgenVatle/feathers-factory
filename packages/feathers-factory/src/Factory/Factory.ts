@@ -70,9 +70,23 @@ export class Factory<
         params?: SchemaOverrides<TParams>,
     ): Promise<TResult> {
         const resolvedData: any = await this.resolve(data);
-        const resolvedParams = await this.paramsTemplate.resolve(params);
+        const resolvedParams = await this.paramsTemplate.resolve(params) as TParams;
         
-        return this.service.create(resolvedData, resolvedParams as TParams) as Promise<TResult>;
+        return this._create(resolvedData, resolvedParams);
+    }
+    
+    /**
+     * Internal create method. Useful if you need to extend the Factory class
+     * to add your own functionality or error handling without changing the
+     * type signature of the user-facing create method.
+     * {@inheritDoc Factory.create}
+     * @see {@link Factory.create}
+     */
+    protected async _create(
+        data: TSchema,
+        params: TParams,
+    ): Promise<TResult> {
+        return this.service.create(data, params) as Promise<TResult>;
     }
     
     /**
