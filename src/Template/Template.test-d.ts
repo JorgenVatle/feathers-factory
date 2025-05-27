@@ -179,6 +179,7 @@ describe('FactoryTemplate', () => {
             const template = new FactoryTemplate({
                 staticField: 'ok' as const,
                 staticPromise: Promise.resolve('ok' as const),
+                
                 async testThis() {
                     expectTypeOf(await this.call('staticField')).toEqualTypeOf<'ok'>();
                     expectTypeOf(await this.call('staticPromise')).toEqualTypeOf<'ok'>();
@@ -194,12 +195,25 @@ describe('FactoryTemplate', () => {
                 async methodPromise() {
                     return 'ok' as const
                 },
+                
                 async testThis() {
                     expectTypeOf(await this.call('method')).toEqualTypeOf<'ok'>();
                     expectTypeOf(await this.call('methodPromise')).toEqualTypeOf<'ok'>();
                 }
             })
         });
+        
+        it('Resolves types for arrow functions', async () => {
+            new FactoryTemplate({
+                arrowFunction: () => 'ok' as const,
+                arrowPromise: () => Promise.resolve('ok' as const),
+                
+                async testThis() {
+                    expectTypeOf(await this.call('arrowFunction')).toEqualTypeOf<'ok'>();
+                    expectTypeOf(await this.call('arrowPromise')).toEqualTypeOf<'ok'>();
+                }
+            })
+        })
     })
     
 })
