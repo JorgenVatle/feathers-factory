@@ -105,7 +105,9 @@ describe('Factory', () => {
                 }
             })
         });
-        
+    })
+    
+    describe('Unsafe extend method', () => {
         it('can specify new fields with unsafeExtend method', async () => {
             const newFactory = factory.unsafeExtend({
                 async test2() {
