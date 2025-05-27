@@ -7,7 +7,7 @@ export default defineProject({
     test: {
         name: 'Basic Feathers App',
         alias: {
-            'feathers-factory': Path.join(__dirname, '../../src/index.ts'),
+            'feathers-factory': Path.join(__dirname, '../../packages/feathers-factory/src/index.ts'),
         },
     }
 })
