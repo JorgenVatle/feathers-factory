@@ -168,7 +168,7 @@ export class Factory<
         TParamsOutput = InferOutput<SchemaOverrides<Omit<TParams, keyof TParamsOverrides> & TParamsOverrides>>
     >(
         data: SchemaOverrides<Omit<TSchema, keyof TDataOverrides> & TDataOverrides>,
-        params: SchemaOverrides<Omit<TParams, keyof TParamsOverrides> & TParamsOverrides>
+        params?: SchemaOverrides<Omit<TParams, keyof TParamsOverrides> & TParamsOverrides>
     ): Factory<TTemplateOutput, TTemplateOutput, TParamsOutput> {
         // @ts-expect-error This overrides the expected type from the service.
         return new Factory(this.service, data, params);
