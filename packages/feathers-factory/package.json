@@ -47,8 +47,6 @@
     "@faker-js/faker": "^9.7.0",
     "@feathersjs/feathers": "^5.0.34",
     "@types/node": "^20.17.46",
-    "cross-env": "^5.2.0",
-    "ts-node": "^8.0.3",
     "tsup": "^8.4.0",
     "typescript": "^5.8.3",
     "vitest": "^3.1.3"
