@@ -11,5 +11,10 @@
   },
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "@feathersjs/adapter-commons": "^4.5.17",
+    "@feathersjs/feathers": "^4.5.17",
+    "feathers-memory": "^4.1.0"
+  }
 }
