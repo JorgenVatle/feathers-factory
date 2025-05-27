@@ -50,8 +50,13 @@ export default class Factory<
      * configured service's create() method.
      *
      * {@link https://feathersjs.com/guides/basics/services.html#service-methods Feathers Service.create()}
-     * @param data Optional overrides for the factory template. Can be functions or static values.
-     * @param params Optional params to send to the service.
+     * @param data Replaces fields in the default factory template. Can be
+     *      functions or static values. Useful if you have a field that has
+     *      some side effects that you want to override or already have the
+     *      output for.
+     * @param params Optional params to send to the service. Can also be either
+     *      functions or static values. Functions are called and replaced with
+     *      their return type.
      */
     public async create(
         data?: TemplateSchemaOverrides<TSchema>,
@@ -84,7 +89,10 @@ export default class Factory<
      * Just resolve a predefined factory template without inserting it into
      * the underlying service.
      *
-     * @param overrides
+     * @param overrides Replaces fields in the default factory template. Can be
+     *      functions or static values. Useful if you have a field that has
+     *      some side effects that you want to override or already have the
+     *      output for.
      */
     public get(overrides: TemplateSchemaOverrides<TSchema> = {}): Promise<TResult> {
         // @ts-expect-error type mismatch
