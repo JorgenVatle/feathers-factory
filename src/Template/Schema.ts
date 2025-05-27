@@ -55,14 +55,6 @@ type FieldValue<T> = Promise<T> | T;
  *      other input types.
  * @see {@link InferOutput} - Resolves both FactoryTemplate and SchemaTemplate
  *      types
- * @example
- * type schema = {
- *     userId: () => 123,
- *     createdAt: () => new Date()
- * }
- *
- * const data: ResolveSchemaOutput<schema>
- *     // -> { userId: number, createdAt: Date }
  */
 export type ResolveSchema<TSchema> = Simplify<{
     [key in keyof TSchema]: ResolveField<TSchema[key]>;
@@ -71,6 +63,7 @@ export type ResolveSchema<TSchema> = Simplify<{
 /**
  * Resolve the output type of the provided schema field.
  * Unwraps any promises and function return types.
+ *
  * @see {@link InferOutput} - Resolves both FactoryTemplate and SchemaTemplate
  *      types
  */

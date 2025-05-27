@@ -100,6 +100,20 @@ export class FactoryTemplate<
 
 /**
  * Unwrap a factory template to resolve the final output type.
+ *
+ * @example
+ * const UserTemplate = {
+ *     userId: () => 123,
+ *     createdAt: () => new Date(),
+ *     role: 'member'
+ * }
+ * type User = InferOutput<typeof UserTemplate>;
+ * // {
+ * //  userId: number,
+ * //  createdAt: Date,
+ * //  role: 'member'
+ * // }
+ *
  */
 export type InferOutput<T> =
     T extends FactoryTemplate<infer TOutput>
