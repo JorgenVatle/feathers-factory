@@ -174,6 +174,7 @@ describe('FactoryTemplate', () => {
     })
     
     describe('Context call methods', () => {
+        
         it('Resolves types for static fields', async () => {
             const template = new FactoryTemplate({
                 staticField: 'ok' as const,
@@ -184,6 +185,21 @@ describe('FactoryTemplate', () => {
                 }
             })
         })
+        
+        it('Resolves types for method fields', async () => {
+            const template = new FactoryTemplate({
+                method() {
+                    return 'ok' as const
+                },
+                async methodPromise() {
+                    return 'ok' as const
+                },
+                async testThis() {
+                    expectTypeOf(await this.call('method')).toEqualTypeOf<'ok'>();
+                    expectTypeOf(await this.call('methodPromise')).toEqualTypeOf<'ok'>();
+                }
+            })
+        });
     })
     
 })
