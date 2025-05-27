@@ -146,10 +146,21 @@ describe('Extend method', () => {
         })
     });
     
-    it('can reference fields from the original template within new fields', () => {
+    it('can specify new fields with unsafeExtend method', async () => {
         const newFactory = factory.unsafeExtend({
             async test2() {
-                expectTypeOf(await this.get('test')).toEqualTypeOf<any>();
+                return 'ok' as const;
+            }
+        });
+        
+        const result = await newFactory.create();
+        await expectTypeOf(result.test2).toEqualTypeOf<'ok'>();
+    })
+    
+    it('can reference fields from the original template within new fields', () => {
+        factory.unsafeExtend({
+            async test2() {
+                expectTypeOf(await this.get('_id')).toEqualTypeOf<string>();
             }
         })
     })
