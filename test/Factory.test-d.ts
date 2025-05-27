@@ -58,23 +58,45 @@ describe('Factory Types', () => {
     
     
     describe('Service params', () => {
-        it('will infer non-standard params types', () => {
-            const customService = {
-                create(data: { foo: 'bar' }, params: { custom: 'param' }) {}
-            }
-            const factory = new Factory(customService, { foo: 'bar', });
+        describe('Non-standard Service params', () => {
+            const factory = new Factory({
+                create(
+                    data: { foo: 'bar' },
+                    params: { custom: 'param' }
+                ) {}
+            }, { foo: 'bar', });
             
-            // @ts-expect-error
-            factory.create({}, { custom: 'invalid' })
-            factory.create({}, { custom: 'param' });
+            it('allows expected params to be passed', () => {
+                expectTypeOf(factory.create).toBeCallableWith({}, { custom: 'param' })
+            })
+            
+            it('forbids unexpected params to be passed', () => {
+                expectTypeOf(factory.create).toBeCallableWith({}, {
+                    // @ts-expect-error
+                    custom: 'param1'
+                })
+            })
         })
         
-        it('will infer standard params types', () => {
+        describe('Standard Feathers Service params', () => {
             const factory = new Factory({} as Service<{ foo: 'bar' }>, { foo: 'bar', });
             
-            // @ts-expect-error
-            factory.create({}, { paginate: 'invalid' })
-            factory.create({}, { custom: 'param' });
+            it('allows expected params to be passed', () => {
+                expectTypeOf(factory.create).toBeCallableWith({}, { paginate: false })
+                expectTypeOf(factory.create).toBeCallableWith({}, { paginate: { max: 10 } })
+            });
+            
+            it('forbids unexpected params to be passed', () => {
+                expectTypeOf(factory.create).toBeCallableWith({}, {
+                    // @ts-expect-error
+                    paginate: 'invalid',
+                });
+                
+                expectTypeOf(factory.create).toBeCallableWith({}, {
+                    // @ts-expect-error
+                    paginate: {},
+                })
+            })
         })
     })
     
