@@ -1,7 +1,14 @@
 import { Params } from '@feathersjs/feathers';
 import { FeathersServiceNotDefined } from './Errors/FeathersFactoryError';
 import type { FactoryCompatibleService } from './ServiceTypes';
-import { FactoryTemplate, type SchemaField, type TemplateSchema, type TemplateSchemaOverrides } from './Template';
+import {
+    type BaseSchema,
+    FactoryTemplate,
+    type InferOutput,
+    type SchemaField,
+    type TemplateSchema,
+    type TemplateSchemaOverrides,
+} from './Template';
 
 export default class Factory<
     TSchema,
@@ -93,6 +100,30 @@ export default class Factory<
         }
         
         return Promise.all(promises);
+    }
+    
+    /**
+     * Create a new factory using the current one as the basis for the next one.
+     * @param data Replaces fields in the default factory template. Can be
+     *      functions or static values. Useful if you have a field that has
+     *      some side effects that you want to override or already have the
+     *      output for.
+     * @param params Optional params to send to the service. Can also be either
+     *      functions or static values. Functions are called and replaced with
+     *      their return type.
+     */
+    public extend<
+        TDataOverrides extends BaseSchema,
+        TParamsOverrides extends BaseSchema,
+    >(
+        data: TemplateSchemaOverrides<Omit<TSchema, keyof TDataOverrides> & TDataOverrides>,
+        params: TemplateSchemaOverrides<Omit<TParams, keyof TParamsOverrides> & TParamsOverrides>
+    ): Factory<
+        InferOutput<TemplateSchemaOverrides<Omit<TSchema, keyof TDataOverrides> & TDataOverrides>>,
+        InferOutput<TemplateSchemaOverrides<Omit<TParams, keyof TParamsOverrides> & TParamsOverrides>>
+    > {
+        // @ts-expect-error This overrides the expected type from the service.
+        return new Factory(this.service, data, params);
     }
     
     /**
