@@ -25,8 +25,6 @@
     of the service.
 
   ```ts
-  import Factory from "./Factory";
-
   const customFactory = new Factory({
     /**
      * Types will be inferred from this data argument.
@@ -265,8 +263,6 @@
     of the service.
 
   ```ts
-  import Factory from "./Factory";
-
   const customFactory = new Factory({
     /**
      * Types will be inferred from this data argument.
