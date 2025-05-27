@@ -9,7 +9,7 @@ export default class Factory<
     TParams = Params,
 > {
     public readonly template: FactoryTemplate<TSchema>;
-    public readonly paramsTemplate: FactoryTemplate<Params>;
+    public readonly paramsTemplate: FactoryTemplate<TParams>;
     
     /**
      * Factory constructor.
