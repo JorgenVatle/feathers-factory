@@ -253,6 +253,27 @@ The resolved data is then passed directly into your
 [Feathers service](https://crow.docs.feathersjs.com/guides/basics/services.html#service-methods) through its 
 `create()` method.
 
+## Feathers-Factory isn't just for Feathers apps
+As Feathers.js Service API is very lightweight, this package doesn't depend on any Feathers-specific features. We just
+expect a Feathers-service-like signature for creating data.
+
+You can just as easily pass any object with a `create()` method into the Factory class. Types are inferred from the
+method's data parameter. So there's no difference in whether you provide an actual Feathers service or something else.
+
+```ts
+import { database } from './mongo';
+
+const movies = {
+    create(data: { title: string }) {
+        return database.collection('movies').insert(data)
+    }
+}
+
+const movieFactory = new Factory(movies, {
+    title: () => faker.book.title(),
+});
+```
+
 ## Credit
 Thanks to [clues.js](https://www.npmjs.com/package/clues) for providing an excellent library for resolving in-object data.
 
