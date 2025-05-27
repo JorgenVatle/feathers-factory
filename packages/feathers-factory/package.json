@@ -15,7 +15,6 @@
     "test": "vitest",
     "prepack": "npm run build",
     "prepublishOnly": "npm run lint && npm test",
-    "postversion": "git push && git push --tags",
     "release": "changeset publish",
     "build": "tsup",
     "lint": "tsc --noEmit"
