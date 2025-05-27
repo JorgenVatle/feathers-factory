@@ -1,5 +1,5 @@
 import { faker as Faker } from '@faker-js/faker';
-import { Factory } from '../../src';
+import { Factory } from 'feathers-factory';
 import App from './App';
 
 const UsersService = App.service('users');
