@@ -13,6 +13,13 @@ export default class Factory<
     
     /**
      * Factory constructor.
+     * @param service Feathers-compatible service to send created data to.
+     *     A Feathers-compatible service is any object that has a create()
+     *     method. 😁
+     * @param template Factory template. Defines a set of functions or static
+     *     values to be run every time the factory is executed.
+     * @param defaultParams Optional template for generating {@link Params} to
+     *     be used when creating data for your service.
      */
     public constructor(
         private readonly service: FactoryCompatibleService<TSchema, TResult, TParams>,
