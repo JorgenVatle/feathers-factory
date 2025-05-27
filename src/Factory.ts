@@ -39,7 +39,12 @@ export default class Factory<
     }
     
     /**
-     * Store generated data to the Feathers service.
+     * Generates data using the provided template and sends it to the
+     * configured service's create() method.
+     *
+     * {@link https://feathersjs.com/guides/basics/services.html#service-methods Feathers Service.create()}
+     * @param data Optional overrides for the factory template. Can be functions or static values.
+     * @param params Optional params to send to the service.
      */
     public async create(
         data?: TemplateSchemaOverrides<TSchema>,
