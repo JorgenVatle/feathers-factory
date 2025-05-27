@@ -2,7 +2,7 @@
 "feathers-factory": minor
 ---
 
-Add `extend` and `unsafeExtend` methods to Factory class.
+Add `extend` and `unsafeExtend` methods to Factories, and improved TSDocs. 
 
 - Added `Factory.extend()` - creates a new factory class with the same expected input and output types from the underlying service.
 - Added `Factory.unsafeExtend()` - creates a new factory class where the input/output types of the service can be overriden to provide values not otherwise allowed by the service's create() method.
