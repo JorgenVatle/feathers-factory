@@ -33,16 +33,6 @@ export type SchemaOverrides<TSchema> = {
 export type BaseSchema<TFields extends Record<string, unknown> = Record<string, unknown>> = TFields;
 
 /**
- * Template factory function.
- * The function that runs every time the associated template or factory is
- * called
- */
-export type TemplateFunction<
-    TValue,
-    TContext = BaseSchema
-> = (...params: [context: TContext]) => TValue;
-
-/**
  * Defines a value / template function that will execute every time the
  * associated template or factory is run.
  */
