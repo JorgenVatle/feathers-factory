@@ -56,7 +56,7 @@ export class Factory<
      * Generates data using the provided template and sends it to the
      * configured service's create() method.
      *
-     * @param data Replaces fields in the default factory template. Can be
+     * @param overrides Replaces fields in the default factory template. Can be
      *      functions or static values. Useful if you have a field that has
      *      some side effects that you want to override or already have the
      *      output for.
@@ -66,10 +66,10 @@ export class Factory<
      * @see {@link https://feathersjs.com/guides/basics/services.html#service-methods Feathers Service.create()}
      */
     public async create(
-        data?: SchemaOverrides<TSchema>,
+        overrides?: SchemaOverrides<TSchema>,
         params?: SchemaOverrides<TParams>,
     ): Promise<TResult> {
-        const resolvedData: any = await this.resolve(data);
+        const resolvedData: any = await this.resolve(overrides);
         const resolvedParams = await this.paramsTemplate.resolve(params) as TParams;
         
         return this._create(resolvedData, resolvedParams);
@@ -131,7 +131,7 @@ export class Factory<
     /**
      * Create a new factory using the current one as the basis for the next one.
      *
-     * @param data Replaces fields in the default factory template. Can be
+     * @param overrides Replaces fields in the default factory template. Can be
      *      functions or static values. Useful if you have a field that has
      *      some side effects that you want to override or already have the
      *      output for.
@@ -140,11 +140,11 @@ export class Factory<
      *      their return type.
      */
     public extend(
-        data: SchemaOverrides<TSchema>,
+        overrides: SchemaOverrides<TSchema>,
         params?: SchemaOverrides<TParams>
     ): Factory<TSchema, TResult, TParams> {
         // @ts-expect-error This overrides the expected type from the service.
-        return new Factory(this.service, data, params);
+        return new Factory(this.service, overrides, params);
     }
     
     /**
@@ -152,7 +152,7 @@ export class Factory<
      * The difference from {@link extend} is that this method will allow you to
      * specify field types that are not otherwise allowed by the service.
      *
-     * @param data Replaces fields in the default factory template. Can be
+     * @param overrides Replaces fields in the default factory template. Can be
      *      functions or static values. Useful if you have a field that has
      *      some side effects that you want to override or already have the
      *      output for.
@@ -167,11 +167,11 @@ export class Factory<
         TTemplateOutput = {} extends TDataOverrides ? TSchema : Omit<TSchema, keyof TDataOverrides> & InferOutput<TDataOverrides>,
         TParamsOutput = Omit<TParams, keyof TParamsOverrides> & InferOutput<TParamsOverrides>,
     >(
-        data: SchemaOverrides<Omit<TSchema, keyof TDataOverrides> & TDataOverrides>,
+        overrides: SchemaOverrides<Omit<TSchema, keyof TDataOverrides> & TDataOverrides>,
         params?: SchemaOverrides<Omit<TParams, keyof TParamsOverrides> & TParamsOverrides>
     ): Factory<TTemplateOutput, TTemplateOutput, TParamsOutput> {
         // @ts-expect-error This overrides the expected type from the service.
-        return new Factory(this.service, data, params);
+        return new Factory(this.service, overrides, params);
     }
     
     /**
