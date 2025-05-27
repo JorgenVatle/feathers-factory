@@ -10,7 +10,7 @@ import {
     type TemplateSchemaOverrides,
 } from '../Template';
 
-export default class Factory<
+export class Factory<
     TSchema,
     TResult = TSchema,
     TParams = Params,
