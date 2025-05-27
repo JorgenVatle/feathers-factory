@@ -13,6 +13,33 @@ export abstract class SchemaContext<
     TSchema,
     TOutput = ResolveSchemaOutput<TSchema>,
 > {
+    /**
+     * Resolve the value of a template field within the current generator
+     * context. Fields are only resolved once per generator context.
+     *
+     * This ensures that you can safely reference the same field multiple times
+     * within the same generation context and from different fields and always
+     * get the same value.
+     *
+     * In other words, template functions will only run once regardless of how
+     * many times you call {@link TemplateContext.get}.
+     *
+     * If you do want a new value, use {@link TemplateContext.call} instead.
+     *
+     * @example
+     * template = ({
+     *     firstName: () => faker.person.firstName(),
+     *     lastName: () => faker.person.lastName(),
+     *
+     *     fullName: () => `${this.get('firstName')} ${this.get('lastName')}`,
+     *     // -> John Doe
+     *
+     *     // Functions are only called once, then cached to ensure consistent
+     *     // results within the same generation context.
+     *     email: () => `${this.get('firstName')}.${this.get('lastName')}@example.com`
+     *     // -> John.Doe@example.com,
+     * })
+     */
     public get<TKey extends keyof TOutput>(key: TKey): Promise<SchemaFieldValue<TOutput[TKey]>>
     public get<TKey extends Paths<TOutput> & string>(key: TKey): Promise<Get<TOutput, TKey>>
     public get<TKey extends any>(key: TKey): Promise<unknown> {
@@ -20,6 +47,32 @@ export abstract class SchemaContext<
         return this._get(key);
     }
     
+    /**
+     * Run the generator function for a given field. This will not cache the
+     * result within the current context. Meaning you can call it multiple times
+     * within the same generation context and it will always return a new value.
+     *
+     * This is useful if you want to extend the result of a field from within
+     * another field. Do keep in mind that you might want to use it sparingly
+     * in case the field has side-effects. E.g. creating new records in the
+     * database.
+     *
+     * @example
+     * new FactoryTemplate({
+     *     firstName: () => faker.person.firstName(),
+     *     lastName: () => faker.person.lastName(),
+     *
+     *     fullName: () => `${this.get('firstName')} ${this.get('lastName')}`,
+     *     // -> John Doe
+     *
+     *     family: () => [
+     *         this.call('fullName'), // -> <New random name>
+     *         this.call('fullName'), // -> <New random name>
+     *
+     *         this.get('fullName'), // -> John Doe
+     *     ]
+     * })
+     */
     public call<TKey extends Paths<TOutput> & string>(key: TKey): Promise<Get<TOutput, TKey>> {
         return this._call(key);
     }
@@ -54,62 +107,19 @@ export class TemplateContext<TSchema> extends SchemaContext<TSchema> {
         Object.assign(this._state, Object.fromEntries(entries));
     }
     
+    
     /**
-     * Resolve the value of a template field within the current generator
-     * context. Fields are only resolved once per generator context.
-     *
-     * This ensures that you can safely reference the same field multiple times
-     * within the same generation context and from different fields and always
-     * get the same value.
-     *
-     * In other words, template functions will only run once regardless of how
-     * many times you call {@link TemplateContext.get}.
-     *
-     * If you do want a new value, use {@link TemplateContext.call} instead.
-     *
-     * @example
-     * template = ({
-     *     firstName: () => faker.person.firstName(),
-     *     lastName: () => faker.person.lastName(),
-     *
-     *     fullName: () => `${this.get('firstName')} ${this.get('lastName')}`,
-     *     // -> John Doe
-     *
-     *     // Functions are only called once, then cached to ensure consistent
-     *     // results within the same generation context.
-     *     email: () => `${this.get('firstName')}.${this.get('lastName')}@example.com`
-     *     // -> John.Doe@example.com,
-     * })
-     *
+     * Resolve the value of a field within the current context. Ensures the
+     * value will be cached in the current context. So functions will only run
+     * once.
      */
     protected _get(key: string) {
         return Clues(this._state, key as string, { CONTEXT: this });
     }
     
     /**
-     * Run the generator function for a given field. This will not cache the
-     * result within the current context. Meaning you can call it multiple times
-     * within the same generation context and it will always return a new value.
-     *
-     * This is useful if you want to extend the result of a field from within
-     * another field. Do keep in mind that you might want to use it sparingly
-     * in case the field has side-effects. E.g. creating new records in the
-     * database.
-     *
-     * @example
-     * template = ({
-     *     firstName: () => faker.person.firstName(),
-     *     lastName: () => faker.person.lastName(),
-     *
-     *     fullName: () => `${this.get('firstName')} ${this.get('lastName')}`,
-     *     // -> John Doe
-     *
-     *     family: () => [
-     *         this.call('fullName'), // -> <New random name>
-     *         this.call('fullName'), // -> <New random name>
-     *
-     *         this.get('fullName'), // -> John Doe
-     *     ]
+     * Resolve a template property in a new context. Ensures a new value will
+     * be provided every time.
      */
     public _call(key: string) {
         const freshContext = new TemplateContext(this.template);
