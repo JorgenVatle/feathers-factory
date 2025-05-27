@@ -132,6 +132,13 @@ describe('Factory', () => {
                     expectTypeOf(await this.get('_id')).toEqualTypeOf<string>();
                 }
             })
+        });
+        
+        it('does not alter output types for fields not explicitly overridden', async () => {
+            const result = await factory.unsafeExtend({}).create();
+            expectTypeOf(result._id).toEqualTypeOf<string>();
+            expectTypeOf(result.createdAt).toEqualTypeOf<Date>();
+            expectTypeOf(result.customer).toEqualTypeOf<ServiceType['customer']>();
         })
     })
 })
