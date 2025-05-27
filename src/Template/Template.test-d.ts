@@ -107,7 +107,7 @@ describe('FactoryTemplate', () => {
         expectTypeOf(await template.get('staticPromise')).toEqualTypeOf<'ok'>();
     })
     
-    describe('dot notation', () => {
+    describe('.get() method dot notation', () => {
         it('works 1 level deep for simple schema fields', async () => {
             const template = new FactoryTemplate({
                 firstName: () => 'John' as const,
@@ -170,6 +170,62 @@ describe('FactoryTemplate', () => {
             expectTypeOf(await template.get('address.street')).toEqualTypeOf<string>();
             expectTypeOf(await template.get('address.city')).toEqualTypeOf<string>();
             expectTypeOf(await template.get('address.zip')).toEqualTypeOf<number>();
+        })
+    })
+    
+    describe('.call() method dot notation', () => {
+        it('works 1 level deep for simple schema fields', async () => {
+            const template = new FactoryTemplate({
+                firstName: () => 'John' as const,
+                lastName: () => 'Doe' as const,
+                address: () => {
+                    return {
+                        street: faker.location.streetAddress(),
+                        city: faker.location.city(),
+                        zip: parseInt(faker.location.zipCode()),
+                    }
+                },
+                
+                async testThis() {
+                    expectTypeOf(await this.call('firstName')).toEqualTypeOf<'John'>();
+                    expectTypeOf(await this.call('lastName')).toEqualTypeOf<'Doe'>();
+                    expectTypeOf(await this.call('address.street')).toEqualTypeOf<string>();
+                    expectTypeOf(await this.call('address.city')).toEqualTypeOf<string>();
+                    expectTypeOf(await this.call('address.zip')).toEqualTypeOf<number>();
+                },
+                
+                async testParam(ctx) {
+                    expectTypeOf(await ctx.call('firstName')).toEqualTypeOf<'John'>();
+                    expectTypeOf(await ctx.call('lastName')).toEqualTypeOf<'Doe'>();
+                    expectTypeOf(await ctx.call('address.street')).toEqualTypeOf<string>();
+                    expectTypeOf(await ctx.call('address.city')).toEqualTypeOf<string>();
+                    expectTypeOf(await ctx.call('address.zip')).toEqualTypeOf<number>();
+                }
+            })
+        });
+        
+        it('works 1 level deep for promised schema fields', async () => {
+            const template = new FactoryTemplate({
+                firstName: () => 'John' as const,
+                lastName: () => 'Doe' as const,
+                address: () => Promise.resolve({
+                    street: faker.location.streetAddress(),
+                    city: faker.location.city(),
+                    zip: parseInt(faker.location.zipCode()),
+                }),
+                
+                async testThis() {
+                    expectTypeOf(await this.call('address.street')).toEqualTypeOf<string>();
+                    expectTypeOf(await this.call('address.city')).toEqualTypeOf<string>();
+                    expectTypeOf(await this.call('address.zip')).toEqualTypeOf<number>();
+                },
+                
+                async testParam(ctx) {
+                    expectTypeOf(await ctx.call('address.street')).toEqualTypeOf<string>();
+                    expectTypeOf(await ctx.call('address.city')).toEqualTypeOf<string>();
+                    expectTypeOf(await ctx.call('address.zip')).toEqualTypeOf<number>();
+                }
+            })
         })
     })
     
