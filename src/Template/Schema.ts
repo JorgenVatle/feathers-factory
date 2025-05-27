@@ -49,6 +49,12 @@ type FieldValue<T> = Promise<T> | T;
 /**
  * Unwrap any promises within the provided schema to enable dot notation
  * accessors for nested promisified fields.
+ *
+ * @warning This type helper is primarily for internal use. You're probably
+ *      looking for InferOutput, which serves the same purpose with handlers for
+ *      other input types.
+ * @see {@link InferOutput} - Resolves both FactoryTemplate and SchemaTemplate
+ *      types
  * @example
  * type schema = {
  *     userId: () => 123,
@@ -65,5 +71,7 @@ export type ResolveSchema<TSchema> = Simplify<{
 /**
  * Resolve the output type of the provided schema field.
  * Unwraps any promises and function return types.
+ * @see {@link InferOutput} - Resolves both FactoryTemplate and SchemaTemplate
+ *      types
  */
 export type ResolveField<T> = T extends SchemaField<infer T> ? T : T;
