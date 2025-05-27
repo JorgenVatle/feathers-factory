@@ -15,6 +15,11 @@ npm install --save-dev feathers-factory
 Feathers Factory provides an easy way define data generation templates for testing Feathers services. This works 
 really nicely together with a mock data generator like [faker](https://github.com/faker-js/faker).
 
+The stand-out feature is that factory templates are contextualized with smart dependency handling. Or in other words,
+fields can reference others through `this.get()` where each field will be evaluated just once per run. Which can be 
+handy if you have multiple fields within a single template that depends on a single foreign key created within the same
+template. 
+
 ### Define and export a factory for your tests
 Just new up the Feathers Factory class, provide your Feathers service, and a "Generator" object which defines what
 values should be inserted into your service when the factory is called.
