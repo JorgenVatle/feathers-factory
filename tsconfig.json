@@ -15,5 +15,11 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
 
+    "paths": {
+      "feathers-factory": [
+        "./src/index.ts"
+      ]
+    }
+
   },
 }
