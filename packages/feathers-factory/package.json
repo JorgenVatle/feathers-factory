@@ -12,10 +12,8 @@
     }
   },
   "scripts": {
-    "test": "vitest",
+    "test": "echo 'Cannot run tests from this directory. Use the test command from the parent directory instead!'; exit 1",
     "prepack": "npm run build",
-    "prepublishOnly": "npm run lint && npm test",
-    "release": "changeset publish",
     "build": "tsup",
     "lint": "tsc --noEmit"
   },
