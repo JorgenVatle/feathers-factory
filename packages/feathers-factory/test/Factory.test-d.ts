@@ -111,7 +111,18 @@ describe('Factory', () => {
             expectTypeOf(result._id).toEqualTypeOf<string>();
             expectTypeOf(result.createdAt).toEqualTypeOf<Date>();
             expectTypeOf(result.customer).toEqualTypeOf<ServiceType['customer']>();
-        })
+        });
+        
+        it('can reference overridden fields from the same override object', () => {
+            factory.extend({
+                _id() {
+                    return 'foo';
+                },
+                async test() {
+                    expectTypeOf(await this.get('_id')).toEqualTypeOf<string>();
+                }
+            })
+        });
     })
     
     describe('Unsafe extend method', () => {
