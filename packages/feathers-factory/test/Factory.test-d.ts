@@ -106,7 +106,7 @@ describe('Factory', () => {
             })
         });
         
-        it('does not alter the expected output type', async () => {
+        it('does not alter the original output type', async () => {
             const result = await factory.extend({}).create();
             expectTypeOf(result._id).toEqualTypeOf<string>();
             expectTypeOf(result.createdAt).toEqualTypeOf<Date>();
