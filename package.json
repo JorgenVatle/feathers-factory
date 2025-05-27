@@ -58,5 +58,8 @@
   "dependencies": {
     "clues": "^4.0.2",
     "type-fest": "^4.41.0"
-  }
+  },
+  "workspaces": [
+    "examples/_basic-feathers-app"
+  ]
 }
