@@ -161,10 +161,18 @@ export class TemplateContext<TSchema> extends SchemaContext<TSchema> {
         return Object.fromEntries(await Promise.all(result));
     };
     
+    /**
+     * Retrieve and memoize the result of the given property path.
+     * Calls any functions and caches the output for any subsequent calls.
+     */
     protected _get(key: string) {
         return Clues(this._state, key as string, { CONTEXT: this });
     }
     
+    /**
+     * Disregard field memoization and always call any functions associated
+     * with the provided property path.
+     */
     public _call(key: string) {
         const freshContext = new TemplateContext(this.template);
         
