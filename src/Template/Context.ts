@@ -13,8 +13,6 @@ export abstract class SchemaContext<
     TSchema,
     TOutput = ResolveSchemaOutput<TSchema>,
 > {
-    public readonly _output!: TOutput;
-    
     public get<TKey extends keyof TOutput>(key: TKey): Promise<SchemaFieldValue<TOutput[TKey]>>
     public get<TKey extends Paths<TOutput> & string>(key: TKey): Promise<Get<TOutput, TKey>>
     public get<TKey extends any>(key: TKey): Promise<unknown> {
