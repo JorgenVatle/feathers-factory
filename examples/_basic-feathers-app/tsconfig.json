@@ -1,12 +1,6 @@
 {
-  "extends": "../../packages/feathers-factory/tsconfig.json",
-  "compilerOptions": {
-    "paths": {
-      "feathers-factory": [
-        "../../src/index.ts"
-      ]
-    }
-  },
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {},
   "include": [
     "./**/*.ts"
   ]
