@@ -1,6 +1,6 @@
 import Clues from 'clues';
 import type { Get, Paths } from 'type-fest';
-import type { ResolveFieldOutput, ResolveSchemaOutput } from './Schema';
+import type { ResolveFieldOutput, ResolveSchema } from './Schema';
 import { FactoryTemplate } from './Template';
 
 /**
@@ -11,7 +11,7 @@ import { FactoryTemplate } from './Template';
  */
 export abstract class SchemaContext<
     TSchema,
-    TOutput = ResolveSchemaOutput<TSchema>,
+    TOutput = ResolveSchema<TSchema>,
 > {
     /**
      * Resolve the value of a template field within the current generator

@@ -1,6 +1,6 @@
 import type { Simplify } from 'type-fest';
 import { type SchemaContext, TemplateContext } from './Context';
-import type { BaseSchema, ResolveSchemaOutput, SchemaOverrides, TemplateSchema } from './Schema';
+import type { BaseSchema, ResolveSchema, SchemaOverrides, TemplateSchema } from './Schema';
 
 
 export class FactoryTemplate<
@@ -39,7 +39,7 @@ export class FactoryTemplate<
      * In other words, functions are guaranteed to run only once with each
      * call to {@link resolve}.
      */
-    public resolve(overrides?: SchemaOverrides<ResolveSchemaOutput<TSchema>>): Promise<ResolveSchemaOutput<TSchema>> {
+    public resolve(overrides?: SchemaOverrides<ResolveSchema<TSchema>>): Promise<ResolveSchema<TSchema>> {
         const template = this.extend(overrides || {});
         const context = new TemplateContext(template);
         
@@ -103,5 +103,5 @@ export class FactoryTemplate<
  */
 export type InferOutput<T> =
     T extends FactoryTemplate<infer TOutput>
-    ? ResolveSchemaOutput<TOutput>
-    : ResolveSchemaOutput<T>;
+    ? ResolveSchema<TOutput>
+    : ResolveSchema<T>;

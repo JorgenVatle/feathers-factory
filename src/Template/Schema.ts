@@ -44,12 +44,6 @@ export type SchemaField<
     | (() => FieldValue<TValue>)
     | (FieldValue<TValue>);
 
-/**
- * Resolve the output type of the provided schema field.
- * Unwraps any promises and function return types.
- */
-export type ResolveFieldOutput<T> = T extends SchemaField<infer T> ? T : T;
-
 type FieldValue<T> = Promise<T> | T;
 
 /**
@@ -64,6 +58,12 @@ type FieldValue<T> = Promise<T> | T;
  * const data: ResolveSchemaOutput<schema>
  *     // -> { userId: number, createdAt: Date }
  */
-export type ResolveSchemaOutput<TSchema> = Simplify<{
+export type ResolveSchema<TSchema> = Simplify<{
     [key in keyof TSchema]: ResolveFieldOutput<TSchema[key]>;
 }>
+
+/**
+ * Resolve the output type of the provided schema field.
+ * Unwraps any promises and function return types.
+ */
+export type ResolveFieldOutput<T> = T extends SchemaField<infer T> ? T : T;
