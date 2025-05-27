@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { ArticleFactory } from './Factories';
+import { ArticleFactory } from '../Factories';
 
 describe('Feathers Test Factories', () => {
     describe('ArticleFactory', () => {
