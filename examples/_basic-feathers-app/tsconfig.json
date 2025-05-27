@@ -1,9 +1,9 @@
 {
-  "extends": "../tsconfig.json",
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
     "paths": {
       "feathers-factory": [
-        "../src/index.ts"
+        "../../src/index.ts"
       ]
     }
   },
