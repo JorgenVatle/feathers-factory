@@ -104,6 +104,7 @@ export default class Factory<
     
     /**
      * Create a new factory using the current one as the basis for the next one.
+     *
      * @param data Replaces fields in the default factory template. Can be
      *      functions or static values. Useful if you have a field that has
      *      some side effects that you want to override or already have the
@@ -112,16 +113,37 @@ export default class Factory<
      *      functions or static values. Functions are called and replaced with
      *      their return type.
      */
-    public extend<
+    public extend(
+        data: TemplateSchemaOverrides<TSchema>,
+        params: TemplateSchemaOverrides<TParams>
+    ): Factory<TParams, TResult, TParams> {
+        // @ts-expect-error This overrides the expected type from the service.
+        return new Factory(this.service, data, params);
+    }
+    
+    /**
+     * Create a new factory using the current one as the basis for the next one.
+     * The difference from {@link extend} is that this method will allow you to
+     * specify field types that are not otherwise allowed by the service.
+     *
+     * @param data Replaces fields in the default factory template. Can be
+     *      functions or static values. Useful if you have a field that has
+     *      some side effects that you want to override or already have the
+     *      output for.
+     * @param params Optional params to send to the service. Can also be either
+     *      functions or static values. Functions are called and replaced with
+     *      their return type.
+     */
+    public unsafeExtend<
         TDataOverrides extends BaseSchema,
         TParamsOverrides extends BaseSchema,
+        
+        TTemplateOutput = InferOutput<TemplateSchemaOverrides<Omit<TSchema, keyof TDataOverrides> & TDataOverrides>>,
+        TParamsOutput = InferOutput<TemplateSchemaOverrides<Omit<TParams, keyof TParamsOverrides> & TParamsOverrides>>
     >(
         data: TemplateSchemaOverrides<Omit<TSchema, keyof TDataOverrides> & TDataOverrides>,
         params: TemplateSchemaOverrides<Omit<TParams, keyof TParamsOverrides> & TParamsOverrides>
-    ): Factory<
-        InferOutput<TemplateSchemaOverrides<Omit<TSchema, keyof TDataOverrides> & TDataOverrides>>,
-        InferOutput<TemplateSchemaOverrides<Omit<TParams, keyof TParamsOverrides> & TParamsOverrides>>
-    > {
+    ): Factory<TTemplateOutput, TTemplateOutput, TParamsOutput> {
         // @ts-expect-error This overrides the expected type from the service.
         return new Factory(this.service, data, params);
     }
