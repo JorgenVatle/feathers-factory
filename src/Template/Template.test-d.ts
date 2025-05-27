@@ -173,4 +173,17 @@ describe('FactoryTemplate', () => {
         })
     })
     
+    describe('Context call methods', () => {
+        it('Resolves types for static fields', async () => {
+            const template = new FactoryTemplate({
+                staticField: 'ok' as const,
+                staticPromise: Promise.resolve('ok' as const),
+                async testThis() {
+                    expectTypeOf(await this.call('staticField')).toEqualTypeOf<'ok'>();
+                    expectTypeOf(await this.call('staticPromise')).toEqualTypeOf<'ok'>();
+                }
+            })
+        })
+    })
+    
 })
