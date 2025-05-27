@@ -154,7 +154,7 @@ describe('Extend method', () => {
         });
         
         const result = await newFactory.create();
-        await expectTypeOf(result.test2).toEqualTypeOf<'ok'>();
+        expectTypeOf(result.test2).toEqualTypeOf<'ok'>();
     })
     
     it('can reference fields from the original template within new fields', () => {
