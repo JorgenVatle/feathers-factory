@@ -44,7 +44,6 @@
   },
   "homepage": "https://github.com/JorgenVatle/feathers-factory#readme",
   "devDependencies": {
-    "@changesets/cli": "^2.29.4",
     "@faker-js/faker": "^9.7.0",
     "@feathersjs/feathers": "^5.0.34",
     "@types/node": "^20.17.46",
