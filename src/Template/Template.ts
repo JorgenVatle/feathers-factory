@@ -118,7 +118,8 @@ export class FactoryTemplate<
  * // }
  *
  */
-export type InferOutput<T> =
+export type InferOutput<T> = Simplify<
     T extends FactoryTemplate<infer TOutput>
     ? ResolveSchema<TOutput>
-    : ResolveSchema<T>;
+    : ResolveSchema<T>
+>;
