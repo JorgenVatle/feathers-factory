@@ -99,4 +99,51 @@ describe('Service params', () => {
             })
         })
     })
+});
+
+describe('Extend method', () => {
+    type ServiceType = {
+        _id: string;
+        createdAt: Date;
+        customer: {
+            firstName: string;
+            lastName: string;
+            address: {
+                street: string;
+                city: string;
+            }
+        },
+        test: any;
+    }
+    const service = {
+        async create(data: ServiceType) {
+            return data;
+        }
+    }
+    const factory = new Factory(service, {
+        _id: () => process.hrtime().join('-'),
+        createdAt: () => new Date(),
+        customer: () => {
+            return {
+                firstName: 'John',
+                lastName: 'Doe',
+                address: {
+                    street: '123 Main St',
+                    city: 'Anytown',
+                }
+            }
+        },
+        test: () => {}
+    });
+    
+    it('can reference fields from the original template', () => {
+        factory.extend({
+            async test() {
+                expectTypeOf(await this.get('_id')).toEqualTypeOf<string>();
+                expectTypeOf(await this.get('createdAt')).toEqualTypeOf<Date>();
+                expectTypeOf(await this.get('customer')).toEqualTypeOf<ServiceType['customer']>();
+            }
+        })
+    });
+    
 })
