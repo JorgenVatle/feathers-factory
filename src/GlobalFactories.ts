@@ -1,5 +1,5 @@
 import { Params } from '@feathersjs/feathers';
-import Factory from './Factory';
+import { Factory } from './Factory';
 import type { HasBeenAugmented } from './lib/Utilities';
 import type { TemplateSchemaOverrides } from './Template';
 
