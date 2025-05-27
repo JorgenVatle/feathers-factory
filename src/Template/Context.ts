@@ -77,7 +77,17 @@ export abstract class SchemaContext<
         return this._call(key);
     }
     
+    /**
+     * Resolve the value of a field within the current context. Ensures the
+     * value will be cached in the current context. So functions will only run
+     * once.
+     */
     protected abstract _get(path: string): Promise<any>;
+    
+    /**
+     * Resolve a template property in a new context. Ensures a new value will
+     * be provided every time.
+     */
     protected abstract _call(path: string): Promise<any>;
 }
 
@@ -108,19 +118,12 @@ export class TemplateContext<TSchema> extends SchemaContext<TSchema> {
     }
     
     
-    /**
-     * Resolve the value of a field within the current context. Ensures the
-     * value will be cached in the current context. So functions will only run
-     * once.
-     */
+   
     protected _get(key: string) {
         return Clues(this._state, key as string, { CONTEXT: this });
     }
     
-    /**
-     * Resolve a template property in a new context. Ensures a new value will
-     * be provided every time.
-     */
+    
     public _call(key: string) {
         const freshContext = new TemplateContext(this.template);
         
