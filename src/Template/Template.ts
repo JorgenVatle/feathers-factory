@@ -72,6 +72,9 @@ export class FactoryTemplate<
      * references sibling fields within the template, they will also be called
      * every time you run this method.
      *
+     * @see {@link resolve} - Resolves all template fields within the same
+     *      context
+     *
      * @example
      * const template = new FactoryTemplate({
      *     order: () => OrderFactory.create(),
