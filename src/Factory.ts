@@ -9,7 +9,7 @@ export default class Factory<
     TParams = Params,
 > {
     public readonly template: FactoryTemplate<TSchema>;
-    protected readonly params: FactoryTemplate<Params>;
+    public readonly paramsTemplate: FactoryTemplate<Params>;
     
     /**
      * Factory constructor.
@@ -35,7 +35,7 @@ export default class Factory<
             this.template = new FactoryTemplate(template);
         }
         
-        this.params = new FactoryTemplate(defaultParams);
+        this.paramsTemplate = new FactoryTemplate(defaultParams);
     }
     
     /**
@@ -46,7 +46,7 @@ export default class Factory<
         params?: TemplateSchemaOverrides<TParams>,
     ): Promise<TResult> {
         const resolvedData: any = await this.get(data);
-        const resolvedParams = await this.params.resolve(params);
+        const resolvedParams = await this.paramsTemplate.resolve(params);
         
         return this.service.create(resolvedData, resolvedParams as TParams) as Promise<TResult>;
     }
