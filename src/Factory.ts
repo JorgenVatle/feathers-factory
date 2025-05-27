@@ -8,7 +8,7 @@ export default class Factory<
     TResult = TSchema,
     TParams = Params,
 > {
-    protected readonly data: FactoryTemplate<TSchema>;
+    protected readonly template: FactoryTemplate<TSchema>;
     protected readonly params: FactoryTemplate<Params>;
     
     /**
@@ -16,7 +16,7 @@ export default class Factory<
      */
     public constructor(
         private readonly service: FactoryCompatibleService<TSchema, TResult, TParams>,
-        data: TemplateSchema<{
+        template: TemplateSchema<{
             [key in keyof TSchema]: SchemaField<TSchema[key]>
         }> | FactoryTemplate<{
             [key in keyof TSchema]: SchemaField<TSchema[key]>
@@ -27,12 +27,12 @@ export default class Factory<
             throw new FeathersServiceNotDefined('The provided service doesn\'t appear to exist!');
         }
         
-        if (data instanceof FactoryTemplate) {
+        if (template instanceof FactoryTemplate) {
             // @ts-expect-error mismatched types
-            this.data = data;
+            this.template = template;
         } else {
             // @ts-expect-error mismatched types
-            this.data = new FactoryTemplate(data);
+            this.template = new FactoryTemplate(template);
         }
         
         this.params = new FactoryTemplate(defaultParams);
@@ -76,7 +76,7 @@ export default class Factory<
      */
     public get(overrides: TemplateSchemaOverrides<TSchema> = {}): Promise<TResult> {
         // @ts-expect-error type mismatch
-        return this.data.resolve(overrides);
+        return this.template.resolve(overrides);
     }
     
 }
