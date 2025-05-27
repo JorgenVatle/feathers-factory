@@ -117,19 +117,6 @@ export class TemplateContext<TSchema> extends SchemaContext<TSchema> {
         Object.assign(this._state, Object.fromEntries(entries));
     }
     
-    
-   
-    protected _get(key: string) {
-        return Clues(this._state, key as string, { CONTEXT: this });
-    }
-    
-    
-    public _call(key: string) {
-        const freshContext = new TemplateContext(this.template);
-        
-        return freshContext._get(key);
-    }
-    
     /**
      * Wrap any template functions around an array to indicate to Clues.js
      * what parameters are expected. Which is just this class instance.
@@ -173,6 +160,16 @@ export class TemplateContext<TSchema> extends SchemaContext<TSchema> {
         });
         return Object.fromEntries(await Promise.all(result));
     };
+    
+    protected _get(key: string) {
+        return Clues(this._state, key as string, { CONTEXT: this });
+    }
+    
+    public _call(key: string) {
+        const freshContext = new TemplateContext(this.template);
+        
+        return freshContext._get(key);
+    }
 }
 
 /**
