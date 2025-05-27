@@ -8,7 +8,7 @@ export default class Factory<
     TResult = TSchema,
     TParams = Params,
 > {
-    protected readonly template: FactoryTemplate<TSchema>;
+    public readonly template: FactoryTemplate<TSchema>;
     protected readonly params: FactoryTemplate<Params>;
     
     /**
