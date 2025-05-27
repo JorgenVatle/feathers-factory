@@ -146,4 +146,12 @@ describe('Extend method', () => {
         })
     });
     
+    it('can reference fields from the original template within new fields', () => {
+        const newFactory = factory.unsafeExtend({
+            async test2() {
+                expectTypeOf(await this.get('test')).toEqualTypeOf<any>();
+            }
+        })
+    })
+    
 })
