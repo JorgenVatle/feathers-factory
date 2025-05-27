@@ -43,7 +43,7 @@ export class TemplateContext<TSchema> extends SchemaContext<TSchema> {
      * through the {@link TemplateContext.get} method.
      * @private
      */
-    public readonly _state: ContextState<TSchema>;
+    public readonly _state: ContextState;
     
     constructor(protected readonly template: FactoryTemplate<TSchema>) {
         super();
@@ -161,9 +161,8 @@ export class TemplateContext<TSchema> extends SchemaContext<TSchema> {
 /**
  * Resolver state. May contain some partially resolved template fields.
  */
-type ContextState<TTemplate> = {
-    [key in keyof TTemplate]: ContextField<TTemplate[key]>;
-}
+type ContextState = Record<string, ContextField>;
+
 /**
  * Contextualized FactoryTemplate fields.
  * When resolving some fields will get converted to promises,
@@ -172,7 +171,7 @@ type ContextState<TTemplate> = {
  * Todo: Attempt to infer types that will never get converted to a promise or
  *  function. (sync functions, static values, etc.)
  */
-type ContextField<TType> =
+type ContextField<TType = unknown> =
     | TType
     | Promise<TType>
     | (() => Promise<TType> | TType);
