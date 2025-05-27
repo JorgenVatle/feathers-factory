@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import App from '../feathers/App';
-import { ArticleFactory, CommentOnOwnArticleFactory } from '../feathers/Factories';
+import App from '../App';
+import { ArticleFactory, CommentOnOwnArticleFactory } from '../Factories';
 
 describe('relational/cross-dependent factories', () => {
     it('creates user documents for articles', async () => {
