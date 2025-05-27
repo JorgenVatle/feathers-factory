@@ -62,7 +62,7 @@ export default class Factory<
         data?: TemplateSchemaOverrides<TSchema>,
         params?: TemplateSchemaOverrides<TParams>,
     ): Promise<TResult> {
-        const resolvedData: any = await this.get(data);
+        const resolvedData: any = await this.resolve(data);
         const resolvedParams = await this.paramsTemplate.resolve(params);
         
         return this.service.create(resolvedData, resolvedParams as TParams) as Promise<TResult>;
@@ -104,7 +104,7 @@ export default class Factory<
      *      some side effects that you want to override or already have the
      *      output for.
      */
-    public get(overrides: TemplateSchemaOverrides<TSchema> = {}): Promise<TResult> {
+    public resolve(overrides: TemplateSchemaOverrides<TSchema> = {}): Promise<TResult> {
         // @ts-expect-error type mismatch
         return this.template.resolve(overrides);
     }

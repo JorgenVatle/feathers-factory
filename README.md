@@ -154,7 +154,7 @@ await CommentFactoryWithSlugs.createMany(1337, {}, {
 ### Only fetch data
 You can resolve the factory data _without_ inserting it into the database using the Factory `get()` method.
 ```js
-await UserFactory.get({ username: 'phantom-user99' });
+await UserFactory.resolve({ username: 'phantom-user99' });
 // { username: "phantom-user99", membership: "bronze" }
 ```
 

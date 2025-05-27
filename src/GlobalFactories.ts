@@ -104,7 +104,7 @@ export default new class GlobalFactories {
             throw Error(`Could not locate factory '${factoryName}'. Did you define it?`);
         }
 
-        return factory.get(overrides);
+        return factory.resolve(overrides);
     }
 
 }
