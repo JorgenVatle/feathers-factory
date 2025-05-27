@@ -1,4 +1,4 @@
-import type { Service } from '@feathersjs/feathers';
+import type { Params, Service } from '@feathersjs/feathers';
 import { describe, expectTypeOf, it } from 'vitest';
 import type { FactoryService } from '../src';
 import { Factory } from '../src';
@@ -79,7 +79,8 @@ describe('Factory Types', () => {
         })
         
         describe('Standard Feathers Service params', () => {
-            const factory = new Factory({} as Service<{ foo: 'bar' }>, { foo: 'bar', });
+            type DocumentType = { foo: 'bar' };
+            const factory = new Factory({} as Service<DocumentType, DocumentType, Params<DocumentType>>, { foo: 'bar', });
             
             it('allows expected params to be passed', () => {
                 expectTypeOf(factory.create).toBeCallableWith({}, { paginate: false })
@@ -88,13 +89,17 @@ describe('Factory Types', () => {
             
             it('forbids unexpected params to be passed', () => {
                 expectTypeOf(factory.create).toBeCallableWith({}, {
-                    // @ts-expect-error
-                    paginate: 'invalid',
+                    query: {
+                        // @ts-expect-error
+                        foo: 'invalid',
+                    }
                 });
                 
                 expectTypeOf(factory.create).toBeCallableWith({}, {
-                    // @ts-expect-error
-                    paginate: {},
+                    query: {
+                        // @ts-expect-error
+                        unknownField: 'invalid',
+                    }
                 })
             })
         })
