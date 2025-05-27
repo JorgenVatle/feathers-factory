@@ -23,8 +23,13 @@ export class FactoryTemplate<
     }
     
     /**
-     * Run all factory functions in the template and return final result to be
-     * stored in the database.
+     * Run all factory functions in the template within a new template context.
+     *
+     * This ensures that fields within the template that depend on each other
+     * (through e.g {@link SchemaContext.get}) will only execute once.
+     *
+     * In other words, functions are guaranteed to run only once with each
+     * call to {@link resolve}.
      */
     public resolve(overrides?: TemplateSchemaOverrides<ResolveSchemaOutput<TSchema>>): Promise<ResolveSchemaOutput<TSchema>> {
         const template = this.extend(overrides || {});
