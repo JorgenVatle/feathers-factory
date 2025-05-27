@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="feathers-factory" pattern="file[feathers-factory]:src//*||file[feathers-factory]:test//*" />
+</component>
