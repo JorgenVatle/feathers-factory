@@ -22,7 +22,7 @@ export interface GlobalFactories {
 }
 
 
-export default new class GlobalFactories {
+class GlobalFactoryManager {
 
     /**
      * Defined factories.
@@ -108,6 +108,8 @@ export default new class GlobalFactories {
     }
 
 }
+
+export const GlobalFactories = new GlobalFactoryManager();
 
 type FactoryName = keyof FactoryRegistry;
 type GlobalFactory<TName extends FactoryName> = FactoryRegistry[TName];
