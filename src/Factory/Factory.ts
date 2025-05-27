@@ -1,5 +1,5 @@
 import { Params } from '@feathersjs/feathers';
-import { FeathersServiceNotDefined } from '../Errors/FeathersFactoryError';
+import { ServiceNotDefined } from '../Errors';
 import {
     type BaseSchema,
     FactoryTemplate,
@@ -38,7 +38,7 @@ export class Factory<
         defaultParams: TemplateSchema<TParams> = {} as any,
     ) {
         if (!service) {
-            throw new FeathersServiceNotDefined('The provided service doesn\'t appear to exist!');
+            throw new ServiceNotDefined('The provided service doesn\'t appear to exist!');
         }
         
         if (template instanceof FactoryTemplate) {

@@ -1,1 +1,2 @@
-export * as Errors from './FeathersFactoryError';
+export * from './Error';
+export * from './ServiceNotDefined';
