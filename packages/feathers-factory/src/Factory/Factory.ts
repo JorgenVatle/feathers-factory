@@ -81,6 +81,18 @@ export class Factory<
      * type signature of the user-facing create method.
      * {@inheritDoc Factory.create}
      * @see {@link Factory.create}
+     * @example
+     * class CustomFactory<TSchema, TResult, TParams> extends Factory<TSchema, TResult, TParams> {
+     *     protected _create(data, params) {
+     *         try {
+     *             return super._create(data, params)
+     *         } catch (error) {
+     *             // ...
+     *         } finally {
+     *             // ...
+     *         }
+     *     }
+     * }
      */
     protected async _create(
         data: TSchema,
