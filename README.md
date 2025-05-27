@@ -276,7 +276,8 @@ const movieFactory = new Factory(movies, {
 ```
 
 ## Credit
-Thanks to [clues.js](https://www.npmjs.com/package/clues) for providing an excellent library for resolving in-object data.
+Thanks to [clues.js](https://www.npmjs.com/package/clues) for providing an excellent library for resolving 
+contextualized object data.
 
 ## License
 This repository is licensed under the ISC license.
