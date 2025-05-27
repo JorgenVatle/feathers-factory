@@ -38,6 +38,7 @@
   },
   "author": "JorgenVatle",
   "license": "ISC",
+  "readme": "../../README.md",
   "bugs": {
     "url": "https://github.com/JorgenVatle/feathers-factory/issues"
   },
