@@ -1,7 +1,7 @@
 import type { Service } from '@feathersjs/feathers';
 import { describe, expectTypeOf, it } from 'vitest';
-import { Factory } from '../src/Factory';
-import type { FactoryCompatibleService } from '../src/ServiceTypes';
+import { Factory } from '../src';
+import type { FactoryCompatibleService } from '../src/Factory/ServiceTypes';
 
 describe('Factory Types', () => {
     
