@@ -5,7 +5,7 @@ import { FactoryTemplate } from './Template';
 describe('FactoryTemplate', () => {
     
     it('exposes return types of sibling functions through a context parameter', () => {
-        const template = new FactoryTemplate({
+        new FactoryTemplate({
             arrowFunction: () => 'ok' as const,
             // Todo: use non-explicit type
             asyncPromise: async (): Promise<'ok'> => 'ok' as const,
@@ -21,7 +21,7 @@ describe('FactoryTemplate', () => {
     })
     
     it('exposes return types of sibling functions through method "this" context', () => {
-        const template = new FactoryTemplate({
+        new FactoryTemplate({
             arrowFunction: () => 'ok' as const,
             asyncPromise: async () => 'ok' as const,
             asyncDate: () => { return new Date() },
@@ -176,7 +176,7 @@ describe('FactoryTemplate', () => {
     describe('Context call methods', () => {
         
         it('Resolves types for static fields', async () => {
-            const template = new FactoryTemplate({
+            new FactoryTemplate({
                 staticField: 'ok' as const,
                 staticPromise: Promise.resolve('ok' as const),
                 
@@ -188,7 +188,7 @@ describe('FactoryTemplate', () => {
         })
         
         it('Resolves types for method fields', async () => {
-            const template = new FactoryTemplate({
+            new FactoryTemplate({
                 method() {
                     return 'ok' as const
                 },
