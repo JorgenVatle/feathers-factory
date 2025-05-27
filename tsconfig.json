@@ -17,7 +17,7 @@
 
     "paths": {
       "feathers-factory": [
-        "./src/index.ts"
+        "./packages/feathers-factory/src/index.ts"
       ]
     }
 
