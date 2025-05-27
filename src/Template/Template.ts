@@ -2,24 +2,31 @@ import { type SchemaContext, TemplateContext } from './Context';
 import type { BaseSchema, ResolveSchemaOutput, TemplateSchema, TemplateSchemaOverrides } from './Schema';
 
 
-/**
- * Factory data template.
- * Defines a set of static values or functions that can be run to produce new
- * data every time the template is resolved. Normally by the Factory class.
- *
- * Each template resolve request is contextualized so that the fields in your
- * template always receive the same value if they depend on the result of
- * sibling fields.
- *
- * Factory Templates has nothing to do with Feathers.js and you're free to use
- * them anywhere there is a use for running a set of functions that depend on
- * output of sibling fields within the same context.
- */
 export class FactoryTemplate<
     TSchema,
     TContext extends SchemaContext<TSchema> = SchemaContext<TSchema>,
 > {
-    constructor(public readonly _schema: TemplateSchema<TSchema>) {
+    public readonly _schema: TemplateSchema<TSchema>;
+    
+    /**
+     * Factory data template.
+     * Defines a set of static values or functions that can be run to produce new
+     * data every time the template is resolved. Normally by the Factory class.
+     *
+     * Each template resolve request is contextualized so that the fields in your
+     * template always receive the same value if they depend on the result of
+     * sibling fields.
+     *
+     * Factory Templates has nothing to do with Feathers.js and you're free to use
+     * them anywhere there is a use for running a set of functions that depend on
+     * output of sibling fields within the same context.
+     *
+     * @param schema Template schema - Can be functions or static values. All
+     *      functions will be replaced with their return types when
+     *      resolving the template
+     */
+    constructor(schema: TemplateSchema<TSchema>) {
+        this._schema = schema;
     }
     
     /**
