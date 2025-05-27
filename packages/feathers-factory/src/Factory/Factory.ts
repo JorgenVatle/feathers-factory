@@ -164,7 +164,7 @@ export class Factory<
         TDataOverrides extends BaseSchema,
         TParamsOverrides extends BaseSchema,
         
-        TTemplateOutput = Omit<TSchema, keyof TDataOverrides> & InferOutput<TDataOverrides>,
+        TTemplateOutput = {} extends TDataOverrides ? TSchema : Omit<TSchema, keyof TDataOverrides> & InferOutput<TDataOverrides>,
         TParamsOutput = Omit<TParams, keyof TParamsOverrides> & InferOutput<TParamsOverrides>,
     >(
         data: SchemaOverrides<Omit<TSchema, keyof TDataOverrides> & TDataOverrides>,
