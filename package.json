@@ -6,7 +6,8 @@
     "test": "vitest",
     "release": "changeset publish",
     "build": "npm run build -w packages/feathers-factory",
-    "lint": "npm run lint -w packages/feathers-factory"
+    "lint": "npm run lint -w packages/feathers-factory",
+    "prerelease": "npm run lint && npm run test"
   },
   "devDependencies": {
     "@changesets/cli": "^2.29.4",
