@@ -61,7 +61,13 @@ export class TemplateContext<TSchema> extends SchemaContext<TSchema> {
      * context. Fields are only resolved once per generator context.
      *
      * This ensures that you can safely reference the same field multiple times
-     * within the same generation context and from different fields.
+     * within the same generation context and from different fields and always
+     * get the same value.
+     *
+     * In other words, template functions will only run once regardless of how
+     * many times you call {@link TemplateContext.get}.
+     *
+     * If you do want a new value, use {@link TemplateContext.call} instead.
      *
      * @example
      * template = ({
