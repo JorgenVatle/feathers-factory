@@ -254,11 +254,12 @@ The resolved data is then passed directly into your
 `create()` method.
 
 ## Feathers-Factory isn't just for Feathers apps
-As Feathers.js Service API is very lightweight, this package doesn't depend on any Feathers-specific features. We just
-expect a Feathers-service-like signature for creating data.
+This package doesn't depend on any Feathers.js specific features to function. We just assume a Feathers-service-like
+`create()` signature for adding entries to your app's database.
 
-You can just as easily pass any object with a `create()` method into the Factory class. Types are inferred from the
-method's data parameter. So there's no difference in whether you provide an actual Feathers service or something else.
+In other words, you can just as easily pass any object with a `create()` method into the Factory class. Types are
+inferred from the method's data parameter. So there's no difference in whether you provide an actual Feathers service
+or something else entirely.
 
 ```ts
 import { database } from './mongo';
