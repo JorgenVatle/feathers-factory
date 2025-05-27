@@ -1,3 +1,4 @@
+import type { Simplify } from 'type-fest';
 import type { SchemaContext } from './Context';
 
 /**
@@ -68,6 +69,6 @@ type FieldValue<T> = Promise<T> | T;
  * const data: ResolveSchemaOutput<schema>
  *     // -> { userId: number, createdAt: Date }
  */
-export type ResolveSchemaOutput<TSchema> = {
+export type ResolveSchemaOutput<TSchema> = Simplify<{
     [key in keyof TSchema]: SchemaFieldValue<TSchema[key]>;
-}
+}>
