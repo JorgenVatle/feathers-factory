@@ -280,6 +280,6 @@ Thanks to [clues.js](https://www.npmjs.com/package/clues) for providing an excel
 contextualized object data.
 
 ## License
-This repository is licensed under the ISC license.
+This repository is licensed under the [ISC license](LICENSE).
 
 Copyright (c) 2019, Jørgen Vatle.
