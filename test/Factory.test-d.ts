@@ -1,7 +1,7 @@
 import type { Service } from '@feathersjs/feathers';
 import { describe, expectTypeOf, it } from 'vitest';
+import type { FactoryService } from '../src';
 import { Factory } from '../src';
-import type { FactoryCompatibleService } from '../src/Factory/ServiceTypes';
 
 describe('Factory Types', () => {
     
@@ -9,7 +9,7 @@ describe('Factory Types', () => {
         function createFactory<
             TSchema,
             TOutput = TSchema
-        >(service: FactoryCompatibleService<TSchema, TOutput>): NoInfer<(data: TSchema) => TOutput> {
+        >(service: FactoryService<TSchema, TOutput>): NoInfer<(data: TSchema) => TOutput> {
             return {} as any;
         }
         
