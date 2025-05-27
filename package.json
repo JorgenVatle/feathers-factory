@@ -45,7 +45,7 @@
   "devDependencies": {
     "@changesets/cli": "^2.29.4",
     "@faker-js/faker": "^9.7.0",
-    "@feathersjs/feathers": "^4.5.17",
+    "@feathersjs/feathers": "^5.0.34",
     "@types/node": "^20.17.46",
     "cross-env": "^5.2.0",
     "ts-node": "^8.0.3",
