@@ -1,6 +1,6 @@
 import { faker, simpleFaker } from '@faker-js/faker';
+import { Factory, type FactoryService } from 'feathers-factory';
 import { afterAll, afterEach, describe, expect, it, vi } from 'vitest';
-import { Factory, type FactoryService } from '../src';
 
 describe('Factory', () => {
     const factory = new Factory(userService, {

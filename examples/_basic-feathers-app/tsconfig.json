@@ -1,5 +1,5 @@
 {
-  "extends": "../../tsconfig.json",
+  "extends": "../../packages/feathers-factory/tsconfig.json",
   "compilerOptions": {
     "paths": {
       "feathers-factory": [
@@ -8,6 +8,6 @@
     }
   },
   "include": [
-    "./**/*.ts",
+    "./**/*.ts"
   ]
 }

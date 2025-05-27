@@ -1,5 +1,5 @@
+import { FactoryTemplate } from 'feathers-factory';
 import { describe, expect, expectTypeOf, it } from 'vitest';
-import { FactoryTemplate } from '../src';
 
 
 describe('Real-world examples', () => {

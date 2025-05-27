@@ -1,7 +1,7 @@
 import type { Params, Service } from '@feathersjs/feathers';
+import type { FactoryService } from 'feathers-factory';
+import { Factory } from 'feathers-factory';
 import { describe, expectTypeOf, it } from 'vitest';
-import type { FactoryService } from '../src';
-import { Factory } from '../src';
 
 describe('Factory Types', () => {
     

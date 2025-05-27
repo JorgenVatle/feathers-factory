@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
+import { FactoryTemplate } from 'feathers-factory';
 import { describe, expectTypeOf, it } from 'vitest';
-import { FactoryTemplate } from '../src';
 
 describe('FactoryTemplate', () => {
     
