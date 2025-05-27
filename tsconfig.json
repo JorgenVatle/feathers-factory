@@ -7,7 +7,7 @@
     "noEmit": true,
     "outDir": "./dist",
     "lib": ["es2022"],
-
+    "isolatedModules": true,
     "strict": true,
     "noImplicitReturns": true,
     "types": [],
