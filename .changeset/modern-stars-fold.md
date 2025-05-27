@@ -9,5 +9,6 @@ Add `extend` and `unsafeExtend` methods to Factories, and improved TSDocs.
 - Added and expanded TSDocs for `Factory`, `FactoryTemplate` and `TemplateContext` methods.
 - Renamed `Factory.get()` to `Factory.resolve()` to be more in line with the signatures used in the rest of the library.
 - Renamed `TemplateSchemaOverrides` type helper to `SchemaOverrides` to avoid unnecessary verboseness.
+- Renamed `ResolveSchemaOutput` and `SchemaFieldValue` type helpers to simply `ResolveSchema` and `ResolveField` respectively. These helpers are primarily internal, though are exported as they may be useful in some use cases. 
 - Changed `InferOutput` type helper to work with any input type so it is less finicky to use.
 - Included internal FeathersFactoryError classes in package exports.
