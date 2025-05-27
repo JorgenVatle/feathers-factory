@@ -61,9 +61,9 @@ describe('FactoryTemplate', () => {
             }
         });
         
-        expectTypeOf(await template.get('fullName')).toEqualTypeOf<'John Doe'>();
-        expectTypeOf(await template.get('age')).toEqualTypeOf<50>();
-        expectTypeOf(await template.get('description')).toEqualTypeOf<'John Doe (50)'>();
+        expectTypeOf(await template.resolveField('fullName')).toEqualTypeOf<'John Doe'>();
+        expectTypeOf(await template.resolveField('age')).toEqualTypeOf<50>();
+        expectTypeOf(await template.resolveField('description')).toEqualTypeOf<'John Doe (50)'>();
     })
     
     it('handles static fields', async () => {
@@ -80,8 +80,8 @@ describe('FactoryTemplate', () => {
             }
         });
         
-        expectTypeOf(await template.get('staticField')).toEqualTypeOf<'ok'>();
-        expectTypeOf(await template.get('staticPromise')).toEqualTypeOf<'ok'>();
+        expectTypeOf(await template.resolveField('staticField')).toEqualTypeOf<'ok'>();
+        expectTypeOf(await template.resolveField('staticPromise')).toEqualTypeOf<'ok'>();
     })
     
     it('handles method fields', async () => {
@@ -103,8 +103,8 @@ describe('FactoryTemplate', () => {
             // }
         });
         
-        expectTypeOf(await template.get('staticField')).toEqualTypeOf<'ok'>();
-        expectTypeOf(await template.get('staticPromise')).toEqualTypeOf<'ok'>();
+        expectTypeOf(await template.resolveField('staticField')).toEqualTypeOf<'ok'>();
+        expectTypeOf(await template.resolveField('staticPromise')).toEqualTypeOf<'ok'>();
     })
     
     describe('.get() method dot notation', () => {
@@ -137,11 +137,11 @@ describe('FactoryTemplate', () => {
                 }
             })
             
-            expectTypeOf(await template.get('firstName')).toEqualTypeOf<'John'>();
-            expectTypeOf(await template.get('lastName')).toEqualTypeOf<'Doe'>();
-            expectTypeOf(await template.get('address.street')).toEqualTypeOf<string>();
-            expectTypeOf(await template.get('address.city')).toEqualTypeOf<string>();
-            expectTypeOf(await template.get('address.zip')).toEqualTypeOf<number>();
+            expectTypeOf(await template.resolveField('firstName')).toEqualTypeOf<'John'>();
+            expectTypeOf(await template.resolveField('lastName')).toEqualTypeOf<'Doe'>();
+            expectTypeOf(await template.resolveField('address.street')).toEqualTypeOf<string>();
+            expectTypeOf(await template.resolveField('address.city')).toEqualTypeOf<string>();
+            expectTypeOf(await template.resolveField('address.zip')).toEqualTypeOf<number>();
         });
         
         it('works 1 level deep for promised schema fields', async () => {
@@ -167,9 +167,9 @@ describe('FactoryTemplate', () => {
                 }
             })
             
-            expectTypeOf(await template.get('address.street')).toEqualTypeOf<string>();
-            expectTypeOf(await template.get('address.city')).toEqualTypeOf<string>();
-            expectTypeOf(await template.get('address.zip')).toEqualTypeOf<number>();
+            expectTypeOf(await template.resolveField('address.street')).toEqualTypeOf<string>();
+            expectTypeOf(await template.resolveField('address.city')).toEqualTypeOf<string>();
+            expectTypeOf(await template.resolveField('address.zip')).toEqualTypeOf<number>();
         })
     })
     
