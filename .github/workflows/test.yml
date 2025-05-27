@@ -2,13 +2,11 @@ name: 'Tests'
 run-name: '🧪 Test: ${{ github.event.head_commit.message || github.event.pull_request.title }}'
 on:
   push:
-    branches:
-      - master
+  workflow_call:
   pull_request:
     types:
       - synchronize
       - opened
-  workflow_call:
 
 jobs:
   test:
