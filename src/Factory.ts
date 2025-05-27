@@ -70,6 +70,16 @@ export default class Factory<
     
     /**
      * Quickly populate the database running the factory a number of times.
+     *
+     * @param quantity The number of times to run the factory. Or rather,
+     *      how many documents do you want inserted into the database.
+     * @param overrides Replaces fields in the default factory template. Can be
+     *      functions or static values. Useful if you have a field that has
+     *      some side effects that you want to override or already have the
+     *      output for.
+     * @param params Optional params to send to the service. Can also be either
+     *      functions or static values. Functions are called and replaced with
+     *      their return type.
      */
     public createMany(
         quantity: number,
