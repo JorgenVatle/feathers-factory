@@ -1,13 +1,13 @@
 import { Params } from '@feathersjs/feathers';
 import { ServiceNotDefined } from '../Errors';
 import {
-    type BaseSchema,
     FactoryTemplate,
     type InferOutput,
     type SchemaField,
     type SchemaOverrides,
     type TemplateSchema,
 } from '../Template';
+import type { ExtendSchema } from '../Template/Schema';
 import type { FactoryCompatibleService } from './ServiceTypes';
 
 export class Factory<
@@ -161,14 +161,14 @@ export class Factory<
      *      their return type.
      */
     public unsafeExtend<
-        TDataOverrides extends BaseSchema,
-        TParamsOverrides extends BaseSchema,
+        TDataOverrides,
+        TParamsOverrides,
         
         TTemplateOutput = {} extends TDataOverrides ? TSchema : Omit<TSchema, keyof TDataOverrides> & InferOutput<TDataOverrides>,
         TParamsOutput = Omit<TParams, keyof TParamsOverrides> & InferOutput<TParamsOverrides>,
     >(
-        overrides: SchemaOverrides<Omit<TSchema, keyof TDataOverrides> & TDataOverrides>,
-        params?: SchemaOverrides<Omit<TParams, keyof TParamsOverrides> & TParamsOverrides>
+        overrides: ExtendSchema<TSchema, TDataOverrides>,
+        params?: ExtendSchema<TParams, TParamsOverrides>
     ): Factory<TTemplateOutput, TTemplateOutput, TParamsOutput> {
         // @ts-expect-error This overrides the expected type from the service.
         return new Factory(this.service, overrides, params);
