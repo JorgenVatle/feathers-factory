@@ -172,7 +172,8 @@ describe('FactoryTemplate', () => {
             },
             async fullDescription() {
               return (await this.get('descriptionLines')).join('\n');
-            }
+            },
+            optionalField: 'ok' as 'ok' | undefined,
         });
         
         
@@ -233,6 +234,16 @@ describe('FactoryTemplate', () => {
                     expectTypeOf(await this.get('age')).toEqualTypeOf<number>();
                     expectTypeOf(await this.get('createdAt')).toEqualTypeOf<Date>();
                 },
+            });
+        });
+        
+        it('will mark optional fields as present when defined in overrides', async () => {
+            await template.resolve({
+                optionalField: 'ok',
+                async summary() {
+                    expectTypeOf(await this.get('optionalField')).toEqualTypeOf<'ok'>();
+                    return 'test';
+                }
             });
         })
         
