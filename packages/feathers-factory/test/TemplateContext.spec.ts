@@ -199,18 +199,19 @@ describe('TemplateContext', () => {
             })
         );
         
-        it('will throw an error when accessing a non-existing field', async () => {
-            await expect(async () => {
-                await context.get('nonExistingField' as any)
-            }).rejects.toThrow();
-        });
-        
-        it('will include the field name in the error message', async () => {
-            await expect(async () => {
-                await context.get('nonExistingField' as any)
-            }).rejects.toEqual(expect.objectContaining({
-                message: expect.stringContaining('nonExistingField')
-            }));
+        describe('Non existing fields', () => {
+            const nonExistingField = context.get('nonExistingField' as any);
+            
+            it('will throw an error when accessing a non-existing field', async () => {
+                await expect(nonExistingField).rejects.toThrow();
+            });
+            
+            it('will include the field name in the error message', async () => {
+                await expect(nonExistingField).rejects.toEqual(expect.objectContaining({
+                    message: expect.stringContaining('nonExistingField')
+                }));
+            })
         })
+        
     })
 })
