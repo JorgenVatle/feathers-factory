@@ -31,11 +31,11 @@ export type SchemaOverrides<
 } & ThisType<
     SchemaContext<
         Omit<TSchema, keyof TOverrides>
-        & { 
+        & {
             // Mark fields specified in overrides as non-optional.
             // Also narrows the type to only include fields that are specified
             // in the overrides.
-            [key in keyof TSchema as key extends keyof TOverrides ? key : never]:
+            [key in keyof TSchema as key extends keyof TOverrides ? key : never]-?:
                 key extends keyof TOverrides
                     ? SchemaField<Extract<TSchema[key], TOverrides[key]>>
                     : never;
