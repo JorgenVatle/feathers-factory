@@ -1,5 +1,11 @@
 # feathers-factory
 
+## 5.1.0-beta.5
+
+### Patch Changes
+
+- 56777a3: Fix issue where extending an existing Factory instance would only include the provided overrides in the resulting template
+
 ## 5.1.0-beta.4
 
 ### Patch Changes
