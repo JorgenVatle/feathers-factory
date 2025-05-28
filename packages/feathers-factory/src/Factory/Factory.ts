@@ -139,9 +139,12 @@ export class Factory<
      *      functions or static values. Functions are called and replaced with
      *      their return type.
      */
-    public extend(
-        overrides: SchemaOverrides<TSchema>,
-        params?: SchemaOverrides<TParams>
+    public extend<
+        TDataOverrides,
+        TParamsOverrides,
+    >(
+        overrides: SchemaOverrides<TSchema, TDataOverrides>,
+        params?: SchemaOverrides<TParams, TParamsOverrides>
     ): Factory<TSchema, TResult, TParams> {
         // @ts-expect-error This overrides the expected type from the service.
         return new Factory(this.service, overrides, params);
