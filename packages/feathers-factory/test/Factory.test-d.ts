@@ -133,7 +133,9 @@ describe('Factory', () => {
             factory.extend({
                 optionalProperty: 'ok',
                 maybeUndefined: 'ok',
+                maybeNull: 'ok',
                 async test() {
+                    expectTypeOf(await this.get('maybeNull')).toEqualTypeOf<'ok'>();
                     expectTypeOf(await this.get('maybeUndefined')).toEqualTypeOf<'ok'>();
                     expectTypeOf(await this.get('optionalProperty')).toEqualTypeOf<'ok'>();
                 }
@@ -143,6 +145,7 @@ describe('Factory', () => {
         it('will not make optional fields required by default', () => {
             factory.extend({
                 async test() {
+                    expectTypeOf(await this.get('maybeNull')).not.toEqualTypeOf<'ok'>();
                     expectTypeOf(await this.get('maybeUndefined')).not.toEqualTypeOf<'ok'>();
                     expectTypeOf(await this.get('optionalProperty')).not.toEqualTypeOf<'ok'>();
                 }
