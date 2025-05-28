@@ -10,6 +10,9 @@ describe('FactoryTemplate', () => {
         firstName: 'test',
         lastName: 'test',
         firstNameConst: 'Test' as const,
+        registeredAt() {
+            return this.get('createdAt');
+        }
     });
     
     describe('Resolved data types', async () => {
@@ -246,15 +249,37 @@ describe('FactoryTemplate', () => {
             expectTypeOf(resolved.lastName).toEqualTypeOf<string>();
         })
         
-        it('can override original field types', async () => {
-            const newTemplate = template.extend({
-                _id: () => ({ objectId: 'foo' }),
+        describe('Overwriting field types from parent template', () => {
+            it('allows rewrites of arrow functions', () =>{
+                const newTemplate = template.extend({
+                    _id: () => ({ objectId: 'foo' }),
+                });
+                
+                expectTypeOf(newTemplate.resolve).toBeCallableWith({
+                    _id: { objectId: '123' },
+                });
             });
             
-            expectTypeOf(newTemplate.resolve).toBeCallableWith({
-                _id: { objectId: '123' },
+            it('allows rewrites of static fields', () => {
+                const newTemplate = template.extend({
+                    firstName: null,
+                });
+                
+                expectTypeOf(newTemplate.resolve).toBeCallableWith({
+                    firstName: null,
+                });
             });
-        });
+            
+            it('allows rewrites of method fields', () => {
+                const newTemplate = template.extend({
+                    registeredAt: 'just now',
+                });
+                
+                expectTypeOf(newTemplate.resolve).toBeCallableWith({
+                    registeredAt: 'just now',
+                });
+            })
+        })
         
         describe(`"this" context`, () => {
             it('can access original template fields through "this"', async () => {
