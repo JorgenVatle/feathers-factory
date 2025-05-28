@@ -1,5 +1,11 @@
 # feathers-factory
 
+## 5.1.0-beta.6
+
+### Patch Changes
+
+- 02ef02e: Use overrides provided to Factory create() method for narrowing return type of underlying service.
+
 ## 5.1.0-beta.5
 
 ### Patch Changes
