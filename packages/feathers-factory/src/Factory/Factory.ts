@@ -65,13 +65,19 @@ export class Factory<
      *      their return type.
      * @see {@link https://feathersjs.com/guides/basics/services.html#service-methods Feathers Service.create()}
      */
-    public async create(
-        overrides?: SchemaOverrides<TSchema>,
-        params?: SchemaOverrides<TParams>,
-    ): Promise<TResult> {
+    public async create<
+        TDataOverrides,
+        TParamsOverrides,
+    >(
+        overrides?: SchemaOverrides<TSchema, TDataOverrides>,
+        params?: SchemaOverrides<TParams, TParamsOverrides>,
+    ): Promise<{
+        [key in keyof TSchema]-?: key extends keyof TDataOverrides ? TDataOverrides[key] : TSchema[key]
+    }> {
         const resolvedData: any = await this.resolve(overrides);
         const resolvedParams = await this.paramsTemplate.resolve(params) as TParams;
         
+        // @ts-expect-error Type mismatch.
         return this._create(resolvedData, resolvedParams);
     }
     
@@ -122,6 +128,7 @@ export class Factory<
         const promises: Promise<TResult>[] = [];
         
         for (let i = 0; i < quantity; i++) {
+            // @ts-expect-error Type mismatch.
             promises.push(this.create(overrides, params));
         }
         
