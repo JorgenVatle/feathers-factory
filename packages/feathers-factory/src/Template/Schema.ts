@@ -20,11 +20,25 @@ type ExtendTemplateSchema<T> = {
 
 /**
  * Accepts a partial schema template to override base schema values.
-* Used for template resolve() and extend() methods.
+ * Used for template resolve() and extend() methods.
  */
 export type SchemaOverrides<TSchema> = {
     [key in keyof TSchema]?: SchemaField<TSchema[key]>;
-};
+} & ThisType<SchemaContext<TSchema>>;
+
+/**
+ * Extend an existing schema with new fields and optionally new types.
+ * Unlike {@link SchemaOverrides}, this type will allow you to override types
+ * from the base schema.
+ */
+export type ExtendSchema<
+    TSchema,
+    TOverrides,
+    TMerged = TOverrides & Partial<Omit<ResolveSchema<TSchema>, keyof TOverrides>>,
+> = TemplateSchema<
+    TMerged,
+    SchemaContext<TOverrides & Omit<TSchema, keyof TOverrides>>
+>
 
 
 /**
