@@ -188,5 +188,29 @@ describe('TemplateContext', () => {
         
     })
     
-    
+    describe('Errors', () => {
+        const context = new TemplateContext(
+            new FactoryTemplate({
+                staticField: 'ok',
+                arrowFunction: () => 'ok' as const,
+                staticPromise: Promise.resolve('ok'),
+                asyncPromise: async () => 'ok',
+                asyncDate: () => new Date(),
+            })
+        );
+        
+        it('will throw an error when accessing a non-existing field', async () => {
+            await expect(async () => {
+                await context.get('nonExistingField' as any)
+            }).rejects.toThrow();
+        });
+        
+        it('will include the field name in the error message', async () => {
+            await expect(async () => {
+                await context.get('nonExistingField' as any)
+            }).rejects.toEqual(expect.objectContaining({
+                message: expect.stringContaining('nonExistingField')
+            }));
+        })
+    })
 })
