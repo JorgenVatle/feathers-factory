@@ -1,5 +1,6 @@
 import Clues from 'clues';
 import type { Get, Paths } from 'type-fest';
+import { FieldResolveError } from '../Errors';
 import type { ResolveField, ResolveSchema } from './Schema';
 import { FactoryTemplate } from './Template';
 
@@ -165,8 +166,24 @@ export class TemplateContext<TSchema> extends SchemaContext<TSchema> {
      * Retrieve and memoize the result of the given property path.
      * Calls any functions and caches the output for any subsequent calls.
      */
-    protected _get(key: string): Promise<unknown> {
-        return Clues(this._state, key as string, { CONTEXT: this });
+    protected async _get(key: string): Promise<unknown> {
+        try {
+            return Clues(this._state, key as string, { CONTEXT: this });
+        } catch (error) {
+            if (error instanceof Error) {
+                throw error;
+            }
+            const descriptors = Object.getOwnPropertyDescriptors(error);
+            let message = 'Unknown error';
+            if ('message' in descriptors) {
+                message = descriptors.message.value;
+            }
+            throw new FieldResolveError(
+                `Failed to resolve '${key}' field: ${message}`,
+                { key, context: this },
+                { cause: error }
+            )
+        }
     }
     
     /**
