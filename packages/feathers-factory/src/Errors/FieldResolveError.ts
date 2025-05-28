@@ -1,6 +1,6 @@
 import { Error } from './Error';
 
-export class FieldNotDefined extends Error {
+export class FieldResolveError extends Error {
     constructor(
         message: string,
         public readonly field: { key: string },

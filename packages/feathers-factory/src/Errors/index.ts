@@ -1,3 +1,3 @@
 export * from './Error';
 export * from './ServiceNotDefined';
-export * from './FieldNotDefined';
+export * from './FieldResolveError';
