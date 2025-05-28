@@ -129,9 +129,11 @@ describe('Factory', () => {
         
         it('will narrow types based on the provided overrides', async () => {
             factory.extend({
+                optionalProperty: 'ok',
                 maybeUndefinedDate: new Date(),
                 async test() {
                     expectTypeOf(await this.get('maybeUndefinedDate')).toEqualTypeOf<Date>();
+                    expectTypeOf(await this.get('optionalProperty')).toEqualTypeOf<'ok'>();
                 }
             });
         });
@@ -140,6 +142,7 @@ describe('Factory', () => {
             factory.extend({
                 async test() {
                     expectTypeOf(await this.get('maybeUndefinedDate')).not.toEqualTypeOf<Date>();
+                    expectTypeOf(await this.get('optionalProperty')).not.toEqualTypeOf<'ok'>();
                 }
             });
         })
