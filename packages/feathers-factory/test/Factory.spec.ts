@@ -1,6 +1,6 @@
 import { faker, simpleFaker } from '@faker-js/faker';
 import { Factory, type FactoryService } from 'feathers-factory';
-import { afterAll, afterEach, describe, expect, it, vi } from 'vitest';
+import { afterAll, afterEach, describe, expect, expectTypeOf, it, vi } from 'vitest';
 
 describe('Factory', () => {
     const factory = new Factory(userService, {
@@ -84,6 +84,13 @@ describe('Factory', () => {
                 lastName: 'Doe'
             })
             expect(lastName).not.toHaveBeenCalled();
+        });
+        
+        it('will narrow types based on the provided overrides', async () => {
+            const result = await factory.create({
+                maybeUndefined: 'ok',
+            });
+            expectTypeOf(result.maybeUndefined).toEqualTypeOf<'ok'>();
         })
         
     })
@@ -165,4 +172,5 @@ const userService = createService<{
     lastName: string;
     email: string;
     fullName: string;
+    maybeUndefined?: 'ok' | undefined;
 }>();
