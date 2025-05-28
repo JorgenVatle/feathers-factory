@@ -201,8 +201,8 @@ describe('FactoryTemplate', () => {
                 test: () => {},
             }).resolve({
                 async test() {
-                    expectTypeOf(await this.get('firstName')).toEqualTypeOf<string>();
-                    expectTypeOf(await this.get('lastName')).toEqualTypeOf<string>();
+                    expectTypeOf(await this.get('firstName')).toEqualTypeOf<'John'>();
+                    expectTypeOf(await this.get('lastName')).toEqualTypeOf<'Doe'>();
                     expectTypeOf(await this.get('age')).toEqualTypeOf<number>();
                     expectTypeOf(await this.get('createdAt')).toEqualTypeOf<Date>();
                 },
