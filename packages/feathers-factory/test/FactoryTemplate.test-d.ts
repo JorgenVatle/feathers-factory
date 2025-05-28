@@ -235,6 +235,17 @@ describe('FactoryTemplate', () => {
                     }
                 })
             })
+            
+            it('can access new template fields that accesses original template fields', () => {
+                template.extend({
+                    async summary() {
+                        return await this.get('_id');
+                    },
+                    async test() {
+                        expectTypeOf(await this.get('summary')).toEqualTypeOf<string>();
+                    }
+                });
+            })
         })
         
         it('it overrides optional fields from the original template', () => {
