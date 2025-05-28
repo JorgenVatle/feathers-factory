@@ -126,7 +126,7 @@ describe('Factory', () => {
     })
     
     describe('Unsafe extend method', () => {
-        it('can specify new fields with unsafeExtend method', async () => {
+        it('can specify new fields', async () => {
             const newFactory = factory.unsafeExtend({
                 async test2() {
                     return 'ok' as const;
@@ -144,6 +144,20 @@ describe('Factory', () => {
                 }
             })
         });
+        
+        it('can reference fields that depend on other fields', async () => {
+            factory.unsafeExtend({
+                _id: () => 1 as number;
+                _idTag() {
+                    return `id:${this.get('_id')}` as const;
+                },
+                
+                async test2() {
+                    expectTypeOf(await this.get('_id')).toEqualTypeOf<number>();
+                    expectTypeOf(await this.get('_idTag')).toEqualTypeOf<`id:${number}`>();
+                }
+            })
+        })
         
         it('does not alter output types for fields not explicitly overridden', async () => {
             const result = await factory.unsafeExtend({}).create();
