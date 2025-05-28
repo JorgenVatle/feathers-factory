@@ -24,7 +24,7 @@ type ExtendTemplateSchema<T> = {
  */
 export type SchemaOverrides<TSchema> = {
     [key in keyof TSchema]?: SchemaField<TSchema[key]>;
-} & ThisType<SchemaContext<TSchema>>;
+};
 
 
 /**

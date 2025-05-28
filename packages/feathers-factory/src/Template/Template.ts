@@ -1,6 +1,6 @@
 import type { Simplify } from 'type-fest';
 import { type SchemaContext, TemplateContext } from './Context';
-import type { BaseSchema, ResolveSchema, SchemaOverrides, TemplateSchema } from './Schema';
+import type { ResolveSchema, SchemaOverrides, TemplateSchema } from './Schema';
 
 
 export class FactoryTemplate<
@@ -50,8 +50,8 @@ export class FactoryTemplate<
      * Create a new factory template using the current template's schema as
      * defaults for the new template.
      */
-    public extend<TOverrides extends BaseSchema>(
-        overrides: SchemaOverrides<Simplify<Omit<TSchema, keyof TOverrides> & TOverrides>>
+    public extend<TOverrides>(
+        overrides: TemplateSchema<TOverrides & Partial<Omit<TSchema, keyof TOverrides>>, SchemaContext<TOverrides & Omit<TSchema, keyof TOverrides>>>
     ): FactoryTemplate<Simplify<Omit<TSchema, keyof TOverrides> & TOverrides>> {
         // @ts-expect-error Incompatible types
         return new FactoryTemplate({

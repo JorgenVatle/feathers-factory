@@ -250,13 +250,11 @@ describe('FactoryTemplate', () => {
                         expectTypeOf(firstName).toEqualTypeOf<'Test'>();
                         expectTypeOf(result).toEqualTypeOf<'name:Test'>();
                         
-                        // TODO: Returning the result breaks types above - casting them to unknown
-                        // return result;
+                        return result;
                     },
                     async test() {
                         expectTypeOf(await this.get('explicitTypeCast')).toEqualTypeOf<`_id:${number}`>();
                         
-                        // @ts-expect-error Todo: Fix type error. Related to returning a result above.
                         expectTypeOf(await this.get('literal')).toEqualTypeOf<'name:Test'>();
                     }
                 });
