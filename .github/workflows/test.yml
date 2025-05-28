@@ -2,13 +2,11 @@ name: 'Tests'
 run-name: '🧪 Test: ${{ github.event.head_commit.message || github.event.pull_request.title }}'
 on:
   push:
-    branches:
-      - master
+  workflow_call:
   pull_request:
     types:
       - synchronize
       - opened
-  workflow_call:
 
 jobs:
   test:
@@ -16,10 +14,10 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: 'Checkout repository'
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: 'Setup Node.js'
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
 
       - name: 'Install dependencies'
         run: npm ci

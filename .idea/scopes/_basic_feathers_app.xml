@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="_basic-feathers-app" pattern="file[feathers-factory]:examples/_basic-feathers-app//*" />
+</component>

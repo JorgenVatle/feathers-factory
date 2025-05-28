@@ -15,6 +15,11 @@ npm install --save-dev feathers-factory
 Feathers Factory provides an easy way define data generation templates for testing Feathers services. This works 
 really nicely together with a mock data generator like [faker](https://github.com/faker-js/faker).
 
+The stand-out feature is that factory templates are contextualized with smart dependency handling. Or in other words,
+fields can reference others through [`this.get()`](#use-a-property-from-the-current-factory) where each field will be 
+evaluated just once per run. Which can be handy if you have multiple fields within a single template that depends on
+a single foreign key created within the same template. 
+
 ### Define and export a factory for your tests
 Just new up the Feathers Factory class, provide your Feathers service, and a "Generator" object which defines what
 values should be inserted into your service when the factory is called.
@@ -154,7 +159,7 @@ await CommentFactoryWithSlugs.createMany(1337, {}, {
 ### Only fetch data
 You can resolve the factory data _without_ inserting it into the database using the Factory `get()` method.
 ```js
-await UserFactory.get({ username: 'phantom-user99' });
+await UserFactory.resolve({ username: 'phantom-user99' });
 // { username: "phantom-user99", membership: "bronze" }
 ```
 
@@ -253,10 +258,33 @@ The resolved data is then passed directly into your
 [Feathers service](https://crow.docs.feathersjs.com/guides/basics/services.html#service-methods) through its 
 `create()` method.
 
+## Feathers-Factory isn't just for Feathers apps
+This package doesn't depend on any Feathers.js specific features to function. We just assume a Feathers-service-like
+`create()` signature for adding entries to your app's database.
+
+In other words, you can just as easily pass any object with a `create()` method into the Factory class. Types are
+inferred from the method's data parameter. So there's no difference in whether you provide an actual Feathers service
+or something else entirely.
+
+```ts
+import { database } from './mongo';
+
+const movies = {
+    create(data: { title: string }) {
+        return database.collection('movies').insert(data)
+    }
+}
+
+const movieFactory = new Factory(movies, {
+    title: () => faker.book.title(),
+});
+```
+
 ## Credit
-Thanks to [clues.js](https://www.npmjs.com/package/clues) for providing an excellent library for resolving in-object data.
+Thanks to [clues.js](https://www.npmjs.com/package/clues) for providing an excellent library for resolving 
+contextualized object data.
 
 ## License
-This repository is licensed under the ISC license.
+This repository is licensed under the [ISC license](LICENSE).
 
 Copyright (c) 2019, Jørgen Vatle.

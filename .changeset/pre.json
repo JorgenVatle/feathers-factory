@@ -1,0 +1,18 @@
+{
+  "mode": "pre",
+  "tag": "beta",
+  "initialVersions": {
+    "feathers-factory": "5.0.1",
+    "basic-feathers-example-app": "1.0.0"
+  },
+  "changesets": [
+    "clear-badgers-wonder",
+    "every-trains-buy",
+    "fruity-beds-report",
+    "heavy-cloths-lick",
+    "hip-emus-mate",
+    "modern-stars-fold",
+    "ripe-boxes-dig",
+    "tough-olives-drop"
+  ]
+}

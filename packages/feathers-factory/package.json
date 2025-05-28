@@ -1,0 +1,54 @@
+{
+  "name": "feathers-factory",
+  "version": "5.1.0-beta.6",
+  "description": "Create data factories for your Feathers services",
+  "main": "./dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "test": "echo 'Cannot run tests from this directory. Use the test command from the parent directory instead!'; exit 1",
+    "prepack": "npm run build",
+    "build": "tsup",
+    "lint": "tsc --noEmit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JorgenVatle/feathers-factory.git"
+  },
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "factory",
+    "feathers",
+    "fixtures",
+    "data"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "author": "JorgenVatle",
+  "license": "ISC",
+  "readme": "../../README.md",
+  "bugs": {
+    "url": "https://github.com/JorgenVatle/feathers-factory/issues"
+  },
+  "homepage": "https://github.com/JorgenVatle/feathers-factory#readme",
+  "devDependencies": {
+    "@faker-js/faker": "^9.7.0",
+    "@feathersjs/feathers": "^5.0.34",
+    "@types/node": "^20.17.46",
+    "tsup": "^8.4.0",
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "clues": "^4.0.2",
+    "type-fest": "^4.41.0"
+  }
+}

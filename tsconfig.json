@@ -7,13 +7,20 @@
     "noEmit": true,
     "outDir": "./dist",
     "lib": ["es2022"],
-
+    "isolatedModules": true,
     "strict": true,
     "noImplicitReturns": true,
     "types": [],
     "noFallthroughCasesInSwitch": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
+    "noUncheckedIndexedAccess": true,
+
+    "paths": {
+      "feathers-factory": [
+        "./packages/feathers-factory/src/index.ts"
+      ]
+    }
 
   },
 }
