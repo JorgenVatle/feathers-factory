@@ -65,8 +65,8 @@ describe('Factory', () => {
                 city: string;
             }
         },
-        completedAt: Date | undefined;
-        optionalKey?: 'ok',
+        maybeUndefinedDate: Date | undefined;
+        optionalProperty?: 'ok',
         test: any;
     }
     const service = {
@@ -87,7 +87,7 @@ describe('Factory', () => {
                 }
             }
         },
-        completedAt: new Date() as undefined | Date,
+        maybeUndefinedDate: new Date() as undefined | Date,
         test: () => {}
     });
     
@@ -129,9 +129,9 @@ describe('Factory', () => {
         
         it('will narrow types based on the provided overrides', async () => {
             factory.extend({
-                completedAt: new Date(),
+                maybeUndefinedDate: new Date(),
                 async test() {
-                    expectTypeOf(await this.get('completedAt')).toEqualTypeOf<Date>();
+                    expectTypeOf(await this.get('maybeUndefinedDate')).toEqualTypeOf<Date>();
                 }
             });
         });
@@ -139,7 +139,7 @@ describe('Factory', () => {
         it('will not make optional fields required by default', () => {
             factory.extend({
                 async test() {
-                    expectTypeOf(await this.get('completedAt')).not.toEqualTypeOf<Date>();
+                    expectTypeOf(await this.get('maybeUndefinedDate')).not.toEqualTypeOf<Date>();
                 }
             });
         })
