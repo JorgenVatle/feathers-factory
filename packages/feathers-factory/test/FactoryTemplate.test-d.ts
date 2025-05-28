@@ -195,8 +195,28 @@ describe('FactoryTemplate', () => {
                 },
                 // Static value
                 createdAt: new Date(),
-                test: () => {
+                test: () => {},
+            }).resolve({
+                async test() {
+                    expectTypeOf(await this.get('firstName')).toEqualTypeOf<string>();
+                    expectTypeOf(await this.get('lastName')).toEqualTypeOf<string>();
+                    expectTypeOf(await this.get('age')).toEqualTypeOf<number>();
+                    expectTypeOf(await this.get('createdAt')).toEqualTypeOf<Date>();
                 },
+            });
+        })
+        
+        it('can access fields with explicit return types', async () => {
+            await new FactoryTemplate({
+                // Synchronous function
+                firstName: (): string => 'test',
+                // method without context
+                lastName(): string { return 'test' },
+                // Method with context
+                async age(): Promise<number> { return (await this.get('firstName')).length },
+                // Static value
+                createdAt: new Date(),
+                test: () => {},
             }).resolve({
                 async test() {
                     expectTypeOf(await this.get('firstName')).toEqualTypeOf<string>();
