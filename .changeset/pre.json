@@ -3,7 +3,6 @@
   "tag": "beta",
   "initialVersions": {
     "feathers-factory": "5.0.1",
-    "basic-feathers-example-app": "1.0.0"
   },
   "changesets": [
     "clear-badgers-wonder",
