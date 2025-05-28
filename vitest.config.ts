@@ -1,11 +1,7 @@
-import Path from 'node:path';
 import { defineConfig } from 'vitest/config';
+import { include, sharedConfig } from './vitest.config.base';
 
-const __dirname = new URL('.', import.meta.url).pathname;
-
-function include(dir: string) {
-    return Path.join(__dirname, dir, '/**/*.{test,spec}.?(c|m)[jt]s?(x)');
-}
+const { test } = sharedConfig({})
 
 export default defineConfig({
     test: {
@@ -15,9 +11,7 @@ export default defineConfig({
         include: [
             include('packages/feathers-factory'),
         ],
-        alias: {
-            'feathers-factory': Path.join(__dirname, 'packages/feathers-factory/src/index.ts'),
-        },
+        alias: test.alias,
         workspace: [
             './vitest.config.ts',
             {
