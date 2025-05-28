@@ -147,7 +147,7 @@ export class Factory<
         params?: SchemaOverrides<TParams, TParamsOverrides>
     ): Factory<TSchema, TResult, TParams> {
         // @ts-expect-error This overrides the expected type from the service.
-        return new Factory(this.service, overrides, params);
+        return new Factory(this.service, this.template.extend(overrides), this.paramsTemplate.extend(params));
     }
     
     /**
@@ -174,7 +174,7 @@ export class Factory<
         params?: ExtendSchema<TParams, TParamsOverrides>
     ): Factory<TTemplateOutput, TTemplateOutput, TParamsOutput> {
         // @ts-expect-error This overrides the expected type from the service.
-        return new Factory(this.service, overrides, params);
+        return new Factory(this.service, this.template.extend(overrides), this.paramsTemplate.extend(params));
     }
     
     /**
