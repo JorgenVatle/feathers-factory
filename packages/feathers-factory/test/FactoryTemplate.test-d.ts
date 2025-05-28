@@ -9,6 +9,7 @@ describe('FactoryTemplate', () => {
         createdAt: () => new Date(),
         firstName: 'test',
         lastName: 'test',
+        firstNameConst: 'Test' as const,
     });
     
     describe('Resolved data types', async () => {
@@ -238,11 +239,25 @@ describe('FactoryTemplate', () => {
             
             it('can access new template fields that accesses original template fields', () => {
                 template.extend({
-                    async summary() {
-                        return await this.get('_id');
+                    async explicitTypeCast() {
+                        expectTypeOf(await this.get('_id')).toEqualTypeOf<number>();
+                        return await this.get('_id') as any as `_id:${number}`;
+                    },
+                    async literal() {
+                        const firstName = await this.get('firstNameConst');
+                        const result = `name:${firstName}` as const;
+                        
+                        expectTypeOf(firstName).toEqualTypeOf<'Test'>();
+                        expectTypeOf(result).toEqualTypeOf<'name:Test'>();
+                        
+                        // TODO: Returning the result breaks types above - casting them to unknown
+                        // return result;
                     },
                     async test() {
-                        expectTypeOf(await this.get('summary')).toEqualTypeOf<string>();
+                        expectTypeOf(await this.get('explicitTypeCast')).toEqualTypeOf<`_id:${number}`>();
+                        
+                        // @ts-expect-error Todo: Fix type error. Related to returning a result above.
+                        expectTypeOf(await this.get('literal')).toEqualTypeOf<'name:Test'>();
                     }
                 });
             })
