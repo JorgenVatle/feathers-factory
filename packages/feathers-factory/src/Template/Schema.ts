@@ -39,12 +39,6 @@ export type ExtendSchema<
     SchemaContext<TOverrides & Omit<TSchema, keyof TOverrides>>
 >
 
-
-/**
- * Base type for template schemas.
- */
-export type BaseSchema<TFields extends Record<string, unknown> = Record<string, unknown>> = TFields;
-
 /**
  * Defines a value / template function that will execute every time the
  * associated template or factory is run.
