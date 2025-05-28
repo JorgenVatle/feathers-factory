@@ -6,6 +6,7 @@
     "basic-feathers-example-app": "1.0.0"
   },
   "changesets": [
+    "every-trains-buy",
     "hip-emus-mate",
     "modern-stars-fold",
     "ripe-boxes-dig"

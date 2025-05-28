@@ -1,5 +1,14 @@
 # feathers-factory
 
+## 5.1.0-beta.3
+
+### Patch Changes
+
+- f015dea: Add missing exports for ExtendSchema and ResolveField helper types.
+
+  - Implemented type narrowing for overrides provided to FactoryTemplate's `resolve()` method. Fixes issues where
+    optional types remain optional even when the provided overrides invalidate that type.
+
 ## 5.1.0-beta.2
 
 ### Minor Changes
