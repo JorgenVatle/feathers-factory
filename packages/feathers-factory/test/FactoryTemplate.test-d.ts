@@ -85,7 +85,7 @@ describe('FactoryTemplate', () => {
             });
         })
         
-        it(`template methods can reference other methods with explicit return types`, async () => {
+        it(`method fields can reference other methods with explicit return types`, async () => {
             new FactoryTemplate({
                 // Synchronous function
                 firstName: (): string => 'test',
@@ -106,7 +106,7 @@ describe('FactoryTemplate', () => {
             });
         })
         
-        it(`template methods can reference other methods with implicit return types`, async () => {
+        it(`method fields can reference other methods with implicit return types`, async () => {
             const template = new FactoryTemplate({
                 // Synchronous function
                 firstName: () => 'John' as const,
