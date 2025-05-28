@@ -1,5 +1,12 @@
 # feathers-factory
 
+## 5.1.0-beta.4
+
+### Patch Changes
+
+- ca75259: Fix issue where optional properties (`{ optional?: true }`) in SchemaOverrides would not be narrowed correctly.
+- 4e8403b: Fix issue where exceptions during schema context resolve loses stack trackes.
+
 ## 5.1.0-beta.3
 
 ### Patch Changes
