@@ -2,7 +2,7 @@
   "mode": "exit",
   "tag": "beta",
   "initialVersions": {
-    "feathers-factory": "5.0.1",
+    "feathers-factory": "5.0.1"
   },
   "changesets": [
     "clear-badgers-wonder",
