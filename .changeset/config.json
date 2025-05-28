@@ -7,5 +7,5 @@
   "access": "restricted",
   "baseBranch": "beta",
   "updateInternalDependencies": "patch",
-  "ignore": []
+  "ignore": ["basic-feathers-example-app"]
 }
