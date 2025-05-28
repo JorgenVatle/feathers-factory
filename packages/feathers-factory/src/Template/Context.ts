@@ -165,7 +165,7 @@ export class TemplateContext<TSchema> extends SchemaContext<TSchema> {
      * Retrieve and memoize the result of the given property path.
      * Calls any functions and caches the output for any subsequent calls.
      */
-    protected _get(key: string) {
+    protected _get(key: string): Promise<unknown> {
         return Clues(this._state, key as string, { CONTEXT: this });
     }
     
