@@ -51,7 +51,7 @@ export class FactoryTemplate<
      * defaults for the new template.
      */
     public extend<TOverrides>(
-        overrides: ExtendSchema<TSchema, TOverrides>
+        overrides: ExtendSchema<TSchema, TOverrides> | {}
     ): FactoryTemplate<Simplify<Omit<TSchema, keyof TOverrides> & TOverrides>> {
         // @ts-expect-error Incompatible types
         return new FactoryTemplate({
