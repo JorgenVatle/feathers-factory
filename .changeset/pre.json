@@ -6,7 +6,9 @@
     "basic-feathers-example-app": "1.0.0"
   },
   "changesets": [
+    "clear-badgers-wonder",
     "every-trains-buy",
+    "fruity-beds-report",
     "hip-emus-mate",
     "modern-stars-fold",
     "ripe-boxes-dig"
