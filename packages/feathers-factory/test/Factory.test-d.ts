@@ -134,6 +134,14 @@ describe('Factory', () => {
                 }
             });
         });
+        
+        it('will not make optional fields required by default', () => {
+            factory.extend({
+                async test() {
+                    expectTypeOf(await this.get('completedAt')).not.toEqualTypeOf<Date>();
+                }
+            });
+        })
     })
     
     describe('Unsafe extend method', () => {
