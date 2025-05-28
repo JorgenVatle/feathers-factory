@@ -2,7 +2,6 @@ import type { Simplify } from 'type-fest';
 import { type SchemaContext, TemplateContext } from './Context';
 import type { ExtendSchema, ResolveSchema, SchemaOverrides, TemplateSchema } from './Schema';
 
-
 export class FactoryTemplate<
     TSchema,
     TContext extends SchemaContext<TSchema> = SchemaContext<TSchema>,
