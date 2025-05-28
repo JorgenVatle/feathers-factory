@@ -66,6 +66,7 @@ describe('Factory', () => {
             }
         },
         completedAt: Date | undefined;
+        optionalKey?: 'ok',
         test: any;
     }
     const service = {
