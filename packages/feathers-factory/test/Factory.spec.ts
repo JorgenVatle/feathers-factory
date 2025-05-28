@@ -132,6 +132,20 @@ describe('Factory', () => {
                 })
             )
         })
+        
+        it('keeps factory template fields not specified in the override', async () => {
+            const result = await baseFactory.extend({
+                newField: 'ok',
+            }).create();
+            
+            expect(result).toEqual(
+                expect.objectContaining({
+                    _id: expect.any(String),
+                    firstName: expect.any(String),
+                    lastName: expect.any(String),
+                })
+            )
+        })
     })
 });
 
