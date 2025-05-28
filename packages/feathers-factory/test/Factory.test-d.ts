@@ -65,6 +65,7 @@ describe('Factory', () => {
                 city: string;
             }
         },
+        completedAt: Date | undefined;
         test: any;
     }
     const service = {
@@ -85,6 +86,7 @@ describe('Factory', () => {
                 }
             }
         },
+        completedAt: new Date() as undefined | Date,
         test: () => {}
     });
     
@@ -122,6 +124,15 @@ describe('Factory', () => {
                     expectTypeOf(await this.get('_id')).toEqualTypeOf<string>();
                 }
             })
+        });
+        
+        it('will narrow types based on the provided overrides', async () => {
+            factory.extend({
+                completedAt: new Date(),
+                async test() {
+                    expectTypeOf(await this.get('completedAt')).toEqualTypeOf<Date>();
+                }
+            });
         });
     })
     
