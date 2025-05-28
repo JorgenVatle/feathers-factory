@@ -148,8 +148,8 @@ describe('Factory', () => {
         it('can reference fields that depend on other fields', async () => {
             factory.unsafeExtend({
                 _id: () => 1 as number,
-                _idTag() {
-                    return `id:${this.get('_id')}` as const;
+                async _idTag() {
+                    return `id:${await this.get('_id')}` as const;
                 },
                 
                 async test2() {
