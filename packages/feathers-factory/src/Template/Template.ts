@@ -38,7 +38,7 @@ export class FactoryTemplate<
      * In other words, functions are guaranteed to run only once with each
      * call to {@link resolve}.
      */
-    public resolve(overrides?: SchemaOverrides<ResolveSchema<TSchema>>): Promise<ResolveSchema<TSchema>> {
+    public resolve<TOverrides>(overrides?: SchemaOverrides<ResolveSchema<TSchema>, TOverrides>): Promise<ResolveSchema<TSchema>> {
         const template = this.extend(overrides || {});
         const context = new TemplateContext(template);
         
