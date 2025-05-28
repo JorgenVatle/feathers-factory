@@ -108,6 +108,30 @@ describe('Factory', () => {
             expect(result2.fullName).toContain(result2.firstName);
             expect(result2.fullName).toContain(result2.lastName);
         })
+    });
+    
+    describe('Extensions', () => {
+        const baseFactory = new Factory(userService, {
+            _id: () => simpleFaker.string.uuid(),
+            email: () => faker.internet.email({}),
+            async fullName() {
+                return `${await this.get('firstName')} ${await this.get('lastName')}`;
+            },
+            firstName: () => faker.person.firstName(),
+            lastName: () => faker.person.lastName(),
+        });
+        
+        it('creates documents with the provided overrides', async () => {
+            const result = await baseFactory.extend({
+                newField: 'ok',
+            }).create();
+            
+            expect(result).toEqual(
+                expect.objectContaining({
+                    newField: expect.stringMatching('ok'),
+                })
+            )
+        })
     })
 });
 
