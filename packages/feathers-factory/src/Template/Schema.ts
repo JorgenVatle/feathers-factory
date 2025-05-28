@@ -34,9 +34,8 @@ export type SchemaOverrides<TSchema> = {
 export type ExtendSchema<
     TSchema,
     TOverrides,
-    TMerged = TOverrides & Partial<Omit<ResolveSchema<TSchema>, keyof TOverrides>>,
 > = TemplateSchema<
-    TMerged,
+    Simplify<TOverrides & Partial<Omit<ResolveSchema<TSchema>, keyof TOverrides>>>,
     SchemaContext<TOverrides & Omit<TSchema, keyof TOverrides>>
 >
 
