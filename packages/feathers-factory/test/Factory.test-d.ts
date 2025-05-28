@@ -65,7 +65,8 @@ describe('Factory', () => {
                 city: string;
             }
         },
-        maybeUndefinedValue: 'ok' | undefined;
+        maybeNull: 'ok' | null,
+        maybeUndefined: 'ok' | undefined;
         optionalProperty?: 'ok',
         test: any;
     }
@@ -87,7 +88,8 @@ describe('Factory', () => {
                 }
             }
         },
-        maybeUndefinedValue: undefined,
+        maybeUndefined: undefined,
+        maybeNull: null,
         test: () => {}
     });
     
@@ -130,9 +132,9 @@ describe('Factory', () => {
         it('will narrow types based on the provided overrides', async () => {
             factory.extend({
                 optionalProperty: 'ok',
-                maybeUndefinedValue: 'ok',
+                maybeUndefined: 'ok',
                 async test() {
-                    expectTypeOf(await this.get('maybeUndefinedValue')).toEqualTypeOf<'ok'>();
+                    expectTypeOf(await this.get('maybeUndefined')).toEqualTypeOf<'ok'>();
                     expectTypeOf(await this.get('optionalProperty')).toEqualTypeOf<'ok'>();
                 }
             });
@@ -141,7 +143,7 @@ describe('Factory', () => {
         it('will not make optional fields required by default', () => {
             factory.extend({
                 async test() {
-                    expectTypeOf(await this.get('maybeUndefinedValue')).not.toEqualTypeOf<'ok'>();
+                    expectTypeOf(await this.get('maybeUndefined')).not.toEqualTypeOf<'ok'>();
                     expectTypeOf(await this.get('optionalProperty')).not.toEqualTypeOf<'ok'>();
                 }
             });
