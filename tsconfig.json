@@ -14,6 +14,7 @@
     "noFallthroughCasesInSwitch": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
+    "noUncheckedIndexedAccess": true,
 
     "paths": {
       "feathers-factory": [
