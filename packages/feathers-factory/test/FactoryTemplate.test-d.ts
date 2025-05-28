@@ -119,6 +119,10 @@ describe('FactoryTemplate', () => {
                 async age() { return (await this.get('firstName')).length },
                 // Static value
                 createdAt: new Date(),
+                // Method with peer dependencies
+                async fullName() {
+                  return `${await this.get('firstName')} ${await this.get('lastName')}` as const;
+                },
                 
                 async summary() {
                     const summary = {
@@ -126,12 +130,14 @@ describe('FactoryTemplate', () => {
                         lastName: await this.get('lastName'),
                         age: await this.get('age'),
                         createdAt: await this.get('createdAt'),
+                        fullName: await this.get('fullName'),
                     }
                     
                     expectTypeOf(summary.firstName).toEqualTypeOf<'John'>();
                     expectTypeOf(summary.lastName).toEqualTypeOf<'Doe'>();
                     expectTypeOf(summary.age).toEqualTypeOf<number>();
                     expectTypeOf(summary.createdAt).toEqualTypeOf<Date>();
+                    expectTypeOf(summary.fullName).toEqualTypeOf<'John Doe'>();
                     
                     return { summary };
                 },
