@@ -168,7 +168,7 @@ export class TemplateContext<TSchema> extends SchemaContext<TSchema> {
      */
     protected async _get(key: string): Promise<unknown> {
         try {
-            return Clues(this._state, key as string, { CONTEXT: this });
+            return await Clues(this._state, key as string, { CONTEXT: this });
         } catch (error) {
             if (error instanceof Error) {
                 throw error;
