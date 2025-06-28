@@ -19,6 +19,28 @@ describe('Context errors', () => {
             const resolvedTemplate = template.resolve();
             await expect(resolvedTemplate).rejects.toHaveProperty('stack', expect.stringContaining('hello world'));
         })
+    });
+    
+    describe('async properties', () => {
+        const template = new FactoryTemplate({
+            async helloWorld() {
+                throw new ErrorTest('hello world');
+            },
+            
+            async test() {
+                await this.get('helloWorld');
+            }
+        });
+        
+        it('keeps the original error message', async () => {
+            const resolvedTemplate = template.resolve();
+            await expect(resolvedTemplate).rejects.toHaveProperty('message', expect.stringContaining('hello world'));
+        })
+        
+        it('has a stack trace', async () => {
+            const resolvedTemplate = template.resolve();
+            await expect(resolvedTemplate).rejects.toHaveProperty('stack', expect.stringContaining('hello world'));
+        })
     })
 })
 
