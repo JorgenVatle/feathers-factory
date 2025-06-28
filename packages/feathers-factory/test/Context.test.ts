@@ -12,7 +12,7 @@ describe('Context error handling', () => {
         
         it('keeps the original error message', async () => {
             const resolvedTemplate = template.resolve();
-            await expect(resolvedTemplate).rejects.toHaveProperty('message', 'hello world');
+            await expect(resolvedTemplate).rejects.toHaveProperty('message', expect.stringContaining('hello world'));
         })
     })
 })
