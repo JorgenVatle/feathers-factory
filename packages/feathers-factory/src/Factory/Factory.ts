@@ -72,7 +72,7 @@ export class Factory<
         overrides?: SchemaOverrides<TSchema, TDataOverrides>,
         params?: SchemaOverrides<TParams, TParamsOverrides>,
     ): Promise<{
-        [key in keyof TSchema]-?: key extends keyof TDataOverrides ? TDataOverrides[key] : TSchema[key]
+        [key in keyof TResult]-?: key extends keyof TDataOverrides ? TDataOverrides[key] : TResult[key]
     }> {
         const resolvedData: any = await this.resolve(overrides);
         const resolvedParams = await this.paramsTemplate.resolve(params) as TParams;
